@@ -4,4 +4,4 @@ export * from './store/slice'
 
 export * from './store/selectors'
 
-export type { UserById } from './types'
+export type { UserById, User } from './types'

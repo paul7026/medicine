@@ -11,3 +11,11 @@ export const usersSelector = createSelector(
     status: usersStatus,
   })
 )
+
+export const userByIdSelector = createSelector(
+  baseSelector,
+  ({ userById, userByIdStatus }) => ({
+    userById,
+    status: userByIdStatus,
+  })
+)

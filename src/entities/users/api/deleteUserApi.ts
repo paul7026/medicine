@@ -2,9 +2,9 @@ import { createThunkWithErrorHandler } from '@shared/helpers/createThunkWithErro
 import $api from '@shared/http/api.config'
 
 export const deleteUserApi = createThunkWithErrorHandler<void, string>(
-  'admins/deleteUser',
+  'users/deleteUser',
   async (userId) => {
-    const response = await $api.delete(`/admins/${userId}`, {})
+    const response = await $api.delete(`/users/${userId}`, {})
 
     return response.data
   }

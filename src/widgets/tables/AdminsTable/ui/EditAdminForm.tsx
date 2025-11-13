@@ -44,8 +44,6 @@ export const EditAdminForm = ({ admin, onClose }: EditAdminFormProps) => {
         addErrorMessage(err)
       })
       .finally(() => setIsLoading(false))
-
-    onClose()
   }
 
   return (

@@ -3,21 +3,23 @@ import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
-import { GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid'
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
+
+import { User } from '@entities/users'
 
 import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
-  onDeleteClick: (id: GridRowId) => void,
-  onEditClick: (id: GridRowId) => void,
-  onViewClick: (id: GridRowId) => void
+  onDeleteClick: (user: User) => void,
+  onEditClick: (user: User) => void,
+  onViewClick: (user: User) => void
 ): GridColDef[] => [
   {
     field: 'actions',
     type: 'actions',
     cellClassName: 'actions',
     minWidth: 150,
-    getActions: ({ id }) => {
+    getActions: ({ row }) => {
       return [
         <GridActionsCellItem
           key={0}
@@ -25,7 +27,7 @@ export const getColumns = (
           color="inherit"
           icon={<VisibilityIcon color="info" />}
           label="View"
-          onClick={() => onViewClick(id)}
+          onClick={() => onViewClick(row)}
         />,
         <GridActionsCellItem
           key={0}
@@ -33,14 +35,14 @@ export const getColumns = (
           color="inherit"
           icon={<EditIcon color="info" />}
           label="Edit"
-          onClick={() => onEditClick(id)}
+          onClick={() => onEditClick(row)}
         />,
         <GridActionsCellItem
           key={1}
           color="inherit"
           icon={<DeleteIcon color="info" />}
           label="Delete"
-          onClick={() => onDeleteClick(id)}
+          onClick={() => onDeleteClick(row)}
         />,
       ]
     },
