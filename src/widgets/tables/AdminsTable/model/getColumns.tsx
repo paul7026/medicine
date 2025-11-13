@@ -87,27 +87,6 @@ export const getColumns = (
     },
   },
   {
-    field: 'is_active',
-    headerName: 'Is active',
-    width: 110,
-    headerAlign: 'center',
-    align: 'center',
-    renderCell: ({ value }) => {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-          }}
-        >
-          {value ? <CheckIcon color="success" /> : <CloseIcon color="error" />}
-        </Box>
-      )
-    },
-  },
-  {
     field: 'created_at',
     headerName: 'Created at',
     width: 160,

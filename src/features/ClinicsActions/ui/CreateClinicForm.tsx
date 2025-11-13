@@ -1,23 +1,19 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { createAdminApi, getAdminsApi } from '@entities/admins'
+import { createAdminApi } from '@entities/admins'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
-import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { Fields } from './Fields'
 
-import { CreateAdminFormProps, CreateAdminFormValues } from '../model/types'
+import { CreateClinicFormProps, CreateClinicFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
-export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const form = useForm<CreateAdminFormValues>({
+export const CreateClinicForm = ({ onClose }: CreateClinicFormProps) => {
+  const form = useForm<CreateClinicFormValues>({
     defaultValues: {
       tenant: '',
       clinic_id: '',
@@ -34,26 +30,22 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
 
   const dispatch = useAppDispatch()
 
-  const onSubmit = (data: CreateAdminFormValues) => {
-    setIsLoading(true)
+  const onSubmit = (data: CreateClinicFormValues) => {
     dispatch(createAdminApi(data))
       .unwrap()
       .then(() => {
-        addSuccessMessage('Admin successfully created')
+        addSuccessMessage('Clinic successfully created')
         onClose()
-        dispatch(getAdminsApi())
       })
       .catch((err) => {
         addErrorMessage(err)
       })
-      .finally(() => setIsLoading(false))
   }
 
   return (
     <FormProvider {...form}>
-      <form id="create-admin-form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="create-form" onSubmit={handleSubmit(onSubmit)}>
         <Fields />
-        <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>
   )

@@ -1,3 +1,7 @@
+import { ClinicsActions } from '@features/ClinicsActions/ui/ClinicsActions'
+
+import { ClinicsTable } from '@widgets/tables/ClinicsTable'
+
 import { Page } from '@shared/ui/Page'
 
 const ClinicsPage = () => {
@@ -6,7 +10,9 @@ const ClinicsPage = () => {
       breadcrumbsList={[{ id: '0', name: 'Clinics', icon: 'medical_services' }]}
       id="clinics-page"
     >
-      ClinicsPage
+      <ClinicsActions />
+
+      <ClinicsTable />
     </Page>
   )
 }
