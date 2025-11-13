@@ -1,6 +1,6 @@
 import { Page } from '@shared/ui/Page'
 
-const FilialsPage = () => {
+const AffiliatePage = () => {
   return (
     <Page
       breadcrumbsList={[{ id: '0', name: 'Filials', icon: 'corporate_fare' }]}
@@ -11,4 +11,4 @@ const FilialsPage = () => {
   )
 }
 
-export default FilialsPage
+export default AffiliatePage

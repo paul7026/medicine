@@ -35,7 +35,12 @@ export const LoginForm = () => {
       <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <TextFieldControl form={form} label="Username *" name="username" />
-          <TextFieldControl form={form} label="Password *" name="password" />
+          <TextFieldControl
+            form={form}
+            label="Password *"
+            name="password"
+            type="password"
+          />
 
           <Button type="submit" variant="contained">
             login

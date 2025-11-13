@@ -1,11 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom'
 
 import { AdminsPage } from '@pages/AdminsPage'
+import { AffiliatePage } from '@pages/AffiliatePage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
-import { FilialsPage } from '@pages/FilialsPage'
 import { LoginPage } from '@pages/LoginPage'
-// import { LoginPage } from '@pages/LoginPage'
 import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
 import { ProfilesPage } from '@pages/ProfilesPage'
@@ -41,8 +40,8 @@ export const router = createBrowserRouter([
         element: <ClinicsPage />,
       },
       {
-        path: 'filials',
-        element: <FilialsPage />,
+        path: 'affiliate',
+        element: <AffiliatePage />,
       },
       {
         path: 'chats',
