@@ -1,7 +1,11 @@
 import { GridRowId } from '@mui/x-data-grid'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { adminsSelector, getAdminsApi } from '@entities/admins'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
@@ -15,6 +19,14 @@ export const AdminsTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
   const [editIsOpen, setEditIsOpen] = useState(false)
   const [id, setId] = useState<GridRowId | null>(null)
+
+  const { admins, status } = useAppSelector(adminsSelector)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getAdminsApi())
+  }, [dispatch])
 
   const handleClickDelete = (id: GridRowId) => {
     setId(id)
@@ -41,26 +53,8 @@ export const AdminsTable = () => {
       <Table
         isSingleSelection
         columns={getColumns(handleClickDelete, handleEdit)}
-        rows={[
-          {
-            id: '5555djdfdf-fdfsdfsf',
-            tenant: 'PANACEA',
-            clinic_id: '',
-            username: 'Jack',
-            is_superuser: true,
-            is_active: true,
-            deleted_at: '',
-          },
-          {
-            id: '1111djdfdf-fdfsdfsf',
-            tenant: 'CLINIC',
-            clinic_id: '1111djdfdf-hjghdghf-4144454d',
-            username: 'Logan',
-            is_superuser: false,
-            is_active: true,
-            deleted_at: '',
-          },
-        ]}
+        loading={status === 'pending'}
+        rows={admins}
       />
       <Modal
         okButton={

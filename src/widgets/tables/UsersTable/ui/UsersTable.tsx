@@ -1,7 +1,11 @@
 import { GridRowId } from '@mui/x-data-grid'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import { getUsersApi, usersSelector } from '@entities/users'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
@@ -16,6 +20,14 @@ export const UsersTable = () => {
   const [editIsOpen, setEditIsOpen] = useState(false)
   const [viewIsOpen, setViewIsOpen] = useState(false)
   const [id, setId] = useState<GridRowId | null>(null)
+
+  const { status, users } = useAppSelector(usersSelector)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getUsersApi())
+  }, [dispatch])
 
   const handleClickDelete = (id: GridRowId) => {
     setId(id)
@@ -48,22 +60,8 @@ export const UsersTable = () => {
       <Table
         isSingleSelection
         columns={getColumns(handleClickDelete, handleEdit, handleView)}
-        rows={[
-          {
-            id: '5555djdfdf-fdfsdfsf',
-            tenant: 'PANACEA',
-            clinic_id: '',
-            name: 'Jack',
-            is_active: true,
-          },
-          {
-            id: '1111djdfdf-fdfsdfsf',
-            tenant: 'CLINIC',
-            clinic_id: '1111djdfdf-hjghdghf-4144454d',
-            name: 'Logan',
-            is_active: true,
-          },
-        ]}
+        loading={status === 'pending'}
+        rows={users}
       />
       <Modal
         okButton={

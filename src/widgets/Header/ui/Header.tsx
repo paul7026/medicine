@@ -18,8 +18,6 @@ interface HeaderProps {
 export const Header = ({ drawerWidth }: HeaderProps) => {
   const [tenant] = useLocalStorageState('tenant')
 
-  console.log(tenant)
-
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 

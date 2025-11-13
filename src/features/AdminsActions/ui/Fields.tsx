@@ -31,7 +31,7 @@ export const Fields = () => {
           disabled={tenant === 'panacea'}
           form={form}
           label="Clinic"
-          name="clinic"
+          name="clinic_id"
           selectItems={CLINIC_SELECT_ITEMS}
         />
       )}

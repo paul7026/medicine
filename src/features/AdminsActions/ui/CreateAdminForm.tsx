@@ -2,6 +2,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 
 import { FormProvider, useForm } from 'react-hook-form'
 
+import { createAdminApi } from '@entities/admins'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
+
 import { Fields } from './Fields'
 
 import { CreateAdminFormProps, CreateAdminFormValues } from '../model/types'
@@ -11,7 +16,7 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   const form = useForm<CreateAdminFormValues>({
     defaultValues: {
       tenant: '',
-      clinic: '',
+      clinic_id: '',
       is_superuser: false,
       password: '',
       username: '',
@@ -21,10 +26,20 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   })
 
   const { handleSubmit } = form
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
+
+  const dispatch = useAppDispatch()
 
   const onSubmit = (data: CreateAdminFormValues) => {
-    console.log(data)
-    onClose()
+    dispatch(createAdminApi(data))
+      .unwrap()
+      .then(() => {
+        addSuccessMessage('Admin successfully created')
+        onClose()
+      })
+      .catch((err) => {
+        addErrorMessage(err)
+      })
   }
 
   return (

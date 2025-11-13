@@ -3,7 +3,7 @@ export interface CreateAdminFormValues {
   username: string
   password: string
   is_superuser: boolean
-  clinic?: string
+  clinic_id?: string
 }
 
 export interface CreateAdminFormProps {

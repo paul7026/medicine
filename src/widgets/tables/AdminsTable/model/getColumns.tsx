@@ -4,6 +4,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import EditIcon from '@mui/icons-material/Edit'
 import { GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid'
 
+import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
@@ -38,21 +39,21 @@ export const getColumns = (
   {
     field: 'id',
     headerName: 'Id',
-    minWidth: 330,
+    width: 300,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'tenant',
     headerName: 'Tenant',
-    minWidth: 150,
+    width: 150,
     headerAlign: 'center',
     align: 'center',
   },
   {
     field: 'clinic_id',
     headerName: 'Clinic id',
-    minWidth: 330,
+    width: 300,
     headerAlign: 'center',
     align: 'center',
   },
@@ -107,10 +108,19 @@ export const getColumns = (
     },
   },
   {
-    field: 'deleted_at',
-    headerName: 'Deleted at',
+    field: 'created_at',
+    headerName: 'Created at',
     width: 160,
     headerAlign: 'center',
     align: 'center',
+    valueGetter: (value: string) => formatIsoString(value),
+  },
+  {
+    field: 'updated_at',
+    headerName: 'Updated at',
+    width: 160,
+    headerAlign: 'center',
+    align: 'center',
+    valueGetter: (value: string) => formatIsoString(value),
   },
 ]

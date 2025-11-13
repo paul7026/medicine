@@ -27,9 +27,15 @@ export const useSystemMessage = () => {
     enqueueSnackbar(message, ERROR_CONFIG)
   }
 
-  const addErrorMessage = (message: { detail: string }) => {
-    if (message.detail) {
+  const addErrorMessage = (message: { detail: string | { msg: string }[] }) => {
+    if (message.detail && typeof message.detail === 'string') {
       showErrorSnackbar(message.detail)
+      return
+    }
+
+    if (message.detail && typeof message.detail === 'object') {
+      message.detail.map((msg) => showErrorSnackbar(msg.msg))
+
       return
     }
   }
