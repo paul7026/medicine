@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 
 import { clinicsSelector, getClinicsApi } from '@entities/clinics'
 
+import { ClinicModalData } from '@widgets/ClinicModalData/ui/ClinicModalData'
+
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Button } from '@shared/ui/Button'
@@ -89,12 +91,13 @@ export const ClinicsTable = () => {
       </Modal>
 
       <Modal
+        withoutActionButtons
         formId="view-form"
         open={viewIsOpen}
-        title="User"
+        title="Clinic"
         onClose={handleClose}
       >
-        {/* <EditUserForm onClose={handleClose} /> */}
+        {id && <ClinicModalData clinicId={id as string} />}
       </Modal>
     </>
   )

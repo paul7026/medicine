@@ -11,3 +11,11 @@ export const clinicsSelector = createSelector(
     status: clinicsStatus,
   })
 )
+
+export const clinicByIdSelector = createSelector(
+  baseSelector,
+  ({ clinicById, clinicByIdStatus }) => ({
+    clinicById,
+    status: clinicByIdStatus,
+  })
+)

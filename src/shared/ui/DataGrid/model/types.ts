@@ -6,6 +6,7 @@ type DataGridItemBase = {
   title: string | number
   subtitle: string | number
   id?: string
+  link?: string
 }
 
 export type DataGridItemWithAction = DataGridItemBase & {

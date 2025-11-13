@@ -1,5 +1,5 @@
 import EditIcon from '@mui/icons-material/Edit'
-import { Tooltip } from '@mui/material'
+import { Link, Tooltip } from '@mui/material'
 
 import { Box } from '@shared/ui/Box'
 import { IconButton } from '@shared/ui/IconButton'
@@ -56,15 +56,19 @@ export const DataGrid = ({
             )}
 
             <Tooltip title={item.subtitle}>
-              <Typography
-                noWrap={item.noWrap}
-                sx={{
-                  maxWidth: subtitleMaxWidth,
-                  wordBreak: `${wordBreakOff ? 'normal' : 'break-all'}`,
-                }}
-              >
-                {item.subtitle ?? '--'}
-              </Typography>
+              {item.link ? (
+                <Link href={item.link}>{item.subtitle ?? '--'}</Link>
+              ) : (
+                <Typography
+                  noWrap={item.noWrap}
+                  sx={{
+                    maxWidth: subtitleMaxWidth,
+                    wordBreak: `${wordBreakOff ? 'normal' : 'break-all'}`,
+                  }}
+                >
+                  {item.subtitle ?? '--'}
+                </Typography>
+              )}
             </Tooltip>
           </Box>
         </Box>
