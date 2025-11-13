@@ -2,13 +2,15 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import EditIcon from '@mui/icons-material/Edit'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import { GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid'
 
 import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
   onDeleteClick: (id: GridRowId) => void,
-  onEditClick: (id: GridRowId) => void
+  onEditClick: (id: GridRowId) => void,
+  onViewClick: (id: GridRowId) => void
 ): GridColDef[] => [
   {
     field: 'actions',
@@ -17,6 +19,14 @@ export const getColumns = (
     minWidth: 150,
     getActions: ({ id }) => {
       return [
+        <GridActionsCellItem
+          key={0}
+          className="textPrimary"
+          color="inherit"
+          icon={<VisibilityIcon color="info" />}
+          label="View"
+          onClick={() => onViewClick(id)}
+        />,
         <GridActionsCellItem
           key={0}
           className="textPrimary"
@@ -43,6 +53,14 @@ export const getColumns = (
     align: 'center',
   },
   {
+    field: 'name',
+    headerName: 'Name',
+    minWidth: 330,
+    headerAlign: 'center',
+    align: 'center',
+    flex: 1,
+  },
+  {
     field: 'tenant',
     headerName: 'Tenant',
     minWidth: 150,
@@ -56,35 +74,7 @@ export const getColumns = (
     headerAlign: 'center',
     align: 'center',
   },
-  {
-    field: 'username',
-    headerName: 'Username',
-    minWidth: 330,
-    headerAlign: 'center',
-    align: 'center',
-    flex: 1,
-  },
-  {
-    field: 'is_superuser',
-    headerName: 'Is superuser',
-    width: 110,
-    headerAlign: 'center',
-    align: 'center',
-    renderCell: ({ value }) => {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-          }}
-        >
-          {value ? <CheckIcon color="success" /> : <CloseIcon color="error" />}
-        </Box>
-      )
-    },
-  },
+
   {
     field: 'is_active',
     headerName: 'Is active',
@@ -105,12 +95,5 @@ export const getColumns = (
         </Box>
       )
     },
-  },
-  {
-    field: 'deleted_at',
-    headerName: 'Deleted at',
-    width: 160,
-    headerAlign: 'center',
-    align: 'center',
   },
 ]

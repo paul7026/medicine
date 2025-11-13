@@ -3,6 +3,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
+import { loginApi } from '@entities/auth'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { Card } from '@shared/ui/Card'
@@ -24,10 +28,15 @@ export const LoginForm = () => {
   })
 
   const { handleSubmit } = form
+  const { addErrorMessage } = useSystemMessage()
+
+  const dispatch = useAppDispatch()
 
   const onSubmit = (data: LoginFormValues) => {
-    console.log(data)
-    navigate('/')
+    dispatch(loginApi(data))
+      .unwrap()
+      .then(() => navigate('/'))
+      .catch((err) => addErrorMessage(err))
   }
 
   return (

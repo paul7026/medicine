@@ -1,3 +1,5 @@
+import { UsersTable } from '@widgets/tables/UsersTable'
+
 import { Page } from '@shared/ui/Page'
 
 const UsersPage = () => {
@@ -6,7 +8,7 @@ const UsersPage = () => {
       breadcrumbsList={[{ id: '0', name: 'Users', icon: 'groups' }]}
       id="users-page"
     >
-      UsersPage
+      <UsersTable />
     </Page>
   )
 }

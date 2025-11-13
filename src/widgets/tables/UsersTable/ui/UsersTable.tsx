@@ -7,13 +7,14 @@ import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
-import { EditAdminForm } from './EditAdminForm'
+import { EditUserForm } from './EditUserForm'
 
 import { getColumns } from '../model/getColumns'
 
-export const AdminsTable = () => {
+export const UsersTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
   const [editIsOpen, setEditIsOpen] = useState(false)
+  const [viewIsOpen, setViewIsOpen] = useState(false)
   const [id, setId] = useState<GridRowId | null>(null)
 
   const handleClickDelete = (id: GridRowId) => {
@@ -29,6 +30,7 @@ export const AdminsTable = () => {
   const handleClose = () => {
     setDeleteIsOpen(false)
     setEditIsOpen(false)
+    setViewIsOpen(false)
     setId(null)
   }
 
@@ -36,29 +38,30 @@ export const AdminsTable = () => {
     handleClose()
   }
 
+  const handleView = (id: GridRowId) => {
+    setId(id)
+    setViewIsOpen(true)
+  }
+
   return (
     <>
       <Table
         isSingleSelection
-        columns={getColumns(handleClickDelete, handleEdit)}
+        columns={getColumns(handleClickDelete, handleEdit, handleView)}
         rows={[
           {
             id: '5555djdfdf-fdfsdfsf',
             tenant: 'PANACEA',
             clinic_id: '',
-            username: 'Jack',
-            is_superuser: true,
+            name: 'Jack',
             is_active: true,
-            deleted_at: '',
           },
           {
             id: '1111djdfdf-fdfsdfsf',
             tenant: 'CLINIC',
             clinic_id: '1111djdfdf-hjghdghf-4144454d',
-            username: 'Logan',
-            is_superuser: false,
+            name: 'Logan',
             is_active: true,
-            deleted_at: '',
           },
         ]}
       />
@@ -69,22 +72,31 @@ export const AdminsTable = () => {
           </Button>
         }
         open={deleteIsOpen}
-        title="Removing an admin"
+        title="Removing a user"
         onClose={handleClose}
       >
         <Typography>
-          Are you sure you want to delete the admin with id:{' '}
+          Are you sure you want to delete the user with id:{' '}
           <strong>{id}</strong>?
         </Typography>
       </Modal>
 
       <Modal
-        formId="edit-admin-form"
+        formId="edit-form"
         open={editIsOpen}
-        title="Editing an admin"
+        title="Editing a user"
         onClose={handleClose}
       >
-        <EditAdminForm onClose={handleClose} />
+        <EditUserForm onClose={handleClose} />
+      </Modal>
+
+      <Modal
+        formId="view-form"
+        open={viewIsOpen}
+        title="User"
+        onClose={handleClose}
+      >
+        {/* <EditUserForm onClose={handleClose} /> */}
       </Modal>
     </>
   )

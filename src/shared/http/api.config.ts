@@ -11,9 +11,9 @@ const $api = axios.create({
 
 $api.interceptors.request.use(
   (config) => {
-    const token = cookies.get('token')
+    const token = cookies.get('access_token')
     if (token) {
-      config.headers.Authorization = `jwt ${token}`
+      config.headers.Authorization = `bearer ${token}`
     }
     return config
   },
@@ -29,7 +29,7 @@ $api.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
-      cookies.remove('token', {
+      cookies.remove('access_token', {
         path: '/',
         secure: false,
       })
@@ -38,28 +38,29 @@ $api.interceptors.response.use(
 
       localStorage.clear()
 
-      // TODO на данный момент мы не получаем refreshToken
-      //   try {
-      //     const refreshToken = cookies.get('refreshToken')
-      //     const response = await axios.post(
-      //       `${baseURL}/auth/renew-tokens`,
-      //       {
-      //         refresh_token: refreshToken,
-      //       },
-      //       {
-      //         headers: {
-      //           'Accept-language': i18n.language,
-      //         },
-      //       }
-      //     )
-      //     const { access_token } = response.data
-      //     cookies.set('token', access_token, {
-      //       path: '/',
-      //       secure: false,
-      //     })
-      //     originalRequest.headers.Authorization = `Bearer ${access_token}`
-      //     return axios(originalRequest)
-      //   } catch (error) {}
+      try {
+        const refreshToken = cookies.get('refresh_token')
+        const response = await axios.post(`${baseURL}/admin/auth/refresh`, {
+          refresh_token: refreshToken,
+        })
+        const { access_token, refresh_token } = response.data
+
+        cookies.set('access_token', access_token, {
+          path: '/',
+          secure: false,
+        })
+
+        cookies.set('refresh_token', refresh_token, {
+          path: '/',
+          secure: false,
+        })
+
+        originalRequest.headers.Authorization = `bearer ${access_token}`
+        return axios(originalRequest)
+      } catch (err) {
+        console.log(err)
+        window.location.href = '/login'
+      }
     }
 
     return Promise.reject(error)

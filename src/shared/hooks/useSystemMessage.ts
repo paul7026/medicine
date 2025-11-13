@@ -1,7 +1,4 @@
 import { useSnackbar } from 'notistack'
-import { FieldValues, Path, UseFormSetError } from 'react-hook-form'
-
-import { ErrorResponse } from '@shared/types'
 
 const ERROR_CONFIG = {
   autoHideDuration: 7000,
@@ -30,36 +27,11 @@ export const useSystemMessage = () => {
     enqueueSnackbar(message, ERROR_CONFIG)
   }
 
-  const addErrorMessage = <T extends FieldValues>(
-    messages: ErrorResponse['response']['data']['errors'],
-    setError?: UseFormSetError<T>
-  ) => {
-    messages.forEach((message) => {
-      const { detail, non_field_errors, msg_key } = message
-
-      if (detail) {
-        showErrorSnackbar(detail)
-        return
-      }
-
-      if (non_field_errors) {
-        showErrorSnackbar(non_field_errors)
-        return
-      }
-
-      const fieldName = msg_key as Path<T>
-      const fieldErrorMessage =
-        fieldName && fieldName in message
-          ? (message[fieldName] as string)
-          : undefined
-
-      if (fieldName && fieldErrorMessage && setError) {
-        setError(fieldName, {
-          type: 'server',
-          message: fieldErrorMessage,
-        })
-      }
-    })
+  const addErrorMessage = (message: { detail: string }) => {
+    if (message.detail) {
+      showErrorSnackbar(message.detail)
+      return
+    }
   }
 
   const addSuccessMessage = (message: string) => {

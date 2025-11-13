@@ -8,9 +8,9 @@ import CircularDependency from 'vite-plugin-circular-dependency'
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   process.env = { ...process.env, ...env }
-  const proxyUrl = process.env.VITE_BASE_URL
+  const proxyUrl = process.env.BASE_URL || 'https://70a9955b1589.ngrok-free.app'
 
-  console.log(proxyUrl)
+  console.log('👉 Loaded BASE_URL:', proxyUrl)
 
   return defineConfig({
     resolve: {
@@ -44,32 +44,33 @@ export default ({ mode }) => {
     ],
     server: {
       proxy: {
-        '/auth': {
+        '/admin': {
           target: proxyUrl,
           changeOrigin: true,
+          secure: true,
         },
-        '/api': {
-          target: proxyUrl,
-          changeOrigin: true,
-        },
-        '/upload': {
-          target: proxyUrl,
-          changeOrigin: true,
-        },
-        '/download': {
-          target: proxyUrl,
-          changeOrigin: true,
-        },
-        '/ws': {
-          target: proxyUrl,
-          changeOrigin: true,
-          ws: true,
-          secure: false,
-          headers: {
-            Connection: 'Upgrade',
-            Upgrade: 'websocket',
-          },
-        },
+        // '/api': {
+        //   target: proxyUrl,
+        //   changeOrigin: true,
+        // },
+        // '/upload': {
+        //   target: proxyUrl,
+        //   changeOrigin: true,
+        // },
+        // '/download': {
+        //   target: proxyUrl,
+        //   changeOrigin: true,
+        // },
+        // '/ws': {
+        //   target: proxyUrl,
+        //   changeOrigin: true,
+        //   ws: true,
+        //   secure: false,
+        //   headers: {
+        //     Connection: 'Upgrade',
+        //     Upgrade: 'websocket',
+        //   },
+        // },
       },
     },
   })
