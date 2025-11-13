@@ -1,7 +1,7 @@
 import { ReducerLoadingState } from '@shared/types'
 
 export interface AdminsState {
-  admins: GetAdminsResponse['items']
+  admins: Admin[]
   adminsStatus: ReducerLoadingState
 }
 
@@ -21,10 +21,21 @@ export interface GetAdminsResponse {
   per_page: number
 }
 
+export type Admin = GetAdminsResponse['items'][number]
+
 export interface CreateAdminApiPayload {
   username: string
   password: string
   tenant: string
   is_superuser: boolean
+  clinic_id?: string
+}
+
+export interface EditAdminPayload {
+  admin_id: string
+  username: string
+  password: string
+  is_superuser: boolean
+  tenant?: string
   clinic_id?: string
 }

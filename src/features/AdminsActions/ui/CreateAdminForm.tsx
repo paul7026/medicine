@@ -20,7 +20,6 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   const form = useForm<CreateAdminFormValues>({
     defaultValues: {
       tenant: '',
-      clinic_id: '',
       is_superuser: false,
       password: '',
       username: '',
@@ -30,13 +29,28 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   })
 
   const { handleSubmit } = form
-  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   const dispatch = useAppDispatch()
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-  const onSubmit = (data: CreateAdminFormValues) => {
+  const onSubmit = ({
+    is_superuser,
+    password,
+    tenant,
+    username,
+    clinic_id,
+  }: CreateAdminFormValues) => {
     setIsLoading(true)
-    dispatch(createAdminApi(data))
+
+    dispatch(
+      createAdminApi({
+        is_superuser,
+        password,
+        tenant,
+        username,
+        ...(clinic_id && { clinic_id }),
+      })
+    )
       .unwrap()
       .then(() => {
         addSuccessMessage('Admin successfully created')

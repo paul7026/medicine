@@ -1,3 +1,5 @@
+import { Admin } from '@entities/admins'
+
 export interface EditAdminFormValues {
   username: string
   password: string
@@ -5,5 +7,6 @@ export interface EditAdminFormValues {
 }
 
 export interface EditAdminFormProps {
+  admin: Admin
   onClose: () => void
 }

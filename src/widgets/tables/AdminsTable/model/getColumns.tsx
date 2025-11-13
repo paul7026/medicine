@@ -2,21 +2,23 @@ import CheckIcon from '@mui/icons-material/Check'
 import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import EditIcon from '@mui/icons-material/Edit'
-import { GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid'
+import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
+
+import { Admin } from '@entities/admins'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
-  onDeleteClick: (id: GridRowId) => void,
-  onEditClick: (id: GridRowId) => void
+  onDeleteClick: (admin: Admin) => void,
+  onEditClick: (admin: Admin) => void
 ): GridColDef[] => [
   {
     field: 'actions',
     type: 'actions',
     cellClassName: 'actions',
     minWidth: 150,
-    getActions: ({ id }) => {
+    getActions: ({ row }) => {
       return [
         <GridActionsCellItem
           key={0}
@@ -24,14 +26,14 @@ export const getColumns = (
           color="inherit"
           icon={<EditIcon color="info" />}
           label="Edit"
-          onClick={() => onEditClick(id)}
+          onClick={() => onEditClick(row)}
         />,
         <GridActionsCellItem
           key={1}
           color="inherit"
           icon={<DeleteIcon color="info" />}
           label="Delete"
-          onClick={() => onDeleteClick(id)}
+          onClick={() => onDeleteClick(row)}
         />,
       ]
     },

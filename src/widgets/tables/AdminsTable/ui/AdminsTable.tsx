@@ -1,11 +1,15 @@
-import { GridRowId } from '@mui/x-data-grid'
-
 import { useEffect, useState } from 'react'
 
-import { adminsSelector, getAdminsApi } from '@entities/admins'
+import {
+  Admin,
+  adminsSelector,
+  deleteAdminApi,
+  getAdminsApi,
+} from '@entities/admins'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
@@ -18,34 +22,46 @@ import { getColumns } from '../model/getColumns'
 export const AdminsTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
   const [editIsOpen, setEditIsOpen] = useState(false)
-  const [id, setId] = useState<GridRowId | null>(null)
+  const [admin, setAdmin] = useState<Admin | null>(null)
 
   const { admins, status } = useAppSelector(adminsSelector)
 
   const dispatch = useAppDispatch()
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
     dispatch(getAdminsApi())
   }, [dispatch])
 
-  const handleClickDelete = (id: GridRowId) => {
-    setId(id)
+  const handleClickDelete = (admin: Admin) => {
+    setAdmin(admin)
     setDeleteIsOpen(true)
   }
 
-  const handleEdit = (id: GridRowId) => {
-    setId(id)
+  const handleEdit = (admin: Admin) => {
+    setAdmin(admin)
     setEditIsOpen(true)
   }
 
   const handleClose = () => {
     setDeleteIsOpen(false)
     setEditIsOpen(false)
-    setId(null)
+    setAdmin(null)
   }
 
   const handleDelete = () => {
-    handleClose()
+    if (!admin) {
+      return
+    }
+
+    dispatch(deleteAdminApi(admin.id))
+      .unwrap()
+      .then(() => {
+        handleClose()
+        addSuccessMessage('Admin deleted')
+        dispatch(getAdminsApi())
+      })
+      .catch((err) => addErrorMessage(err))
   }
 
   return (
@@ -68,7 +84,7 @@ export const AdminsTable = () => {
       >
         <Typography>
           Are you sure you want to delete the admin with id:{' '}
-          <strong>{id}</strong>?
+          <strong>{admin?.id}</strong>?
         </Typography>
       </Modal>
 
@@ -78,7 +94,7 @@ export const AdminsTable = () => {
         title="Editing an admin"
         onClose={handleClose}
       >
-        <EditAdminForm onClose={handleClose} />
+        {admin && <EditAdminForm admin={admin} onClose={handleClose} />}
       </Modal>
     </>
   )
