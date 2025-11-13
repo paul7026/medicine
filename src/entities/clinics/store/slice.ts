@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getClinicsApi } from '../api'
+import { getClinicByIdApi, getClinicsApi } from '../api'
 import { ClinicsState } from '../types'
 
 const initialState: ClinicsState = {
   clinics: [],
   clinicsStatus: 'idle',
+
+  clinicById: null,
+  clinicByIdStatus: 'idle',
 }
 
 const clinicsSlice = createSlice({
@@ -23,6 +26,17 @@ const clinicsSlice = createSlice({
       })
       .addCase(getClinicsApi.rejected, (state) => {
         state.clinicsStatus = 'failed'
+      })
+
+      .addCase(getClinicByIdApi.pending, (state) => {
+        state.clinicByIdStatus = 'pending'
+      })
+      .addCase(getClinicByIdApi.fulfilled, (state, action) => {
+        state.clinicById = action.payload
+        state.clinicByIdStatus = 'succeeded'
+      })
+      .addCase(getClinicByIdApi.rejected, (state) => {
+        state.clinicByIdStatus = 'failed'
       })
   },
 })

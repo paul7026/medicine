@@ -1,1 +1,5 @@
 export * from './getClinicsApi'
+export * from './createClinicApi'
+export * from './deleteClinicApi'
+export * from './getClinicByIdApi'
+export * from './editClinicApi'
