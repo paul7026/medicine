@@ -3,7 +3,7 @@ import $api from '@shared/http/api.config'
 
 import { GetWhoAmIResponse } from '../types'
 
-export const getWhoAmIApi = createThunkWithErrorHandler<
+export const getWhoAmIApi1 = createThunkWithErrorHandler<
   GetWhoAmIResponse,
   void
 >('auth/getWhoAmI', async () => {
