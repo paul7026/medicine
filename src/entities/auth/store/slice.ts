@@ -1,38 +1,41 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { loginApi } from '../api'
+import { cookies } from '@shared/http/cookies'
+
+import { getWhoAmIApi } from '../api'
 import { AuthState } from '../types'
 
 const initialState: AuthState = {
-  loginStatus: 'idle',
+  whoAmI: null,
+  whoAmIStatus: 'idle',
 }
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    // logout: (state) => {
-    //   cookies.remove('token', {
-    //     path: '/',
-    //     secure: false,
-    //   })
-    //   localStorage.clear()
-    //   state.token = null
-    // },
+    logout: () => {
+      cookies.remove('access_token', {
+        path: '/',
+        secure: false,
+      })
+      localStorage.clear()
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(loginApi.pending, (state) => {
-        state.loginStatus = 'pending'
+      .addCase(getWhoAmIApi.pending, (state) => {
+        state.whoAmIStatus = 'pending'
       })
-      .addCase(loginApi.fulfilled, (state) => {
-        state.loginStatus = 'succeeded'
+      .addCase(getWhoAmIApi.fulfilled, (state, action) => {
+        state.whoAmIStatus = 'succeeded'
+        state.whoAmI = action.payload
       })
-      .addCase(loginApi.rejected, (state) => {
-        state.loginStatus = 'failed'
+      .addCase(getWhoAmIApi.rejected, (state) => {
+        state.whoAmIStatus = 'failed'
       })
   },
 })
 
-// export const { logout } = authSlice.actions
+export const { logout } = authSlice.actions
 export const authReducer = authSlice.reducer

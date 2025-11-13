@@ -1,7 +1,8 @@
 import { ReducerLoadingState } from '@shared/types'
 
 export interface AuthState {
-  loginStatus: ReducerLoadingState
+  whoAmI: GetWhoAmIResponse | null
+  whoAmIStatus: ReducerLoadingState
 }
 
 export interface GetWhoAmIResponse {

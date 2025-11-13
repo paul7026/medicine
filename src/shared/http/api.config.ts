@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import { cookies } from './cookies'
 
-const baseURL = '/api'
+const baseURL = '/admin'
 
 const $api = axios.create({
   withCredentials: true,

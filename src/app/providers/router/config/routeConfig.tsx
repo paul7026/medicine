@@ -10,13 +10,15 @@ import { NotFoundPage } from '@pages/NotFoundPage'
 import { ProfilesPage } from '@pages/ProfilesPage'
 import { UsersPage } from '@pages/UsersPage'
 
+import { PrivateRoute } from '../ui/PrivateRoute'
+
 export const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      // <PrivateRoute>
-      <MainPage />
-      // </PrivateRoute>
+      <PrivateRoute>
+        <MainPage />
+      </PrivateRoute>
     ),
     children: [
       // {

@@ -3,7 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
-import { loginApi } from '@entities/auth'
+import { getWhoAmIApi, loginApi } from '@entities/auth'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -35,16 +35,24 @@ export const LoginForm = () => {
   const onSubmit = (data: LoginFormValues) => {
     dispatch(loginApi(data))
       .unwrap()
-      .then(() => navigate('/'))
+      .then(() => {
+        dispatch(getWhoAmIApi()).then(() => navigate('/'))
+      })
       .catch((err) => addErrorMessage(err))
   }
 
   return (
     <Card sx={{ width: 600 }}>
-      <form id="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form autoComplete="on" id="login-form" onSubmit={handleSubmit(onSubmit)}>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <TextFieldControl form={form} label="Username *" name="username" />
           <TextFieldControl
+            autoComplete="username"
+            form={form}
+            label="Username *"
+            name="username"
+          />
+          <TextFieldControl
+            autoComplete="current-password"
             form={form}
             label="Password *"
             name="password"
