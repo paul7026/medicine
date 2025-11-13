@@ -3,6 +3,9 @@ import { ReducerLoadingState } from '@shared/types'
 export interface UsersState {
   users: GetUsersResponse['items']
   usersStatus: ReducerLoadingState
+
+  userById: UserById | null
+  userByIdStatus: ReducerLoadingState
 }
 
 export interface GetUsersResponse {
@@ -17,3 +20,29 @@ export interface GetUsersResponse {
   page: number
   per_page: number
 }
+
+export interface UserById {
+  id: string
+  external_id: string
+  tenant: string
+  clinic_id: string
+  name: string
+  country: string
+  date_of_birth: string
+  height: string
+  weight: string
+  gender: string
+  goal: string
+  custom_goal: string
+  complaints: string[]
+  custom_complaint: string
+  lifestyle: {
+    additionalProp1: object
+  }
+  contraindications: {
+    additionalProp1: object
+  }
+  is_onboarded: boolean
+}
+
+export type GetUserByIdResponse = UserById

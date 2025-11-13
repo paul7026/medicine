@@ -1,11 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getUsersApi } from '../api'
+import { getUserByIdApi, getUsersApi } from '../api'
 import { UsersState } from '../types'
 
 const initialState: UsersState = {
   users: [],
   usersStatus: 'idle',
+
+  userById: null,
+  userByIdStatus: 'idle',
 }
 
 const usersSlice = createSlice({
@@ -23,6 +26,17 @@ const usersSlice = createSlice({
       })
       .addCase(getUsersApi.rejected, (state) => {
         state.usersStatus = 'failed'
+      })
+
+      .addCase(getUserByIdApi.pending, (state) => {
+        state.userByIdStatus = 'pending'
+      })
+      .addCase(getUserByIdApi.fulfilled, (state, action) => {
+        state.userById = action.payload
+        state.userByIdStatus = 'succeeded'
+      })
+      .addCase(getUserByIdApi.rejected, (state) => {
+        state.userByIdStatus = 'failed'
       })
   },
 })
