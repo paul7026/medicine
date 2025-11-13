@@ -1,19 +1,19 @@
-import logo from './images/login_img.png'
+import { LoginForm } from '@features/forms/LoginForm'
 
-import styles from './LoginPage.module.scss'
+import { Page } from '@shared/ui/Page'
 
 const LoginPage = () => {
   return (
-    <div className={styles.loginPage}>
-      <header className={styles.loginHeader} />
-      <div className={styles.loginMain}>
-        {/* <LoginForm /> */}
-
-        <div className={styles.loginImg}>
-          <img alt="veil" src={logo} />
-        </div>
-      </div>
-    </div>
+    <Page
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <LoginForm />
+    </Page>
   )
 }
 

@@ -1,4 +1,3 @@
-import { useTheme } from '@mui/material'
 import { DataGrid } from '@mui/x-data-grid'
 
 import { Box } from '@shared/ui/Box'
@@ -12,8 +11,6 @@ export const Table = ({
   multilineRow = false,
   ...props
 }: TableProps) => {
-  const theme = useTheme()
-
   return (
     <Box
       sx={{
@@ -32,16 +29,15 @@ export const Table = ({
         showCellVerticalBorder
         showColumnVerticalBorder
         checkboxSelection={!isSingleSelection}
-        getRowClassName={({ row }) =>
-          row.status ? `super-app-theme--${row.status}` : ''
-        }
         getRowHeight={multilineRow ? () => 'auto' : undefined}
         initialState={{
           pagination: { paginationModel: { pageSize: 25 } },
         }}
-        rowHeight={42}
         slots={{ noRowsOverlay: CustomNoRowsOverlay }}
         sx={{
+          borderColor: 'primary.light',
+          '--DataGrid-rowBorderColor': '#e0e0e0',
+          boxShadow: 2,
           '& .MuiDataGrid-cell': multilineRow
             ? {
                 whiteSpace: 'normal',
@@ -59,15 +55,6 @@ export const Table = ({
             fontWeight: 'bold',
           },
           backgroundColor: 'white',
-          '& .super-app-theme--FAILED': {
-            color: theme.palette.error.main,
-          },
-          '& .super-app-theme--CREATING': {
-            color: theme.palette.info.main,
-          },
-          '& .super-app-theme--PARTIAL': {
-            color: theme.palette.warning.main,
-          },
         }}
       />
     </Box>

@@ -1,3 +1,5 @@
+import { Toolbar } from '@mui/material'
+
 import { Box } from '@shared/ui/Box'
 import { Breadcrumbs } from '@shared/ui/Breadcrumbs'
 
@@ -8,7 +10,7 @@ export const Page = ({ children, id, sx, breadcrumbsList }: PageProps) => {
     <Box
       id={id}
       sx={{
-        backgroundColor: '#FAFAFB',
+        backgroundColor: '#F5F9FA',
         height: '100%',
         width: '100%',
         display: 'flex',
@@ -18,13 +20,13 @@ export const Page = ({ children, id, sx, breadcrumbsList }: PageProps) => {
         ...sx,
       }}
     >
+      <Toolbar />
       {breadcrumbsList && (
         <Breadcrumbs
           breadcrumbsList={breadcrumbsList}
           sx={{ fontSize: '1.2rem', pt: 1, pb: 1, mb: 1 }}
         />
       )}
-
       {children}
     </Box>
   )

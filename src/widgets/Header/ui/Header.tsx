@@ -1,5 +1,10 @@
+import AccountCircle from '@mui/icons-material/AccountCircle'
 import { AppBar, Toolbar } from '@mui/material'
 
+import { useNavigate } from 'react-router-dom'
+
+import { Box } from '@shared/ui/Box'
+import { Button } from '@shared/ui/Button'
 import { Typography } from '@shared/ui/Typography'
 
 interface HeaderProps {
@@ -7,6 +12,12 @@ interface HeaderProps {
 }
 
 export const Header = ({ drawerWidth }: HeaderProps) => {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    navigate('/login')
+  }
+
   return (
     <AppBar
       position="fixed"
@@ -16,10 +27,19 @@ export const Header = ({ drawerWidth }: HeaderProps) => {
         backgroundColor: '#E0F7FA',
       }}
     >
-      <Toolbar>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography noWrap component="div" variant="h6">
-          Permanent drawer
+          Medicine
         </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Typography variant="h6">maintainer</Typography>
+            <AccountCircle />
+          </Box>
+          <Button color="warning" variant="outlined" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Box>
       </Toolbar>
     </AppBar>
   )

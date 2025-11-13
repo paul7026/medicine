@@ -1,4 +1,4 @@
-import { CssBaseline, Toolbar } from '@mui/material'
+import { CssBaseline } from '@mui/material'
 
 import { Header } from '@widgets/Header'
 import { NavigationPanel } from '@widgets/NavigationPanel'
@@ -11,7 +11,7 @@ export const Layout = ({ children }: LayoutProps) => {
   const drawerWidth = 240
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ height: '100vh' }}>
       <CssBaseline />
 
       <Header drawerWidth={drawerWidth} />
@@ -20,9 +20,12 @@ export const Layout = ({ children }: LayoutProps) => {
 
       <Box
         component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+        sx={{
+          width: `calc(100% - ${drawerWidth}px)`,
+          ml: `${drawerWidth}px`,
+          height: '100%',
+        }}
       >
-        <Toolbar />
         {children}
       </Box>
     </Box>
