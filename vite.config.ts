@@ -44,33 +44,11 @@ export default ({ mode }) => {
     ],
     server: {
       proxy: {
-        '/admin': {
+        '/admin/': {
           target: proxyUrl,
           changeOrigin: true,
           secure: true,
         },
-        // '/api': {
-        //   target: proxyUrl,
-        //   changeOrigin: true,
-        // },
-        // '/upload': {
-        //   target: proxyUrl,
-        //   changeOrigin: true,
-        // },
-        // '/download': {
-        //   target: proxyUrl,
-        //   changeOrigin: true,
-        // },
-        // '/ws': {
-        //   target: proxyUrl,
-        //   changeOrigin: true,
-        //   ws: true,
-        //   secure: false,
-        //   headers: {
-        //     Connection: 'Upgrade',
-        //     Upgrade: 'websocket',
-        //   },
-        // },
       },
     },
   })

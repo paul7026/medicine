@@ -3,10 +3,10 @@ import { AppBar, Toolbar } from '@mui/material'
 
 import { useNavigate } from 'react-router-dom'
 
-import { logout, whoAmISelector } from '@entities/auth'
+import { logout } from '@entities/auth'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
-import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useLocalStorageState } from '@shared/hooks/useLocalStorageState'
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { Typography } from '@shared/ui/Typography'
@@ -16,7 +16,9 @@ interface HeaderProps {
 }
 
 export const Header = ({ drawerWidth }: HeaderProps) => {
-  const { whoAmI } = useAppSelector(whoAmISelector)
+  const [tenant] = useLocalStorageState('tenant')
+
+  console.log(tenant)
 
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
@@ -41,9 +43,8 @@ export const Header = ({ drawerWidth }: HeaderProps) => {
         </Typography>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            {whoAmI && (
-              <Typography variant="h6">{`${whoAmI.username} (${whoAmI.tenant})`}</Typography>
-            )}
+            <Typography variant="h6">{`${tenant.username} (${tenant.tenant})`}</Typography>
+
             <AccountCircle />
           </Box>
           <Button color="warning" variant="outlined" onClick={handleLogout}>
