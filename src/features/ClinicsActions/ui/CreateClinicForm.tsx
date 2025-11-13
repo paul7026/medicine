@@ -1,11 +1,13 @@
 import { yupResolver } from '@hookform/resolvers/yup'
 
+import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { createAdminApi } from '@entities/admins'
+import { createClinicApi, getClinicsApi } from '@entities/clinics'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
+import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { Fields } from './Fields'
 
@@ -13,13 +15,18 @@ import { CreateClinicFormProps, CreateClinicFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
 export const CreateClinicForm = ({ onClose }: CreateClinicFormProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+
   const form = useForm<CreateClinicFormValues>({
     defaultValues: {
-      tenant: '',
-      clinic_id: '',
-      is_superuser: false,
-      password: '',
-      username: '',
+      description: '',
+      email: '',
+      legal_address: '',
+      legal_name: '',
+      managed_by: '',
+      phones: '',
+      title: '',
+      website: '',
     },
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema()),
@@ -31,21 +38,25 @@ export const CreateClinicForm = ({ onClose }: CreateClinicFormProps) => {
   const dispatch = useAppDispatch()
 
   const onSubmit = (data: CreateClinicFormValues) => {
-    dispatch(createAdminApi(data))
+    setIsLoading(true)
+    dispatch(createClinicApi(data))
       .unwrap()
       .then(() => {
         addSuccessMessage('Clinic successfully created')
         onClose()
+        dispatch(getClinicsApi())
       })
       .catch((err) => {
         addErrorMessage(err)
       })
+      .finally(() => setIsLoading(false))
   }
 
   return (
     <FormProvider {...form}>
       <form id="create-form" onSubmit={handleSubmit(onSubmit)}>
         <Fields />
+        <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>
   )

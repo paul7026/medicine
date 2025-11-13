@@ -1,46 +1,47 @@
-import { useFormContext, useWatch } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 
 import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
-import { SwitchControl } from '@shared/ui/Switch'
 import { TextFieldControl } from '@shared/ui/TextField'
 
-import { CLINIC_SELECT_ITEMS, TENANT_SELECT_ITEMS } from '../model/constants'
+import { MANAGED_BY_SELECT_ITEMS } from '../model/constants'
 import { CreateClinicFormValues } from '../model/types'
 
 export const Fields = () => {
   const form = useFormContext<CreateClinicFormValues>()
 
-  const { control } = form
-
-  const tenant = useWatch({ control, name: 'tenant' })
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <TextFieldControl form={form} label="Title *" name="title" />
+
       <SelectControl
-        fullWidth
         form={form}
-        label="Tenant *"
-        name="tenant"
-        selectItems={TENANT_SELECT_ITEMS}
+        label="Managed by *"
+        name="managed_by"
+        selectItems={MANAGED_BY_SELECT_ITEMS}
       />
 
-      {tenant !== 'panacea' && (
-        <SelectControl
-          fullWidth
-          disabled={tenant === 'panacea'}
-          form={form}
-          label="Clinic"
-          name="clinic_id"
-          selectItems={CLINIC_SELECT_ITEMS}
-        />
-      )}
+      <TextFieldControl form={form} label="Website" name="website" />
 
-      <TextFieldControl form={form} label="Username *" name="username" />
+      <TextFieldControl form={form} label="Legal name *" name="legal_name" />
 
-      <TextFieldControl form={form} label="Password *" name="password" />
+      <TextFieldControl
+        form={form}
+        label="Legal address"
+        name="legal_address"
+      />
 
-      <SwitchControl form={form} label="Is superuser" name="is_superuser" />
+      <TextFieldControl form={form} label="Phones" name="phones" />
+
+      <TextFieldControl form={form} label="Email" name="email" type="email" />
+
+      <TextFieldControl
+        multiline
+        form={form}
+        label="Description"
+        name="description"
+        rows={4}
+      />
     </Box>
   )
 }

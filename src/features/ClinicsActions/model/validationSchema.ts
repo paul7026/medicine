@@ -4,11 +4,12 @@ import { CreateClinicFormValues } from './types'
 
 export const validationSchema = (): Yup.ObjectSchema<CreateClinicFormValues> =>
   Yup.object().shape({
-    is_superuser: Yup.boolean().required(),
-    tenant: Yup.string().required(),
-    clinic_id: Yup.string(),
-    password: Yup.string()
-      .required()
-      .min(8, 'Password should have at least 8 characters'),
-    username: Yup.string().required(),
+    title: Yup.string().required().trim(),
+    legal_name: Yup.string().required().trim(),
+    managed_by: Yup.string().trim().required(),
+    website: Yup.string().trim(),
+    legal_address: Yup.string().trim(),
+    phones: Yup.string().trim(),
+    email: Yup.string().trim(),
+    description: Yup.string().trim(),
   })

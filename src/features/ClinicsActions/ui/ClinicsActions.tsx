@@ -34,7 +34,7 @@ export const ClinicsActions = () => {
       <Modal
         formId="create-form"
         open={open}
-        title="Create new admin"
+        title="Create new clinic"
         onClose={handleClose}
       >
         <CreateClinicForm onClose={handleClose} />

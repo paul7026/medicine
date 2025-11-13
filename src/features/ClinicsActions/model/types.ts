@@ -1,9 +1,12 @@
 export interface CreateClinicFormValues {
-  tenant: string
-  username: string
-  password: string
-  is_superuser: boolean
-  clinic_id?: string
+  title: string
+  legal_name: string
+  managed_by: string
+  website?: string
+  legal_address?: string
+  phones?: string
+  email?: string
+  description?: string
 }
 
 export interface CreateClinicFormProps {
