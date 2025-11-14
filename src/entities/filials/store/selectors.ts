@@ -11,3 +11,11 @@ export const filialsSelector = createSelector(
     status: filialsStatus,
   })
 )
+
+export const filialByIdSelector = createSelector(
+  baseSelector,
+  ({ filialById, filialByIdStatus }) => ({
+    filialById,
+    status: filialByIdStatus,
+  })
+)

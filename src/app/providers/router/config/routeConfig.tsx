@@ -4,6 +4,7 @@ import { AdminsPage } from '@pages/AdminsPage'
 import { AffiliatePage } from '@pages/AffiliatePage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
+import { EmployeesPage } from '@pages/EmployeesPage'
 import { LoginPage } from '@pages/LoginPage'
 import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
@@ -35,8 +36,8 @@ export const router = createBrowserRouter([
         element: <UsersPage />,
       },
       {
-        path: 'profiles',
-        element: <ProfilesPage />,
+        path: 'employees',
+        element: <EmployeesPage />,
       },
       {
         path: 'clinics',

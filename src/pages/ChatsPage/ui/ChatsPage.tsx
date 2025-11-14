@@ -1,3 +1,5 @@
+import { ChatsTable } from '@widgets/tables/ChatsTable'
+
 import { Page } from '@shared/ui/Page'
 
 const ChatsPage = () => {
@@ -6,7 +8,7 @@ const ChatsPage = () => {
       breadcrumbsList={[{ id: '0', name: 'Chats', icon: 'chat' }]}
       id="chats-page"
     >
-      ChatsPage
+      <ChatsTable />
     </Page>
   )
 }

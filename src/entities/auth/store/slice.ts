@@ -14,12 +14,21 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    logout: () => {
+    logout: (state) => {
+      // Remove both access and refresh tokens
       cookies.remove('access_token', {
         path: '/',
-        secure: false,
       })
+      cookies.remove('refresh_token', {
+        path: '/',
+      })
+
+      // Clear localStorage
       localStorage.clear()
+
+      // Reset auth state
+      state.whoAmI = null
+      state.whoAmIStatus = 'idle'
     },
   },
   extraReducers: (builder) => {
