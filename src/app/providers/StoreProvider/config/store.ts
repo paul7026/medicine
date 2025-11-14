@@ -3,6 +3,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { adminsReducer } from '@entities/admins'
 import { authReducer } from '@entities/auth'
 import { clinicsReducer } from '@entities/clinics'
+import { employeesReducer } from '@entities/employees'
 import { filialsReducer } from '@entities/filials'
 import { usersReducer } from '@entities/users'
 
@@ -12,6 +13,7 @@ const rootReducer = combineReducers({
   usersReducer,
   clinicsReducer,
   filialsReducer,
+  employeesReducer,
 })
 
 export const setupStore = () => {
