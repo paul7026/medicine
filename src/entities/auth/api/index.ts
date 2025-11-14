@@ -1,2 +1,2 @@
 export * from './loginApi'
-export * from './getwhoAmIApi'
+export * from './getWhoAmIApi'

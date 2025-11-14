@@ -104,7 +104,7 @@ export const CreateClinicForm = ({
       .finally(() => setIsLoading(false))
   }
 
-  if (status === 'pending' || !clinicById) {
+  if ((status === 'pending' || !clinicById) && clinicId) {
     return (
       <Box
         sx={{
