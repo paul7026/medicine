@@ -1,19 +1,21 @@
 import { ReducerLoadingState } from '@shared/types'
 
 export interface PromptsState {
-  prompts: GetPromptsResponse['items']
+  prompts: Prompt[]
   promptsStatus: ReducerLoadingState
 
   promptById: PromptById | null
   promptByIdStatus: ReducerLoadingState
 }
 
+export interface Prompt {
+  id: string
+  clinic_name: string
+  name: string
+}
+
 export interface GetPromptsResponse {
-  items: {
-    id: string
-    clinic_name: string
-    name: string
-  }[]
+  items: Prompt[]
   total: number
   page: number
   per_page: number
@@ -38,6 +40,6 @@ export interface EditPromptPayload {
 
 export interface CreatePromptPayload {
   name: string
-  content: string
+  content?: string
   clinic_id: string
 }
