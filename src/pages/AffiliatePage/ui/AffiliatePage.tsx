@@ -1,3 +1,5 @@
+import { AffiliateActions } from '@features/AffiliateActions'
+
 import { AffiliateTable } from '@widgets/tables/AffiliateTable'
 
 import { Page } from '@shared/ui/Page'
@@ -8,6 +10,8 @@ const AffiliatePage = () => {
       breadcrumbsList={[{ id: '0', name: 'Filials', icon: 'corporate_fare' }]}
       id="filials-page"
     >
+      <AffiliateActions />
+
       <AffiliateTable />
     </Page>
   )

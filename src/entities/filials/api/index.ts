@@ -1,1 +1,5 @@
 export * from './getFilialsApi'
+export * from './getFilialByIdApi'
+export * from './editFilialApi'
+export * from './createFilialApi'
+export * from './deleteFilialApi'

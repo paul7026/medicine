@@ -1,4 +1,4 @@
-export interface EditFilialFormValues {
+export interface CreateFilialFormValues {
   clinic_id: string
   name: string
   address: string
@@ -10,7 +10,6 @@ export interface EditFilialFormValues {
   email?: string
 }
 
-export interface EditFilialFormProps {
-  filialId: string
+export interface CreateFilialFormProps {
   onClose: () => void
 }
