@@ -2,18 +2,23 @@ import { GridRowId } from '@mui/x-data-grid'
 
 import { useEffect, useState } from 'react'
 
-import { clinicsSelector, getClinicsApi } from '@entities/clinics'
+import {
+  clinicsSelector,
+  deleteClinicApi,
+  getClinicsApi,
+} from '@entities/clinics'
+
+import { CreateClinicForm } from '@features/forms/CreateClinicForm'
 
 import { ClinicModalData } from '@widgets/ClinicModalData/ui/ClinicModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
-
-import { EditUserForm } from './EditUserForm'
 
 import { getColumns } from '../model/getColumns'
 
@@ -26,6 +31,7 @@ export const ClinicsTable = () => {
   const { status, clinics } = useAppSelector(clinicsSelector)
 
   const dispatch = useAppDispatch()
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
     dispatch(getClinicsApi())
@@ -42,14 +48,25 @@ export const ClinicsTable = () => {
   }
 
   const handleClose = () => {
+    setId(null)
     setDeleteIsOpen(false)
     setEditIsOpen(false)
     setViewIsOpen(false)
-    setId(null)
   }
 
   const handleDelete = () => {
-    handleClose()
+    if (!id) {
+      return
+    }
+
+    dispatch(deleteClinicApi(id as string))
+      .unwrap()
+      .then(() => {
+        handleClose()
+        addSuccessMessage('Clinic deleted')
+        dispatch(getClinicsApi())
+      })
+      .catch((err) => addErrorMessage(err))
   }
 
   const handleView = (id: GridRowId) => {
@@ -84,10 +101,10 @@ export const ClinicsTable = () => {
       <Modal
         formId="edit-form"
         open={editIsOpen}
-        title="Editing a user"
+        title="Editing a clinic"
         onClose={handleClose}
       >
-        <EditUserForm onClose={handleClose} />
+        <CreateClinicForm clinicId={id} onClose={handleClose} />
       </Modal>
 
       <Modal

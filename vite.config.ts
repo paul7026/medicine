@@ -8,7 +8,7 @@ import CircularDependency from 'vite-plugin-circular-dependency'
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   process.env = { ...process.env, ...env }
-  const proxyUrl = process.env.BASE_URL || 'https://70a9955b1589.ngrok-free.app'
+  const proxyUrl = process.env.BASE_URL || 'https://b8bc855c293e.ngrok-free.app'
 
   console.log('👉 Loaded BASE_URL:', proxyUrl)
 

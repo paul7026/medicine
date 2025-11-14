@@ -1,3 +1,5 @@
+import { GridRowId } from '@mui/x-data-grid'
+
 export interface CreateClinicFormValues {
   title: string
   legal_name: string
@@ -10,5 +12,6 @@ export interface CreateClinicFormValues {
 }
 
 export interface CreateClinicFormProps {
+  clinicId?: GridRowId | null
   onClose: () => void
 }

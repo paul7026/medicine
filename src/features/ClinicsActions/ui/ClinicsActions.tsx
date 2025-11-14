@@ -2,11 +2,11 @@ import AddIcon from '@mui/icons-material/Add'
 
 import { useState } from 'react'
 
+import { CreateClinicForm } from '@features/forms/CreateClinicForm'
+
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
-
-import { CreateClinicForm } from './CreateClinicForm'
 
 export const ClinicsActions = () => {
   const [open, setOpen] = useState(false)
