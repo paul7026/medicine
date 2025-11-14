@@ -2,10 +2,15 @@ import { GridRowId } from '@mui/x-data-grid'
 
 import { useEffect, useState } from 'react'
 
-import { filialsSelector, getFilialsApi } from '@entities/filials'
+import {
+  deleteFilialApi,
+  filialsSelector,
+  getFilialsApi,
+} from '@entities/filials'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
@@ -24,6 +29,7 @@ export const AffiliateTable = () => {
   const { status, filials } = useAppSelector(filialsSelector)
 
   const dispatch = useAppDispatch()
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
     dispatch(getFilialsApi())
@@ -40,14 +46,25 @@ export const AffiliateTable = () => {
   }
 
   const handleClose = () => {
+    setId(null)
     setDeleteIsOpen(false)
     setEditIsOpen(false)
     setViewIsOpen(false)
-    setId(null)
   }
 
   const handleDelete = () => {
-    handleClose()
+    if (!id) {
+      return
+    }
+
+    dispatch(deleteFilialApi(String(id)))
+      .unwrap()
+      .then(() => {
+        handleClose()
+        addSuccessMessage('Filial deleted')
+        dispatch(getFilialsApi())
+      })
+      .catch((err) => addErrorMessage(err))
   }
 
   const handleView = (id: GridRowId) => {
@@ -70,11 +87,11 @@ export const AffiliateTable = () => {
           </Button>
         }
         open={deleteIsOpen}
-        title="Removing a user"
+        title="Removing a filial"
         onClose={handleClose}
       >
         <Typography>
-          Are you sure you want to delete the clinic with id:{' '}
+          Are you sure you want to delete the filial with id:{' '}
           <strong>{id}</strong>?
         </Typography>
       </Modal>
