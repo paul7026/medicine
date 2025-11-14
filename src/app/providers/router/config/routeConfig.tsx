@@ -8,8 +8,8 @@ import { EmployeesPage } from '@pages/EmployeesPage'
 import { LoginPage } from '@pages/LoginPage'
 import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
-import { ProfilesPage } from '@pages/ProfilesPage'
 import { PromptsPage } from '@pages/PromptsPage'
+import { SchedulePage } from '@pages/SchedulePage'
 import { UsersPage } from '@pages/UsersPage'
 
 import { PrivateRoute } from '../ui/PrivateRoute'
@@ -54,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: 'prompts',
         element: <PromptsPage />,
+      },
+      {
+        path: 'schedule',
+        element: <SchedulePage />,
       },
     ],
   },
