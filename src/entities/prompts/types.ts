@@ -11,7 +11,7 @@ export interface PromptsState {
 export interface Prompt {
   id: string
   clinic_name: string
-  name: string
+  prettify_name: string
 }
 
 export interface GetPromptsResponse {
@@ -24,7 +24,7 @@ export interface GetPromptsResponse {
 export interface PromptById {
   id: string
   clinic_id: string
-  name: string
+  prettify_name: string
   content: string
   created_at: string
   updated_at: string
@@ -34,12 +34,5 @@ export type GetPromptByIdPayload = PromptById
 
 export interface EditPromptPayload {
   prompt_id: string
-  name?: string
   content?: string
-}
-
-export interface CreatePromptPayload {
-  name: string
-  content?: string
-  clinic_id: string
 }

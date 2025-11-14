@@ -14,7 +14,13 @@ const initialState: PromptsState = {
 const promptsSlice = createSlice({
   name: 'prompts',
   initialState,
-  reducers: {},
+  reducers: {
+    updatePromptContent: (state, action: { payload: { content: string } }) => {
+      if (state.promptById) {
+        state.promptById.content = action.payload.content
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getPromptsApi.pending, (state) => {
@@ -41,4 +47,5 @@ const promptsSlice = createSlice({
   },
 })
 
+export const { updatePromptContent } = promptsSlice.actions
 export const promptsReducer = promptsSlice.reducer

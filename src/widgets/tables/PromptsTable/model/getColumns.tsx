@@ -1,20 +1,16 @@
-import DeleteIcon from '@mui/icons-material/DeleteOutlined'
-import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 
 import { Prompt } from '@entities/prompts'
 
 export const getColumns = (
-  onDeleteClick: (prompt: Prompt) => void,
-  onEditClick: (prompt: Prompt) => void,
   onViewClick: (prompt: Prompt) => void
 ): GridColDef[] => [
   {
     field: 'actions',
     type: 'actions',
     cellClassName: 'actions',
-    minWidth: 150,
+    minWidth: 120,
     getActions: ({ row }) => {
       return [
         <GridActionsCellItem
@@ -24,21 +20,6 @@ export const getColumns = (
           icon={<VisibilityIcon color="info" />}
           label="View"
           onClick={() => onViewClick(row)}
-        />,
-        <GridActionsCellItem
-          key={0}
-          className="textPrimary"
-          color="inherit"
-          icon={<EditIcon color="info" />}
-          label="Edit"
-          onClick={() => onEditClick(row)}
-        />,
-        <GridActionsCellItem
-          key={1}
-          color="inherit"
-          icon={<DeleteIcon color="info" />}
-          label="Delete"
-          onClick={() => onDeleteClick(row)}
         />,
       ]
     },
@@ -59,11 +40,11 @@ export const getColumns = (
     align: 'center',
   },
   {
-    field: 'name',
-    headerName: 'Name',
+    field: 'prettify_name',
+    headerName: 'Prettify name',
     minWidth: 300,
+    flex: 1,
     headerAlign: 'center',
     align: 'center',
-    flex: 1,
   },
 ]

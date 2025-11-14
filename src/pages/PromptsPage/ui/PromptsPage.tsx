@@ -1,5 +1,3 @@
-import { PromptsActions } from '@features/PromptsActions'
-
 import { PromptsTable } from '@widgets/tables/PromptsTable'
 
 import { Page } from '@shared/ui/Page'
@@ -10,8 +8,6 @@ const PromptsPage = () => {
       breadcrumbsList={[{ id: '0', name: 'Prompts', icon: 'smart_toy' }]}
       id="prompts-page"
     >
-      <PromptsActions />
-
       <PromptsTable />
     </Page>
   )
