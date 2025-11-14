@@ -8,6 +8,8 @@ import {
   getFilialsApi,
 } from '@entities/filials'
 
+import { AffiliateModalData } from '@widgets/AffiliateModalData'
+
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -106,12 +108,14 @@ export const AffiliateTable = () => {
       </Modal>
 
       <Modal
+        withoutActionButtons
         formId="view-form"
+        maxWidth="md"
         open={viewIsOpen}
-        title="User"
+        title="Filial"
         onClose={handleClose}
       >
-        {/* <EditUserForm onClose={handleClose} /> */}
+        {id && <AffiliateModalData filialId={String(id)} />}
       </Modal>
     </>
   )
