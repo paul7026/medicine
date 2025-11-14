@@ -53,13 +53,13 @@ export interface EditFilialPayload {
 }
 
 export interface CreateFilialPayload {
-  name: string
-  timezone: string
-  address: string
-  address_data: string
-  phones: string
-  description: string
-  social_media: string
-  email: string
   clinic_id: string
+  name: string
+  address: string
+  timezone?: string
+  address_data?: string
+  phones?: string
+  description?: string
+  social_media?: string
+  email?: string
 }
