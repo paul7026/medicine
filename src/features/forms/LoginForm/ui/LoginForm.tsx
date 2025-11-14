@@ -43,17 +43,25 @@ export const LoginForm = () => {
 
   return (
     <Card sx={{ width: 600 }}>
-      <form autoComplete="on" id="login-form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        autoComplete="on"
+        id="login-form"
+        name="login-form"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <TextFieldControl
             autoComplete="username"
             form={form}
+            id="username"
             label="Username *"
             name="username"
+            type="text"
           />
           <TextFieldControl
             autoComplete="current-password"
             form={form}
+            id="password"
             label="Password *"
             name="password"
             type="password"
