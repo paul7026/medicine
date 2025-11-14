@@ -16,7 +16,7 @@ import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
-import { EditUserForm } from './EditUserForm'
+import { EditFilialForm } from './EditFilialForm'
 
 import { getColumns } from '../model/getColumns'
 
@@ -99,10 +99,10 @@ export const AffiliateTable = () => {
       <Modal
         formId="edit-form"
         open={editIsOpen}
-        title="Editing a user"
+        title="Editing a filial"
         onClose={handleClose}
       >
-        <EditUserForm onClose={handleClose} />
+        {id && <EditFilialForm filialId={String(id)} onClose={handleClose} />}
       </Modal>
 
       <Modal
