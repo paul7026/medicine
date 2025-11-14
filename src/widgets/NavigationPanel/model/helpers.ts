@@ -6,5 +6,6 @@ export const getNavPanelListItems = () => {
     { id: '3', name: 'Clinics', value: 'clinics', icon: 'medical_services' },
     { id: '4', name: 'Affiliate', value: 'affiliate', icon: 'corporate_fare' },
     { id: '5', name: 'Chats', value: 'chats', icon: 'chat' },
+    { id: '6', name: 'Prompts', value: 'prompts', icon: 'smart_toy' },
   ]
 }
