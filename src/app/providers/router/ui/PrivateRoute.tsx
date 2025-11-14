@@ -25,23 +25,20 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
   const accessToken = cookies.get('access_token')
   const hasToken = !!accessToken
 
-  // Check if we have token but no user data
-  const needsUserData = hasToken && !whoAmI && status !== 'pending'
-
   useEffect(() => {
-    // If we have a token but no user data, fetch it
-    if (needsUserData) {
+    // If we have a token but no user data and we're not already fetching, fetch it
+    if (hasToken && !whoAmI && status === 'idle') {
       dispatch(getWhoAmIApi())
     }
-  }, [dispatch, needsUserData])
+  }, [dispatch, hasToken, whoAmI, status])
 
   // Redirect to login if no token
   if (!hasToken) {
     return <Navigate replace to="/login" />
   }
 
-  // Show loading while fetching user data
-  if (status === 'pending' || (hasToken && !whoAmI && !tenant)) {
+  // Show loading while fetching user data or if we're waiting for initial load
+  if (status === 'pending' || (hasToken && status === 'idle')) {
     return (
       <Box
         sx={{
@@ -65,8 +62,8 @@ export const PrivateRoute = ({ children }: PrivateRouteProps) => {
     return <Navigate replace to="/login" />
   }
 
-  // User is authenticated
-  if (whoAmI && tenant) {
+  // User is authenticated - check for either whoAmI or tenant (tenant comes from localStorage)
+  if (whoAmI || tenant) {
     return <WebSocketProvider>{children}</WebSocketProvider>
   }
 
