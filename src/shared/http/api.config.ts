@@ -26,40 +26,59 @@ $api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    // Check if error has response and is 401 Unauthorized
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      originalRequest.url !== '/auth/refresh'
+    ) {
       originalRequest._retry = true
-
-      cookies.remove('access_token', {
-        path: '/',
-        secure: false,
-      })
-
-      window.location.href = '/login'
-
-      localStorage.clear()
 
       try {
         const refreshToken = cookies.get('refresh_token')
-        const response = await axios.post(`${baseURL}/admin/auth/refresh`, {
+
+        if (!refreshToken) {
+          throw new Error('No refresh token available')
+        }
+
+        // Use $api instance with proper baseURL
+        const response = await axios.post(`${baseURL}/auth/refresh`, {
           refresh_token: refreshToken,
         })
-        const { access_token, refresh_token } = response.data
+
+        const { access_token, refresh_token: newRefreshToken } = response.data
 
         cookies.set('access_token', access_token, {
           path: '/',
-          secure: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
         })
 
-        cookies.set('refresh_token', refresh_token, {
+        cookies.set('refresh_token', newRefreshToken, {
           path: '/',
-          secure: false,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'strict',
         })
 
+        // Update the original request with new token
         originalRequest.headers.Authorization = `bearer ${access_token}`
-        return axios(originalRequest)
-      } catch (err) {
-        console.log(err)
-        window.location.href = '/login'
+        return $api(originalRequest)
+      } catch (refreshError) {
+        // If refresh fails, clear everything and redirect to login
+        cookies.remove('access_token', {
+          path: '/',
+        })
+        cookies.remove('refresh_token', {
+          path: '/',
+        })
+        localStorage.clear()
+
+        // Only redirect if not already on login page
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login'
+        }
+
+        return Promise.reject(refreshError)
       }
     }
 

@@ -26,12 +26,14 @@ export const loginApi = createThunkWithErrorHandler<
 
   cookies.set('access_token', access_token, {
     path: '/',
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
   })
 
   cookies.set('refresh_token', refresh_token, {
     path: '/',
-    secure: false,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
   })
 
   return response.data
