@@ -4,6 +4,7 @@ import { AdminsPage } from '@pages/AdminsPage'
 import { AffiliatePage } from '@pages/AffiliatePage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
+import { DocumentsPage } from '@pages/DocumentsPage'
 import { EmployeesPage } from '@pages/EmployeesPage'
 import { FavourCategoriesPage } from '@pages/FavourCategoriesPage'
 import { FavoursPage } from '@pages/FavoursPage'
@@ -64,6 +65,10 @@ export const router = createBrowserRouter([
       {
         path: 'favour_categories',
         element: <FavourCategoriesPage />,
+      },
+      {
+        path: 'documents',
+        element: <DocumentsPage />,
       },
     ],
   },

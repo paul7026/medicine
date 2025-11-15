@@ -13,6 +13,7 @@ export interface UploaderProps {
   onChange: (file: File) => void
   sx?: SxProps<Theme>
   error?: boolean
+  label: string
   errorMessage?: string
   id?: string
   accept?: string
@@ -20,6 +21,7 @@ export interface UploaderProps {
 
 export const Uploader = ({
   file,
+  label,
   onChange,
   id,
   error,
@@ -45,7 +47,8 @@ export const Uploader = ({
     <FormControl error={error} id={id} sx={sx}>
       <TextField
         error={error}
-        placeholder="Выберите файл"
+        label={label}
+        placeholder="Select file *"
         slotProps={{
           input: {
             readOnly: true,

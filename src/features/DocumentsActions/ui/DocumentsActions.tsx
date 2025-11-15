@@ -2,13 +2,13 @@ import AddIcon from '@mui/icons-material/Add'
 
 import { useState } from 'react'
 
-import { CreateFavourCategoryForm } from '@features/forms/CreateFavourCategoryForm'
+import { UploadDocumentForm } from '@features/UploadDocumentForm'
 
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { Modal } from '@shared/ui/Modal'
 
-export const FavourCategoriesActions = () => {
+export const DocumentsActions = () => {
   const [open, setOpen] = useState(false)
 
   const handleClose = () => {
@@ -29,15 +29,15 @@ export const FavourCategoriesActions = () => {
         variant="contained"
         onClick={() => setOpen(true)}
       >
-        Add category
+        Add document
       </Button>
       <Modal
-        formId="create-favour-category-form"
+        formId="upload-document-form"
         open={open}
-        title="Create new category"
+        title="Upload new document"
         onClose={handleClose}
       >
-        <CreateFavourCategoryForm onClose={handleClose} />
+        <UploadDocumentForm onClose={handleClose} />
       </Modal>
     </Box>
   )

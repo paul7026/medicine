@@ -62,7 +62,7 @@ export const CreateFavourCategoryForm = ({
       reset({
         title: favourCategoryById.title,
         clinic_id: favourCategoryById.clinic_id,
-        description: '',
+        description: favourCategoryById.description,
       })
     }
   }, [favourCategoryById, categoryId, reset])
