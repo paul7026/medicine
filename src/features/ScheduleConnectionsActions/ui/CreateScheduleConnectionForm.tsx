@@ -8,6 +8,7 @@ import {
   getScheduleConnectionsApi,
 } from '@entities/schedule_connections'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
@@ -25,6 +26,10 @@ export const CreateScheduleConnectionForm = ({
 }: CreateScheduleConnectionFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateScheduleConnectionFormValues>({
     defaultValues: {
       clinic_id: '',
@@ -35,7 +40,7 @@ export const CreateScheduleConnectionForm = ({
       password: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer)),
   })
 
   const { handleSubmit } = form
@@ -43,10 +48,18 @@ export const CreateScheduleConnectionForm = ({
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-  const onSubmit = (data: CreateScheduleConnectionFormValues) => {
+  const onSubmit = ({
+    clinic_id,
+    ...rest
+  }: CreateScheduleConnectionFormValues) => {
     setIsLoading(true)
 
-    dispatch(createScheduleConnectionApi(data))
+    dispatch(
+      createScheduleConnectionApi({
+        ...(isMaintainer && { clinic_id }),
+        ...rest,
+      })
+    )
       .unwrap()
       .then(() => {
         addSuccessMessage('Schedule connection successfully created')
@@ -62,7 +75,7 @@ export const CreateScheduleConnectionForm = ({
   return (
     <FormProvider {...form}>
       <form id="create-form" onSubmit={handleSubmit(onSubmit)}>
-        <Fields />
+        <Fields isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>

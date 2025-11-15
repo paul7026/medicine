@@ -12,7 +12,11 @@ import { TextFieldControl } from '@shared/ui/TextField'
 import { TYPE_SELECT_ITEMS } from '../model/constants'
 import { CreateScheduleConnectionFormValues } from '../model/types'
 
-export const Fields = () => {
+interface FieldsProps {
+  isMaintainer: boolean
+}
+
+export const Fields = ({ isMaintainer }: FieldsProps) => {
   const form = useFormContext<CreateScheduleConnectionFormValues>()
   const { clinics, status } = useAppSelector(clinicsSelector)
 
@@ -21,7 +25,7 @@ export const Fields = () => {
     name: clinic.legal_name,
     value: clinic.id,
   }))
-
+  console.log(isMaintainer)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -30,14 +34,16 @@ export const Fields = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        form={form}
-        label="Clinic *"
-        loading={status === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && (
+        <SelectControl
+          fullWidth
+          form={form}
+          label="Clinic *"
+          loading={status === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
       <SelectControl
         fullWidth
