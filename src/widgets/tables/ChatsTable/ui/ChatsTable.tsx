@@ -9,6 +9,8 @@ import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 
+import { EditChatsForm } from './EditChatsForm'
+
 import { getColumns } from '../model/getColumns'
 
 export const ChatsTable = () => {
@@ -52,12 +54,10 @@ export const ChatsTable = () => {
       <Modal
         formId="edit-form"
         open={editIsOpen}
-        title="Editing a chat"
+        title="Add new message"
         onClose={handleClose}
       >
-        {chat && (
-          <div>{/* Edit form will be added here for chat: {chat.id} */}</div>
-        )}
+        {chat && <EditChatsForm chatId={chat.id} onClose={handleClose} />}
       </Modal>
 
       <Modal
@@ -68,7 +68,7 @@ export const ChatsTable = () => {
         title="Chat"
         onClose={handleClose}
       >
-        {chat && <ChatModalData chatId={chat.id} />}
+        {chat && <ChatModalData chatId={chat.id} onClose={handleClose} />}
       </Modal>
     </>
   )

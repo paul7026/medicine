@@ -4,4 +4,9 @@ export * from './store/slice'
 
 export * from './store/selectors'
 
-export type { ChatById, Chat, ChatHistoryItem } from './types'
+export type {
+  ChatById,
+  Chat,
+  ChatHistoryItem,
+  GetChatHistoryResponse,
+} from './types'

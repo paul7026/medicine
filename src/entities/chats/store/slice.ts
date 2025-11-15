@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getChatByIdApi, getChatsApi } from '../api'
+import { getChatByIdApi, getChatHistoryApi, getChatsApi } from '../api'
 import { ChatsState } from '../types'
 
 const initialState: ChatsState = {
@@ -9,6 +9,9 @@ const initialState: ChatsState = {
 
   chatById: null,
   chatByIdStatus: 'idle',
+
+  chatHistory: [],
+  chatHistoryStatus: 'idle',
 }
 
 const chatsSlice = createSlice({
@@ -37,6 +40,17 @@ const chatsSlice = createSlice({
       })
       .addCase(getChatByIdApi.rejected, (state) => {
         state.chatByIdStatus = 'failed'
+      })
+
+      .addCase(getChatHistoryApi.pending, (state) => {
+        state.chatHistoryStatus = 'pending'
+      })
+      .addCase(getChatHistoryApi.fulfilled, (state, action) => {
+        state.chatHistory = action.payload.chat_history
+        state.chatHistoryStatus = 'succeeded'
+      })
+      .addCase(getChatHistoryApi.rejected, (state) => {
+        state.chatHistoryStatus = 'failed'
       })
   },
 })

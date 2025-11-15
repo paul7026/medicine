@@ -19,3 +19,11 @@ export const chatByIdSelector = createSelector(
     status: chatByIdStatus,
   })
 )
+
+export const chatHistorySelector = createSelector(
+  baseSelector,
+  ({ chatHistory, chatHistoryStatus }) => ({
+    chatHistory,
+    status: chatHistoryStatus,
+  })
+)

@@ -6,6 +6,9 @@ export interface ChatsState {
 
   chatById: ChatById | null
   chatByIdStatus: ReducerLoadingState
+
+  chatHistory: ChatHistoryItem[]
+  chatHistoryStatus: ReducerLoadingState
 }
 
 export interface GetChatsResponse {
@@ -51,3 +54,17 @@ export interface ChatById {
 export type GetChatByIdResponse = ChatById
 
 export type GetChatByIdPayload = string
+
+export interface GetChatHistoryResponse {
+  chat_history: ChatHistoryItem[]
+}
+
+export type GetChatHistoryPayload = string
+
+export interface EditChatPayload {
+  chat_id: string
+  message: string
+  meta?: {
+    [key: string]: unknown
+  }
+}
