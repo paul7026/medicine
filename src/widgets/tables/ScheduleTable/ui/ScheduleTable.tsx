@@ -47,22 +47,32 @@ export const ScheduleTable = () => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        flex: 1,
+        minHeight: 0,
+      }}
+    >
       <ScheduleFiltersComponent
         filters={filters}
         onFiltersChange={handleFiltersChange}
         onReset={handleResetFilters}
       />
-      <Table
-        isSingleSelection
-        columns={getColumns()}
-        loading={status === 'pending'}
-        paginationMode="server"
-        paginationModel={paginationModel}
-        rowCount={total}
-        rows={slots}
-        onPaginationModelChange={setPaginationModel}
-      />
+      <Box sx={{ flex: 1, minHeight: 0 }}>
+        <Table
+          isSingleSelection
+          columns={getColumns()}
+          loading={status === 'pending'}
+          paginationMode="server"
+          paginationModel={paginationModel}
+          rowCount={total}
+          rows={slots}
+          onPaginationModelChange={setPaginationModel}
+        />
+      </Box>
     </Box>
   )
 }

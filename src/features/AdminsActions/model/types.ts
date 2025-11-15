@@ -1,5 +1,5 @@
 export interface CreateAdminFormValues {
-  tenant: string
+  tenant?: string
   username: string
   password: string
   is_superuser: boolean

@@ -3,6 +3,14 @@ import { ReducerLoadingState } from '@shared/types'
 export interface AdminsState {
   admins: Admin[]
   adminsStatus: ReducerLoadingState
+  total: number
+  page: number
+  per_page: number
+}
+
+export interface GetAdminsPayload {
+  page?: number
+  per_page?: number
 }
 
 export interface GetAdminsResponse {
