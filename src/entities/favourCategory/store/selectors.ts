@@ -11,3 +11,11 @@ export const favourCategoriesSelector = createSelector(
     status: favourCategoriesStatus,
   })
 )
+
+export const favourCategoryByIdSelector = createSelector(
+  baseSelector,
+  ({ favourCategoryById, favourCategoryByIdStatus }) => ({
+    favourCategoryById,
+    status: favourCategoryByIdStatus,
+  })
+)

@@ -8,5 +8,11 @@ export const getNavPanelListItems = () => {
     { id: '5', name: 'Favours', value: 'favours', icon: 'medical_services' },
     { id: '6', name: 'Chats', value: 'chats', icon: 'chat' },
     { id: '7', name: 'Prompts', value: 'prompts', icon: 'smart_toy' },
+    {
+      id: '8',
+      name: 'Favour categories',
+      value: 'favour_categories',
+      icon: 'home_health',
+    },
   ]
 }
