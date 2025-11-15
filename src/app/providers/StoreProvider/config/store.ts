@@ -4,6 +4,8 @@ import { adminsReducer } from '@entities/admins'
 import { authReducer } from '@entities/auth'
 import { clinicsReducer } from '@entities/clinics'
 import { employeesReducer } from '@entities/employees'
+import { favourCategoriesReducer } from '@entities/favourCategory'
+import { favoursReducer } from '@entities/favours'
 import { filialsReducer } from '@entities/filials'
 import { promptsReducer } from '@entities/prompts'
 import { usersReducer } from '@entities/users'
@@ -16,6 +18,8 @@ const rootReducer = combineReducers({
   filialsReducer,
   promptsReducer,
   employeesReducer,
+  favoursReducer,
+  favourCategoriesReducer,
 })
 
 export const setupStore = () => {
