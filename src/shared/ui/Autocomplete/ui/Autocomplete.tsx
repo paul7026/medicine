@@ -48,7 +48,6 @@ export const Autocomplete = <
         isOptionEqualToValue={isOptionEqualToValue}
         loading={loading}
         multiple={multiple}
-        noOptionsText="Нет доступных вариантов"
         options={options}
         renderInput={(params) => (
           <TextField

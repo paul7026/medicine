@@ -11,9 +11,9 @@ export interface FilialsState {
 export interface GetFilialsResponse {
   items: {
     id: string
-    title: string
-    legal_name: string
-    managed_by: string
+    name: string
+    clinic_title: string
+    address: string
   }[]
   total: number
   page: number
@@ -62,4 +62,14 @@ export interface CreateFilialPayload {
   description?: string
   social_media?: string
   email?: string
+}
+
+export interface FavourToFilialPayload {
+  filials: string[]
+  favour_id: string
+}
+
+export interface FavourToEmployeePayload {
+  employees: string[]
+  favour_id: string
 }

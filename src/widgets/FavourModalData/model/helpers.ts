@@ -3,7 +3,15 @@ import { GetFavourByIdResponse } from '@entities/favours'
 import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { isArray } from '@shared/helpers/isArray'
 
-export const getData = (favourById: GetFavourByIdResponse) => {
+import { FavourModalValues } from './types'
+
+export const getData = ({
+  setModalValue,
+  favourById,
+}: {
+  setModalValue: (formValue: FavourModalValues) => void
+  favourById: GetFavourByIdResponse
+}) => {
   return [
     { title: 'id', subtitle: favourById.id },
     {
@@ -40,12 +48,16 @@ export const getData = (favourById: GetFavourByIdResponse) => {
       subtitle: isArray(favourById.filials)
         ? favourById.filials.map((filial) => filial.name).join(', ')
         : favourById.filials,
+      tooltipTitle: 'Change filials',
+      onClick: () => setModalValue('changeFilials'),
     },
     {
       title: 'employees',
       subtitle: isArray(favourById.employees)
         ? favourById.employees.map((filial) => filial.name).join(', ')
         : favourById.employees,
+      tooltipTitle: 'Change employees',
+      onClick: () => setModalValue('changeEmployees'),
     },
     { title: 'created_at', subtitle: formatIsoString(favourById.created_at) },
     { title: 'updated_at', subtitle: formatIsoString(favourById.updated_at) },
