@@ -6,59 +6,44 @@ import {
   CardContent,
   Collapse,
   IconButton,
+  SxProps,
+  Theme,
   Typography,
 } from '@mui/material'
 
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+import { chatHistorySelector, getChatHistoryApi } from '@entities/chats'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useInterval } from '@shared/hooks/useInterval'
+import { CircularProgress } from '@shared/ui/CircularProgress'
 
-type Message = {
-  id: string
-  text: string
-  sender: 'user' | 'bot'
-  timestamp: string
-  meta?: {
-    type: string
-    [key: string]: unknown
-  }
+import { getBackgroundColor, getTextColor } from '../model/helpers'
+
+interface ChatMessagesProps {
+  chatId: string
+  sx?: SxProps<Theme>
 }
 
-const mockMessages: Message[] = [
-  {
-    id: '1',
-    text: 'Hello, I need help with booking an appointment Hello, I need help with booking an appointment',
-    sender: 'user',
-    timestamp: '2025-01-14T12:00:00.000Z',
-  },
-  {
-    id: '2',
-    text: 'Hello! I can help you with that. What type of appointment do you need?',
-    sender: 'bot',
-    timestamp: '2025-01-14T12:00:05.000Z',
-  },
-  {
-    id: '3',
-    text: 'I need a consultation I need a consultation',
-    sender: 'user',
-    timestamp: '2025-01-14T12:01:00.000Z',
-    meta: {
-      type: 'intent',
-      intent: 'booking',
-      confidence: 0.95,
-      entities: ['consultation'],
-    },
-  },
-  {
-    id: '4',
-    text: 'Sure! I can help you book a consultation. What date would work for you?',
-    sender: 'bot',
-    timestamp: '2025-01-14T12:01:30.000Z',
-  },
-]
+export const ChatMessages = ({ chatId, sx }: ChatMessagesProps) => {
+  const { status, chatHistory } = useAppSelector(chatHistorySelector)
 
-export const ChatMessages = () => {
+  const dispatch = useAppDispatch()
+
   const [expandedMeta, setExpandedMeta] = useState<Set<string>>(new Set())
+
+  const fetchChatHistory = useCallback(() => {
+    dispatch(getChatHistoryApi(chatId))
+  }, [dispatch, chatId])
+
+  useEffect(() => {
+    fetchChatHistory()
+  }, [fetchChatHistory])
+
+  useInterval(fetchChatHistory, 3 * 60 * 1000)
 
   const toggleMeta = (messageId: string) => {
     setExpandedMeta((prev) => {
@@ -79,6 +64,7 @@ export const ChatMessages = () => {
         border: '1px solid #e0e0e0',
         borderRadius: 2,
         overflow: 'hidden',
+        ...sx,
       }}
     >
       <Box
@@ -100,68 +86,101 @@ export const ChatMessages = () => {
           p: 2,
         }}
       >
-        {mockMessages.map((message) => {
-          const isUser = message.sender === 'user'
-          const hasMeta = !!message.meta
-          const isMetaExpanded = expandedMeta.has(message.id)
+        {status === 'pending' && chatHistory && chatHistory.length === 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: 400,
+              width: '100%',
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+        {chatHistory &&
+          chatHistory.length > 0 &&
+          chatHistory.map((message) => {
+            const isUser = message.role === 'user'
+            const hasMeta = !!message.meta
+            const isMetaExpanded = expandedMeta.has(message.id)
 
-          return (
-            <Box
-              key={message.id}
-              sx={{
-                display: 'flex',
-                justifyContent: isUser ? 'flex-end' : 'flex-start',
-                width: '100%',
-              }}
-            >
+            return (
               <Box
+                key={message.id}
                 sx={{
-                  maxWidth: '70%',
                   display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: isUser ? 'flex-end' : 'flex-start',
+                  justifyContent: isUser ? 'flex-start' : 'flex-end',
+                  width: '100%',
                 }}
               >
-                <Card
+                <Box
                   sx={{
-                    backgroundColor: isUser ? '#1976d2' : '#f5f5f5',
-                    color: isUser ? '#fff' : '#000',
+                    maxWidth: '70%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: isUser ? 'flex-start' : 'flex-end',
                   }}
                 >
-                  <CardContent sx={{ pb: hasMeta ? 1 : '16px !important' }}>
-                    <Typography variant="body1">{message.text}</Typography>
-                    <Typography
-                      sx={{
-                        display: 'block',
-                        mt: 1,
-                        opacity: 0.7,
-                        fontSize: '0.75rem',
-                      }}
-                      variant="caption"
-                    >
-                      {formatIsoString(message.timestamp)}
-                    </Typography>
-                  </CardContent>
-                </Card>
+                  <Card
+                    sx={{
+                      backgroundColor: getBackgroundColor(message),
+                      color: getTextColor(message),
+                      position: 'relative',
+                    }}
+                  >
+                    <CardContent sx={{ pb: hasMeta ? 1 : '16px !important' }}>
+                      <Typography variant="body1">{message.message}</Typography>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          mt: 1,
+                        }}
+                      >
+                        <Typography
+                          sx={{
+                            display: 'block',
+                            opacity: 0.7,
+                          }}
+                          variant="caption"
+                        >
+                          {formatIsoString(message.created_at)}
+                        </Typography>
+                      </Box>
+                    </CardContent>
 
-                {hasMeta && (
-                  <>
-                    <IconButton
-                      size="small"
-                      sx={{ mt: 0.5, alignSelf: 'flex-start' }}
-                      onClick={() => toggleMeta(message.id)}
-                    >
-                      {isMetaExpanded ? (
-                        <ExpandLessIcon fontSize="small" />
-                      ) : (
-                        <ExpandMoreIcon fontSize="small" />
-                      )}
-                    </IconButton>
+                    {hasMeta && (
+                      <IconButton
+                        color="inherit"
+                        size="small"
+                        sx={{
+                          position: 'absolute',
+                          right: 8,
+                          bottom: 8,
+                          opacity: 0.7,
+                          '&:hover': {
+                            opacity: 1,
+                            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                          },
+                        }}
+                        onClick={() => toggleMeta(message.id)}
+                      >
+                        {isMetaExpanded ? (
+                          <ExpandLessIcon fontSize="small" />
+                        ) : (
+                          <ExpandMoreIcon fontSize="small" />
+                        )}
+                      </IconButton>
+                    )}
+                  </Card>
 
+                  {hasMeta && (
                     <Collapse in={isMetaExpanded}>
                       <Card
                         sx={{
-                          mt: 1,
                           border: '1px solid #e0e0e0',
                           maxWidth: '100%',
                         }}
@@ -186,12 +205,24 @@ export const ChatMessages = () => {
                         </CardContent>
                       </Card>
                     </Collapse>
-                  </>
-                )}
+                  )}
+                </Box>
               </Box>
-            </Box>
-          )
-        })}
+            )
+          })}
+        {status === 'succeeded' && chatHistory && chatHistory.length === 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              p: 4,
+              color: 'text.secondary',
+            }}
+          >
+            <Typography>No messages yet</Typography>
+          </Box>
+        )}
       </Box>
     </Box>
   )

@@ -1,48 +1,37 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+
+import { Chat, chatsSelector, getChatsApi } from '@entities/chats'
 
 import { ChatModalData } from '@widgets/ChatModalData'
 
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 
+import { EditChatsForm } from './EditChatsForm'
+
 import { getColumns } from '../model/getColumns'
 
-type ChatRow = {
-  id: string
-  clinic_name: string
-  prettify_name: string
-}
-
-const mockChats: ChatRow[] = [
-  {
-    id: '1',
-    clinic_name: 'Clinic A',
-    prettify_name: 'Chat #1',
-  },
-  {
-    id: '2',
-    clinic_name: 'Clinic B',
-    prettify_name: 'Chat #2',
-  },
-  {
-    id: '3',
-    clinic_name: 'Clinic C',
-    prettify_name: 'Chat #3',
-  },
-]
-
 export const ChatsTable = () => {
-  const [rows] = useState(mockChats)
   const [editIsOpen, setEditIsOpen] = useState(false)
   const [viewIsOpen, setViewIsOpen] = useState(false)
-  const [chat, setChat] = useState<ChatRow | null>(null)
+  const [chat, setChat] = useState<Chat | null>(null)
 
-  const handleEdit = (chat: ChatRow) => {
+  const { status, chats } = useAppSelector(chatsSelector)
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getChatsApi())
+  }, [dispatch])
+
+  const handleEdit = (chat: Chat) => {
     setChat(chat)
     setEditIsOpen(true)
   }
 
-  const handleView = (chat: ChatRow) => {
+  const handleView = (chat: Chat) => {
     setChat(chat)
     setViewIsOpen(true)
   }
@@ -58,19 +47,17 @@ export const ChatsTable = () => {
       <Table
         isSingleSelection
         columns={getColumns(handleEdit, handleView)}
-        loading={false}
-        rows={rows}
+        loading={status === 'pending'}
+        rows={chats}
       />
 
       <Modal
         formId="edit-form"
         open={editIsOpen}
-        title="Editing a chat"
+        title="Add new message"
         onClose={handleClose}
       >
-        {chat && (
-          <div>{/* Edit form will be added here for chat: {chat.id} */}</div>
-        )}
+        {chat && <EditChatsForm chatId={chat.id} onClose={handleClose} />}
       </Modal>
 
       <Modal
@@ -81,7 +68,7 @@ export const ChatsTable = () => {
         title="Chat"
         onClose={handleClose}
       >
-        {chat && <ChatModalData chatId={chat.id} />}
+        {chat && <ChatModalData chatId={chat.id} onClose={handleClose} />}
       </Modal>
     </>
   )

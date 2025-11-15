@@ -5,9 +5,11 @@ import { GetEmployeesResponse } from '../types'
 
 export const getEmployeesApi = createThunkWithErrorHandler<
   GetEmployeesResponse,
-  void
->('employees/getEmployees', async () => {
-  const response = await $api.get('/admin/employee/list')
+  string | undefined
+>('employees/getEmployees', async (queryStr) => {
+  const response = await $api.get(
+    `/admin/employee/list${queryStr ? '?' + queryStr : ''}`
+  )
 
   return response.data
 })

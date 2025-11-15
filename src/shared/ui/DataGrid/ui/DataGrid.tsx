@@ -55,9 +55,25 @@ export const DataGrid = ({
               </IconButton>
             )}
 
-            <Tooltip title={item.subtitle}>
+            <Tooltip
+              title={
+                typeof item.subtitle === 'string' ||
+                typeof item.subtitle === 'number'
+                  ? item.subtitle
+                  : ''
+              }
+            >
               {item.link ? (
-                <Link href={item.link}>{item.subtitle ?? '--'}</Link>
+                <Link
+                  href={item.link}
+                  sx={{
+                    wordBreak: 'break-all',
+                    maxWidth: subtitleMaxWidth,
+                    display: 'inline-block',
+                  }}
+                >
+                  {item.subtitle ?? '--'}
+                </Link>
               ) : (
                 <Typography
                   noWrap={item.noWrap}

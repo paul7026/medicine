@@ -4,7 +4,7 @@ import { ReactNode } from 'react'
 
 type DataGridItemBase = {
   title: string | number
-  subtitle: string | number
+  subtitle: string | number | ReactNode
   id?: string
   link?: string
 }

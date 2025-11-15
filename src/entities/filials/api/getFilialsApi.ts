@@ -5,9 +5,11 @@ import { GetFilialsResponse } from '../types'
 
 export const getFilialsApi = createThunkWithErrorHandler<
   GetFilialsResponse,
-  void
->('filials/getClinics', async () => {
-  const response = await $api.get('/admin/filial/list')
+  string | undefined
+>('filials/getClinics', async (queryStr) => {
+  const response = await $api.get(
+    `/filial/list${queryStr ? '?' + queryStr : ''}`
+  )
 
   return response.data
 })

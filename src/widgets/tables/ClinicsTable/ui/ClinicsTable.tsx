@@ -110,6 +110,7 @@ export const ClinicsTable = () => {
       <Modal
         withoutActionButtons
         formId="view-form"
+        maxWidth="md"
         open={viewIsOpen}
         title="Clinic"
         onClose={handleClose}

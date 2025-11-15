@@ -4,11 +4,15 @@ import { AdminsPage } from '@pages/AdminsPage'
 import { AffiliatePage } from '@pages/AffiliatePage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
+import { DocumentsPage } from '@pages/DocumentsPage'
 import { EmployeesPage } from '@pages/EmployeesPage'
+import { FavourCategoriesPage } from '@pages/FavourCategoriesPage'
+import { FavoursPage } from '@pages/FavoursPage'
 import { LoginPage } from '@pages/LoginPage'
 import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
 import { PromptsPage } from '@pages/PromptsPage'
+import { ScheduleConnectionsPage } from '@pages/ScheduleConnectionsPage'
 import { SchedulePage } from '@pages/SchedulePage'
 import { UsersPage } from '@pages/UsersPage'
 
@@ -48,6 +52,10 @@ export const router = createBrowserRouter([
         element: <AffiliatePage />,
       },
       {
+        path: 'favours',
+        element: <FavoursPage />,
+      },
+      {
         path: 'chats',
         element: <ChatsPage />,
       },
@@ -58,6 +66,18 @@ export const router = createBrowserRouter([
       {
         path: 'schedule',
         element: <SchedulePage />,
+      },
+      {
+        path: 'favour_categories',
+        element: <FavourCategoriesPage />,
+      },
+      {
+        path: 'documents',
+        element: <DocumentsPage />,
+      },
+      {
+        path: 'schedule-connections',
+        element: <ScheduleConnectionsPage />,
       },
     ],
   },

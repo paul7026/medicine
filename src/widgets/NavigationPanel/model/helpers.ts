@@ -5,8 +5,27 @@ export const getNavPanelListItems = () => {
     { id: '2', name: 'Employees', value: 'employees', icon: 'account_circle' },
     { id: '3', name: 'Clinics', value: 'clinics', icon: 'medical_services' },
     { id: '4', name: 'Affiliate', value: 'affiliate', icon: 'corporate_fare' },
-    { id: '5', name: 'Chats', value: 'chats', icon: 'chat' },
-    { id: '6', name: 'Prompts', value: 'prompts', icon: 'smart_toy' },
-    { id: '7', name: 'Schedule', value: 'schedule', icon: 'schedule' },
+    { id: '5', name: 'Favours', value: 'favours', icon: 'medical_services' },
+    { id: '6', name: 'Chats', value: 'chats', icon: 'chat' },
+    { id: '7', name: 'Prompts', value: 'prompts', icon: 'smart_toy' },
+    { id: '8', name: 'Schedule', value: 'schedule', icon: 'schedule' },
+    {
+      id: '9',
+      name: 'Favour categories',
+      value: 'favour_categories',
+      icon: 'home_health',
+    },
+    {
+      id: '10',
+      name: 'Documents',
+      value: 'documents',
+      icon: 'folder_open',
+    },
+    {
+      id: '11',
+      name: 'Schedule Connections',
+      value: 'schedule-connections',
+      icon: 'link',
+    },
   ]
 }
