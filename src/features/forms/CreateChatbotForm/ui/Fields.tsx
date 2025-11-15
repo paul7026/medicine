@@ -1,0 +1,65 @@
+import { useEffect } from 'react'
+import { useFormContext } from 'react-hook-form'
+
+import { clinicsSelector, getClinicsApi } from '@entities/clinics'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { Box } from '@shared/ui/Box'
+import { SelectControl } from '@shared/ui/Select'
+import { TextFieldControl } from '@shared/ui/TextField'
+
+import { PLATFORM_SELECT_ITEMS } from '../model/constants'
+import { CreateChatbotFormValues } from '../model/types'
+
+export const Fields = () => {
+  const form = useFormContext<CreateChatbotFormValues>()
+
+  const { setValue } = form
+
+  const { clinics, status: clinicsStatus } = useAppSelector(clinicsSelector)
+
+  const clinicsSelectList = clinics.map((clinic) => ({
+    id: clinic.id,
+    name: clinic.legal_name,
+    value: clinic.id,
+  }))
+
+  const isClinicsEmpty = clinicsSelectList.length === 0
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(getClinicsApi())
+  }, [setValue, dispatch])
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      <SelectControl
+        fullWidth
+        disabled={isClinicsEmpty}
+        form={form}
+        label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+        loading={clinicsStatus === 'pending'}
+        name="clinic_id"
+        selectItems={clinicsSelectList}
+      />
+
+      <SelectControl
+        fullWidth
+        form={form}
+        label="Platform *"
+        name="platform"
+        selectItems={PLATFORM_SELECT_ITEMS}
+      />
+
+      <TextFieldControl form={form} label="Bot token *" name="bot_token" />
+
+      <TextFieldControl form={form} label="Api key *" name="api_key" />
+
+      <TextFieldControl form={form} label="Webhook url *" name="webhook_url" />
+
+      <TextFieldControl form={form} label="Config *" name="config" />
+    </Box>
+  )
+}
