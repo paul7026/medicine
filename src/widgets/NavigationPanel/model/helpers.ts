@@ -14,5 +14,11 @@ export const getNavPanelListItems = () => {
       value: 'favour_categories',
       icon: 'home_health',
     },
+    {
+      id: '9',
+      name: 'Documents',
+      value: 'documents',
+      icon: 'folder_open',
+    },
   ]
 }
