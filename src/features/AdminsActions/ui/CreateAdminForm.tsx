@@ -3,9 +3,11 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { createAdminApi, getAdminsApi } from '@entities/admins'
+import { adminsSelector, createAdminApi, getAdminsApi } from '@entities/admins'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
@@ -17,15 +19,21 @@ import { validationSchema } from '../model/validationSchema'
 export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const { page, per_page } = useAppSelector(adminsSelector)
+
+  const tenant = getTenantType()
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateAdminFormValues>({
     defaultValues: {
       tenant: '',
       is_superuser: false,
       password: '',
       username: '',
+      clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer)),
   })
 
   const { handleSubmit } = form
@@ -36,7 +44,7 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   const onSubmit = ({
     is_superuser,
     password,
-    tenant,
+    tenant: formTenant,
     username,
     clinic_id,
   }: CreateAdminFormValues) => {
@@ -46,16 +54,21 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
       createAdminApi({
         is_superuser,
         password,
-        tenant,
+        tenant: isMaintainer ? formTenant || '' : tenant || 'clinic',
         username,
-        ...(clinic_id && { clinic_id }),
+        ...(isMaintainer && clinic_id && { clinic_id }),
       })
     )
       .unwrap()
       .then(() => {
         addSuccessMessage('Admin successfully created')
         onClose()
-        dispatch(getAdminsApi())
+        dispatch(
+          getAdminsApi({
+            page,
+            per_page,
+          })
+        )
       })
       .catch((err) => {
         addErrorMessage(err)
@@ -66,7 +79,7 @@ export const CreateAdminForm = ({ onClose }: CreateAdminFormProps) => {
   return (
     <FormProvider {...form}>
       <form id="create-admin-form" onSubmit={handleSubmit(onSubmit)}>
-        <Fields />
+        <Fields isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>

@@ -13,7 +13,11 @@ import { TextFieldControl } from '@shared/ui/TextField'
 import { TENANT_SELECT_ITEMS } from '../model/constants'
 import { CreateAdminFormValues } from '../model/types'
 
-export const Fields = () => {
+interface FieldsProps {
+  isMaintainer: boolean
+}
+
+export const Fields = ({ isMaintainer }: FieldsProps) => {
   const { clinics, status } = useAppSelector(clinicsSelector)
 
   const clinicsSelectList = clinics.map((clinic) => ({
@@ -31,23 +35,27 @@ export const Fields = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getClinicsApi())
-  }, [dispatch])
+    if (isMaintainer) {
+      dispatch(getClinicsApi())
+    }
+  }, [dispatch, isMaintainer])
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        form={form}
-        label="Tenant *"
-        name="tenant"
-        selectItems={TENANT_SELECT_ITEMS}
-      />
-
-      {tenant !== 'panacea' && (
+      {isMaintainer && (
         <SelectControl
           fullWidth
-          disabled={tenant === 'panacea'}
+          form={form}
+          label="Tenant *"
+          name="tenant"
+          selectItems={TENANT_SELECT_ITEMS}
+        />
+      )}
+
+      {isMaintainer && tenant !== 'panacea' && (
+        <SelectControl
+          fullWidth
+          disabled={!tenant}
           form={form}
           label="Clinic"
           loading={status === 'pending'}
@@ -58,7 +66,12 @@ export const Fields = () => {
 
       <TextFieldControl form={form} label="Username *" name="username" />
 
-      <TextFieldControl form={form} label="Password *" name="password" />
+      <TextFieldControl
+        form={form}
+        label="Password *"
+        name="password"
+        type="password"
+      />
 
       <SwitchControl form={form} label="Is superuser" name="is_superuser" />
     </Box>

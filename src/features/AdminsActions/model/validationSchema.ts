@@ -2,10 +2,14 @@ import * as Yup from 'yup'
 
 import { CreateAdminFormValues } from './types'
 
-export const validationSchema = (): Yup.ObjectSchema<CreateAdminFormValues> =>
+export const validationSchema = (
+  isMaintainer: boolean
+): Yup.ObjectSchema<CreateAdminFormValues> =>
   Yup.object().shape({
     is_superuser: Yup.boolean().required(),
-    tenant: Yup.string().required(),
+    tenant: isMaintainer
+      ? Yup.string().required('Tenant is required')
+      : Yup.string(),
     clinic_id: Yup.string(),
     password: Yup.string()
       .required()

@@ -4,6 +4,6 @@ import { LoginFormValues } from './types'
 
 export const validationSchema = (): Yup.ObjectSchema<LoginFormValues> =>
   Yup.object().shape({
-    password: Yup.string().required(),
-    username: Yup.string().required(),
+    password: Yup.string().required().trim(),
+    username: Yup.string().required().trim(),
   })
