@@ -1,88 +1,68 @@
-import { useState } from 'react'
+import { GridPaginationModel } from '@mui/x-data-grid'
 
+import { useEffect, useState } from 'react'
+
+import { getSlotsApi, slotsSelector } from '@entities/slots'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { Box } from '@shared/ui/Box'
 import { Table } from '@shared/ui/Table'
 
+import { ScheduleFiltersComponent } from './ScheduleFilters'
+
 import { getColumns } from '../model/getColumns'
-
-type ScheduleRow = {
-  id: string
-  clinic_id: string
-  filial_id: string
-  favour_id: string
-  employee_id: string
-  start_time: string
-  end_time: string
-  format: string
-  is_available: boolean
-}
-
-const mockSchedules: ScheduleRow[] = [
-  {
-    id: '1',
-    clinic_id: 'clinic-1',
-    filial_id: 'filial-1',
-    favour_id: 'favour-1',
-    employee_id: 'employee-1',
-    start_time: '2024-01-15T09:00:00Z',
-    end_time: '2024-01-15T10:00:00Z',
-    format: 'online',
-    is_available: true,
-  },
-  {
-    id: '2',
-    clinic_id: 'clinic-2',
-    filial_id: 'filial-2',
-    favour_id: 'favour-2',
-    employee_id: 'employee-2',
-    start_time: '2024-01-15T10:30:00Z',
-    end_time: '2024-01-15T11:30:00Z',
-    format: 'offline',
-    is_available: true,
-  },
-  {
-    id: '3',
-    clinic_id: 'clinic-1',
-    filial_id: 'filial-1',
-    favour_id: 'favour-3',
-    employee_id: 'employee-3',
-    start_time: '2024-01-15T14:00:00Z',
-    end_time: '2024-01-15T15:00:00Z',
-    format: 'online',
-    is_available: false,
-  },
-  {
-    id: '4',
-    clinic_id: 'clinic-3',
-    filial_id: 'filial-3',
-    favour_id: 'favour-1',
-    employee_id: 'employee-1',
-    start_time: '2024-01-16T08:00:00Z',
-    end_time: '2024-01-16T09:00:00Z',
-    format: 'offline',
-    is_available: true,
-  },
-  {
-    id: '5',
-    clinic_id: 'clinic-2',
-    filial_id: 'filial-2',
-    favour_id: 'favour-2',
-    employee_id: 'employee-4',
-    start_time: '2024-01-16T11:00:00Z',
-    end_time: '2024-01-16T12:00:00Z',
-    format: 'online',
-    is_available: true,
-  },
-]
+import { ScheduleFilters } from '../model/types'
 
 export const ScheduleTable = () => {
-  const [rows] = useState(mockSchedules)
+  const { status, slots, total, page, per_page } = useAppSelector(slotsSelector)
+
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page,
+    pageSize: per_page,
+  })
+
+  const [filters, setFilters] = useState<ScheduleFilters>({})
+
+  const dispatch = useAppDispatch()
+
+  useEffect(() => {
+    dispatch(
+      getSlotsApi({
+        page: paginationModel.page,
+        per_page: paginationModel.pageSize,
+        ...filters,
+      })
+    )
+  }, [dispatch, paginationModel.page, paginationModel.pageSize, filters])
+
+  const handleFiltersChange = (newFilters: ScheduleFilters) => {
+    setFilters(newFilters)
+    setPaginationModel({ page: 0, pageSize: paginationModel.pageSize })
+  }
+
+  const handleResetFilters = () => {
+    setFilters({})
+    setPaginationModel({ page: 0, pageSize: paginationModel.pageSize })
+  }
 
   return (
-    <Table
-      isSingleSelection
-      columns={getColumns()}
-      loading={false}
-      rows={rows}
-    />
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+      <ScheduleFiltersComponent
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
+        onReset={handleResetFilters}
+      />
+      <Table
+        isSingleSelection
+        columns={getColumns()}
+        loading={status === 'pending'}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        rowCount={total}
+        rows={slots}
+        onPaginationModelChange={setPaginationModel}
+      />
+    </Box>
   )
 }

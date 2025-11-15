@@ -27,10 +27,6 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // {
-      //   path: '/',
-      //   element: <HomePage />,
-      // },
       {
         path: 'admins',
         element: <AdminsPage />,
@@ -76,7 +72,7 @@ export const router = createBrowserRouter([
         element: <DocumentsPage />,
       },
       {
-        path: 'schedule-connections',
+        path: 'connections-schedule',
         element: <ScheduleConnectionsPage />,
       },
     ],

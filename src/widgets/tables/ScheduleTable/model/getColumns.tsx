@@ -1,6 +1,9 @@
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
 import { GridColDef } from '@mui/x-data-grid'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
+import { Box } from '@shared/ui/Box'
 
 export const getColumns = (): GridColDef[] => [
   {
@@ -20,13 +23,6 @@ export const getColumns = (): GridColDef[] => [
   {
     field: 'filial_id',
     headerName: 'Filial ID',
-    width: 300,
-    headerAlign: 'center',
-    align: 'center',
-  },
-  {
-    field: 'favour_id',
-    headerName: 'Favour ID',
     width: 300,
     headerAlign: 'center',
     align: 'center',
@@ -64,9 +60,22 @@ export const getColumns = (): GridColDef[] => [
   {
     field: 'is_available',
     headerName: 'Is available',
-    type: 'boolean',
     width: 110,
     headerAlign: 'center',
     align: 'center',
+    renderCell: ({ value }) => {
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          {value ? <CheckIcon color="success" /> : <CloseIcon color="error" />}
+        </Box>
+      )
+    },
   },
 ]
