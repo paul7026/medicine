@@ -10,8 +10,8 @@ import { FavoursPage } from '@pages/FavoursPage'
 import { LoginPage } from '@pages/LoginPage'
 import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
-import { ProfilesPage } from '@pages/ProfilesPage'
 import { PromptsPage } from '@pages/PromptsPage'
+import { ScheduleConnectionsPage } from '@pages/ScheduleConnectionsPage'
 import { UsersPage } from '@pages/UsersPage'
 
 import { PrivateRoute } from '../ui/PrivateRoute'
@@ -64,6 +64,10 @@ export const router = createBrowserRouter([
       {
         path: 'favour_categories',
         element: <FavourCategoriesPage />,
+      },
+      {
+        path: 'schedule-connections',
+        element: <ScheduleConnectionsPage />,
       },
     ],
   },

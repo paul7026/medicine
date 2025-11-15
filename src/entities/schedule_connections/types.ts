@@ -36,18 +36,18 @@ export interface ScheduleConnectionById {
 export type GetScheduleConnectionByIdResponse = ScheduleConnectionById
 
 export interface EditScheduleConnectionPayload {
-  connection_id: string
-  partner_token: string
-  user_token: string
-  login: string
-  password: string
+  connection_id?: string
+  partner_token?: string
+  user_token?: string
+  login?: string
+  password?: string
 }
 
 export interface CreateScheduleConnectionPayload {
-  type: string
-  partner_token: string
-  user_token: string
-  login: string
-  password: string
   clinic_id: string
+  type: string
+  partner_token?: string
+  user_token?: string
+  login?: string
+  password?: string
 }

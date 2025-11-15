@@ -55,7 +55,14 @@ export const DataGrid = ({
               </IconButton>
             )}
 
-            <Tooltip title={item.subtitle}>
+            <Tooltip
+              title={
+                typeof item.subtitle === 'string' ||
+                typeof item.subtitle === 'number'
+                  ? item.subtitle
+                  : ''
+              }
+            >
               {item.link ? (
                 <Link href={item.link}>{item.subtitle ?? '--'}</Link>
               ) : (

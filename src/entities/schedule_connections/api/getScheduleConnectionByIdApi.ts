@@ -7,7 +7,7 @@ export const getScheduleConnectionByIdApi = createThunkWithErrorHandler<
   GetScheduleConnectionByIdResponse,
   string
 >('scheduleConnections/getScheduleConnectionById', async (connection_id) => {
-  const response = await $api.get(`/admin/schedule-connection/${connection_id}`)
+  const response = await $api.get(`/schedule-connection/${connection_id}`)
 
   return response.data
 })
