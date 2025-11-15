@@ -4,12 +4,12 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import {
-  createFavourApi,
-  editFavourApi,
-  favourByIdSelector,
-  getFavourByIdApi,
-  getFavoursApi,
-} from '@entities/favours'
+  createFavourCategoryApi,
+  editFavourCategoryApi,
+  favourCategoryByIdSelector,
+  getFavourCategoriesApi,
+  getFavourCategoryByIdApi,
+} from '@entities/favourCategory'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -20,26 +20,26 @@ import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { Fields } from './Fields'
 
-import { CreateFavourFormProps, CreateFavourFormValues } from '../model/types'
+import {
+  CreateFavourCategoryFormProps,
+  CreateFavourCategoryFormValues,
+} from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
-export const CreateFavourForm = ({
-  favourId,
+export const CreateFavourCategoryForm = ({
+  categoryId,
   onClose,
-}: CreateFavourFormProps) => {
+}: CreateFavourCategoryFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const { status, favourById } = useAppSelector(favourByIdSelector)
+  const { status, favourCategoryById } = useAppSelector(
+    favourCategoryByIdSelector
+  )
 
-  const form = useForm<CreateFavourFormValues>({
+  const form = useForm<CreateFavourCategoryFormValues>({
     defaultValues: {
       title: '',
-      favour_category_id: '',
-      comment: '',
-      duration: 1,
-      online_switch_on: false,
-      price: 0,
-      currency: '',
+      description: '',
       clinic_id: '',
     },
     reValidateMode: 'onChange',
@@ -52,36 +52,33 @@ export const CreateFavourForm = ({
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (favourId) {
-      dispatch(getFavourByIdApi(favourId as string))
+    if (categoryId) {
+      dispatch(getFavourCategoryByIdApi(categoryId as string))
     }
-  }, [favourId, dispatch])
+  }, [categoryId, dispatch])
 
   useEffect(() => {
-    if (favourById && favourId) {
+    if (favourCategoryById && categoryId) {
       reset({
-        title: favourById.title,
-        favour_category_id: favourById.favour_category_id,
-        comment: favourById.comment,
-        duration: favourById.duration,
-        online_switch_on: favourById.online_switch_on,
-        price: favourById.price,
-        currency: favourById.currency,
-        clinic_id: favourById.clinic_id,
+        title: favourCategoryById.title,
+        clinic_id: favourCategoryById.clinic_id,
+        description: '',
       })
     }
-  }, [favourById, favourId, reset])
+  }, [favourCategoryById, categoryId, reset])
 
-  const onSubmit = (data: CreateFavourFormValues) => {
+  const onSubmit = (data: CreateFavourCategoryFormValues) => {
     setIsLoading(true)
 
-    if (favourId) {
-      dispatch(editFavourApi({ favour_id: favourId as string, ...data }))
+    if (categoryId) {
+      dispatch(
+        editFavourCategoryApi({ category_id: categoryId as string, ...data })
+      )
         .unwrap()
         .then(() => {
-          addSuccessMessage('Favour successfully edited')
+          addSuccessMessage('Favour category successfully edited')
           onClose()
-          dispatch(getFavoursApi())
+          dispatch(getFavourCategoriesApi())
         })
         .catch((err) => {
           addErrorMessage(err)
@@ -91,12 +88,12 @@ export const CreateFavourForm = ({
       return
     }
 
-    dispatch(createFavourApi(data))
+    dispatch(createFavourCategoryApi(data))
       .unwrap()
       .then(() => {
-        addSuccessMessage('Favour successfully created')
+        addSuccessMessage('Favour category successfully created')
         onClose()
-        dispatch(getFavoursApi())
+        dispatch(getFavourCategoriesApi())
       })
       .catch((err) => {
         addErrorMessage(err)
@@ -104,7 +101,7 @@ export const CreateFavourForm = ({
       .finally(() => setIsLoading(false))
   }
 
-  if ((status === 'pending' || !favourById) && favourId) {
+  if ((status === 'pending' || !favourCategoryById) && categoryId) {
     return (
       <Box
         sx={{
@@ -122,7 +119,11 @@ export const CreateFavourForm = ({
   return (
     <FormProvider {...form}>
       <form
-        id={favourId ? 'edit-favour-form' : 'create-favour-form'}
+        id={
+          categoryId
+            ? 'edit-favour-category-form'
+            : 'create-favour-category-form'
+        }
         onSubmit={handleSubmit(onSubmit)}
       >
         <Fields />
