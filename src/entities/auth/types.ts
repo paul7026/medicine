@@ -8,8 +8,10 @@ export interface AuthState {
 export interface GetWhoAmIResponse {
   id: string
   username: string
-  tenant: string
+  tenant: Tenant
   clinic_id: string
   is_superuser: boolean
   is_active: boolean
 }
+
+export type Tenant = 'maintainer' | 'clinic' | null

@@ -3,10 +3,7 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import {
-  createScheduleConnectionApi,
-  getScheduleConnectionsApi,
-} from '@entities/schedule_connections'
+import { generateSlotsApi, getSlotsApi } from '@entities/slots'
 
 import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
@@ -15,29 +12,20 @@ import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { Fields } from './Fields'
 
-import {
-  CreateScheduleConnectionFormProps,
-  CreateScheduleConnectionFormValues,
-} from '../model/types'
+import { SlotsFormProps, SlotsFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
-export const CreateScheduleConnectionForm = ({
-  onClose,
-}: CreateScheduleConnectionFormProps) => {
+export const GenerateSlotsForm = ({ onClose }: SlotsFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
   const tenant = getTenantType()
-
   const isMaintainer = tenant === 'maintainer'
 
-  const form = useForm<CreateScheduleConnectionFormValues>({
+  const form = useForm<SlotsFormValues>({
     defaultValues: {
+      from_date: null,
+      to_date: null,
       clinic_id: '',
-      type: '',
-      partner_token: '',
-      user_token: '',
-      login: '',
-      password: '',
     },
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema(isMaintainer)),
@@ -48,23 +36,25 @@ export const CreateScheduleConnectionForm = ({
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-  const onSubmit = ({
-    clinic_id,
-    ...rest
-  }: CreateScheduleConnectionFormValues) => {
+  const onSubmit = ({ from_date, to_date, clinic_id }: SlotsFormValues) => {
+    if (!from_date || !to_date) {
+      return
+    }
+
     setIsLoading(true)
 
     dispatch(
-      createScheduleConnectionApi({
+      generateSlotsApi({
+        from_date: from_date.format('YYYY-MM-DD'),
+        to_date: to_date.format('YYYY-MM-DD'),
         ...(isMaintainer && { clinic_id }),
-        ...rest,
       })
     )
       .unwrap()
       .then(() => {
-        addSuccessMessage('Schedule connection successfully created')
+        addSuccessMessage('Slots generated successfully')
         onClose()
-        dispatch(getScheduleConnectionsApi())
+        dispatch(getSlotsApi())
       })
       .catch((err) => {
         addErrorMessage(err)
@@ -74,7 +64,7 @@ export const CreateScheduleConnectionForm = ({
 
   return (
     <FormProvider {...form}>
-      <form id="create-form" onSubmit={handleSubmit(onSubmit)}>
+      <form id="generate-slots-form" onSubmit={handleSubmit(onSubmit)}>
         <Fields isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
