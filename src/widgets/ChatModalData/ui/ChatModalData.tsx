@@ -1,45 +1,64 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import {
+  chatByIdSelector,
+  closeChatApi,
+  getChatByIdApi,
+  getChatHistoryApi,
+} from '@entities/chats'
+
+import { EditChatsForm } from '@widgets/tables/ChatsTable/ui/EditChatsForm'
+
+import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { CircularProgress } from '@shared/ui/CircularProgress'
 import { DataGrid } from '@shared/ui/DataGrid'
+import { Modal } from '@shared/ui/Modal'
 
 import { ChatMessages } from './ChatMessages'
-import { ExportChatButton } from './ExportChatButton'
+import { InterceptReturnButton } from './InterceptReturnButton'
 
 import { getData } from '../model/helpers'
 import { ChatModalDataProps } from '../model/types'
 
-type ChatById = {
-  id: string
-  user_id: string
-  channel: string
-  current_intent: string
-  previous_intent: string
-  is_closed: boolean
-  created_at: string
-  updated_at: string
-}
+export const ChatModalData = ({ chatId, onClose }: ChatModalDataProps) => {
+  const { status, chatById } = useAppSelector(chatByIdSelector)
+  const [isClosing, setIsClosing] = useState(false)
+  const [messageModalOpen, setMessageModalOpen] = useState(false)
 
-const mockChatById: ChatById = {
-  id: '1',
-  user_id: 'user-123',
-  channel: 'telegram',
-  current_intent: 'booking',
-  previous_intent: 'greeting',
-  is_closed: false,
-  created_at: '2025-01-14T12:00:00.000Z',
-  updated_at: '2025-01-14T12:30:00.000Z',
-}
+  const dispatch = useAppDispatch()
+  const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-export const ChatModalData = ({ chatId }: ChatModalDataProps) => {
-  // chatId will be used when connecting to API
-  void chatId
-  const [isLoading] = useState(false)
-  const [chatById] = useState<ChatById | null>(mockChatById)
+  useEffect(() => {
+    dispatch(getChatByIdApi(chatId))
+  }, [dispatch, chatId])
 
-  if (isLoading || !chatById) {
+  const handleCloseChat = () => {
+    setIsClosing(true)
+
+    dispatch(closeChatApi(chatId))
+      .unwrap()
+      .then(() => {
+        addSuccessMessage('Chat closed successfully')
+        onClose()
+      })
+      .catch((err) => addErrorMessage(err))
+      .finally(() => setIsClosing(false))
+  }
+
+  const handleOpenMessage = () => {
+    setMessageModalOpen(true)
+  }
+
+  const handleCloseMessage = () => {
+    setMessageModalOpen(false)
+    dispatch(getChatHistoryApi(chatId))
+  }
+
+  if (status === 'pending' || !chatById) {
     return (
       <Box
         sx={{
@@ -55,10 +74,17 @@ export const ChatModalData = ({ chatId }: ChatModalDataProps) => {
   }
 
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-      <DataGrid dense data={getData(chatById)} />
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 8,
+        gridTemplateAreas: '"data messages" "actions actions"',
+      }}
+    >
+      <DataGrid dense data={getData(chatById)} sx={{ gridArea: 'data' }} />
 
-      <ChatMessages />
+      <ChatMessages chatId={chatId} sx={{ gridArea: 'messages' }} />
 
       <Box
         sx={{
@@ -66,13 +92,34 @@ export const ChatModalData = ({ chatId }: ChatModalDataProps) => {
           gap: 2,
           justifyContent: 'flex-end',
           gridColumn: '2',
+          gridArea: 'actions',
         }}
       >
-        <Button variant="contained">Intercept/Return</Button>
-        <Button variant="contained">Message</Button>
-        <ExportChatButton chatId={chatById.id} />
-        <Button variant="contained">Close chat</Button>
+        <InterceptReturnButton
+          chatId={chatById.id}
+          currentIntent={chatById.current_intent}
+        />
+        <Button variant="contained" onClick={handleOpenMessage}>
+          Message
+        </Button>
+        {/* <ExportChatButton chatId={chatById.id} /> */}
+        <Button
+          disabled={isClosing}
+          variant="contained"
+          onClick={handleCloseChat}
+        >
+          Close chat
+        </Button>
       </Box>
+
+      <Modal
+        formId="edit-form"
+        open={messageModalOpen}
+        title="Add new message"
+        onClose={handleCloseMessage}
+      >
+        <EditChatsForm chatId={chatId} onClose={handleCloseMessage} />
+      </Modal>
     </Box>
   )
 }
