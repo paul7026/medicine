@@ -3,14 +3,12 @@ import { GridRowId } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
 
 import {
-  clinicsSelector,
-  deleteClinicApi,
-  getClinicsApi,
-} from '@entities/clinics'
+  deleteScheduleConnectionApi,
+  getScheduleConnectionsApi,
+  scheduleConnectionsSelector,
+} from '@entities/schedule_connections'
 
-import { CreateClinicForm } from '@features/forms/CreateClinicForm'
-
-import { ClinicModalData } from '@widgets/ClinicModalData/ui/ClinicModalData'
+import { ScheduleConnectionModalData } from '@widgets/ScheduleConnectionModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -20,21 +18,25 @@ import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
+import { EditScheduleConnectionForm } from './EditScheduleConnectionForm'
+
 import { getColumns } from '../model/getColumns'
 
-export const ClinicsTable = () => {
+export const ScheduleConnectionsTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
   const [editIsOpen, setEditIsOpen] = useState(false)
   const [viewIsOpen, setViewIsOpen] = useState(false)
   const [id, setId] = useState<GridRowId | null>(null)
 
-  const { status, clinics } = useAppSelector(clinicsSelector)
+  const { status, scheduleConnections } = useAppSelector(
+    scheduleConnectionsSelector
+  )
 
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
-    dispatch(getClinicsApi())
+    dispatch(getScheduleConnectionsApi())
   }, [dispatch])
 
   const handleClickDelete = (id: GridRowId) => {
@@ -59,12 +61,12 @@ export const ClinicsTable = () => {
       return
     }
 
-    dispatch(deleteClinicApi(id as string))
+    dispatch(deleteScheduleConnectionApi(String(id)))
       .unwrap()
       .then(() => {
         handleClose()
-        addSuccessMessage('Clinic deleted')
-        dispatch(getClinicsApi())
+        addSuccessMessage('Schedule connection deleted')
+        dispatch(getScheduleConnectionsApi())
       })
       .catch((err) => addErrorMessage(err))
   }
@@ -80,7 +82,7 @@ export const ClinicsTable = () => {
         isSingleSelection
         columns={getColumns(handleClickDelete, handleEdit, handleView)}
         loading={status === 'pending'}
-        rows={clinics}
+        rows={scheduleConnections}
       />
       <Modal
         okButton={
@@ -89,11 +91,11 @@ export const ClinicsTable = () => {
           </Button>
         }
         open={deleteIsOpen}
-        title="Removing a user"
+        title="Removing a schedule connection"
         onClose={handleClose}
       >
         <Typography>
-          Are you sure you want to delete the clinic with id:{' '}
+          Are you sure you want to delete the schedule connection with id:{' '}
           <strong>{id}</strong>?
         </Typography>
       </Modal>
@@ -101,10 +103,15 @@ export const ClinicsTable = () => {
       <Modal
         formId="edit-form"
         open={editIsOpen}
-        title="Editing a clinic"
+        title="Editing a schedule connection"
         onClose={handleClose}
       >
-        <CreateClinicForm clinicId={id} onClose={handleClose} />
+        {id && (
+          <EditScheduleConnectionForm
+            connectionId={String(id)}
+            onClose={handleClose}
+          />
+        )}
       </Modal>
 
       <Modal
@@ -112,10 +119,10 @@ export const ClinicsTable = () => {
         formId="view-form"
         maxWidth="md"
         open={viewIsOpen}
-        title="Clinic"
+        title="Schedule connection"
         onClose={handleClose}
       >
-        {id && <ClinicModalData clinicId={id as string} />}
+        {id && <ScheduleConnectionModalData connectionId={String(id)} />}
       </Modal>
     </>
   )

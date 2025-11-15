@@ -20,5 +20,11 @@ export const getNavPanelListItems = () => {
       value: 'documents',
       icon: 'folder_open',
     },
+    {
+      id: '10',
+      name: 'Schedule Connections',
+      value: 'schedule-connections',
+      icon: 'link',
+    },
   ]
 }
