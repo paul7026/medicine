@@ -14,7 +14,7 @@ createRoot(document.getElementById('root')!).render(
   <ErrorBoundary>
     <StoreProvider>
       <ThemeProvider>
-        <LocalizationProvider adapterLocale="ru" dateAdapter={AdapterDayjs}>
+        <LocalizationProvider adapterLocale="en" dateAdapter={AdapterDayjs}>
           <SnackbarCustomProvider>
             <App />
           </SnackbarCustomProvider>

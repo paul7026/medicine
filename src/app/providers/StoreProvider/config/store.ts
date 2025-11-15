@@ -11,6 +11,7 @@ import { favoursReducer } from '@entities/favours'
 import { filialsReducer } from '@entities/filials'
 import { promptsReducer } from '@entities/prompts'
 import { scheduleConnectionsReducer } from '@entities/schedule_connections'
+import { slotsReducer } from '@entities/slots'
 import { usersReducer } from '@entities/users'
 
 const rootReducer = combineReducers({
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   favourCategoriesReducer,
   documentsReducer,
   scheduleConnectionsReducer,
+  slotsReducer,
 })
 
 export const setupStore = () => {
