@@ -11,7 +11,6 @@ export interface GetAdminsResponse {
     tenant: string
     clinic_id: string
     is_superuser: true
-    is_active: true
     id: string
     created_at: string
     updated_at: string
@@ -35,7 +34,7 @@ export interface EditAdminPayload {
   admin_id: string
   username: string
   password: string
-  is_superuser: boolean
   tenant?: string
   clinic_id?: string
+  is_superuser: boolean
 }
