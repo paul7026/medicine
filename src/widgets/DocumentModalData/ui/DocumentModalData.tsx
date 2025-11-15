@@ -1,17 +1,22 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { documentByIdSelector, getDocumentByIdApi } from '@entities/documents'
+
+import { ClinicModalData } from '@widgets/ClinicModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Box } from '@shared/ui/Box'
 import { CircularProgress } from '@shared/ui/CircularProgress'
 import { DataGrid } from '@shared/ui/DataGrid'
+import { Modal } from '@shared/ui/Modal'
 
-import { DocumentModalDataProps } from '../model/types'
 import { getData } from '../model/helpers'
+import { DocumentModalDataProps } from '../model/types'
 
 export const DocumentModalData = ({ documentId }: DocumentModalDataProps) => {
+  const [clinicModalOpen, setClinicModalOpen] = useState(false)
+
   const { documentById, status } = useAppSelector(documentByIdSelector)
 
   const dispatch = useAppDispatch()
@@ -35,9 +40,35 @@ export const DocumentModalData = ({ documentId }: DocumentModalDataProps) => {
     )
   }
 
+  const handleClinicClick = () => {
+    setClinicModalOpen(true)
+  }
+
+  const handleCloseClinicModal = () => {
+    setClinicModalOpen(false)
+  }
+
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <DataGrid dense data={getData(documentById)} subtitleMaxWidth="350px" />
-    </Box>
+    <>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <DataGrid
+          dense
+          data={getData(documentById, handleClinicClick)}
+          subtitleMaxWidth="350px"
+        />
+      </Box>
+
+      <Modal
+        withoutActionButtons
+        maxWidth="md"
+        open={clinicModalOpen}
+        title="Clinic"
+        onClose={handleCloseClinicModal}
+      >
+        {documentById.clinic_id && (
+          <ClinicModalData clinicId={documentById.clinic_id} />
+        )}
+      </Modal>
+    </>
   )
 }

@@ -1,11 +1,22 @@
 import { GetFavourCategoryByIdResponse } from '@entities/favourCategory'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
+import { Link } from '@shared/ui/Link'
 
-export const getData = (favourCategoryById: GetFavourCategoryByIdResponse) => {
+export const getData = (
+  favourCategoryById: GetFavourCategoryByIdResponse,
+  onClinicClick: () => void
+) => {
   return [
     { title: 'id', subtitle: favourCategoryById.id },
-    { title: 'clinic_id', subtitle: favourCategoryById.clinic_id },
+    {
+      title: 'clinic_id',
+      subtitle: (
+        <Link color="info" variant="button" onClick={onClinicClick}>
+          {favourCategoryById.clinic_id}
+        </Link>
+      ),
+    },
     { title: 'title', subtitle: favourCategoryById.title },
     {
       title: 'description',
