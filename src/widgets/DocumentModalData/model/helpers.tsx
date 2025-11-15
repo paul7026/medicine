@@ -1,16 +1,27 @@
 import { GetDocumentByIdResponse } from '@entities/documents'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
+import { Link } from '@shared/ui/Link'
 
-export const getData = (documentById: GetDocumentByIdResponse) => {
+export const getData = (
+  documentById: GetDocumentByIdResponse,
+  onClinicClick: () => void
+) => {
   return [
     { title: 'id', subtitle: documentById.id },
-    { title: 'clinic_id', subtitle: documentById.clinic_id },
+    {
+      title: 'clinic_id',
+      subtitle: (
+        <Link color="info" variant="button" onClick={onClinicClick}>
+          {documentById.clinic_id}
+        </Link>
+      ),
+    },
     { title: 'name', subtitle: documentById.name },
     {
       title: 's3_link',
-      subtitle: documentById.s3_link ? documentById.s3_link : '--',
-      noWrap: true,
+      subtitle: documentById.s3_link,
+      link: documentById.s3_link,
     },
     {
       title: 'chunk',

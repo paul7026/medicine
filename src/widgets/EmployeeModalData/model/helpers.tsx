@@ -2,11 +2,26 @@ import { GetEmployeeByIdResponse } from '@entities/employees'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { isArray } from '@shared/helpers/isArray'
+import { Link } from '@shared/ui/Link'
 
-export const getData = (employeeById: GetEmployeeByIdResponse) => {
+export const getData = (
+  employeeById: GetEmployeeByIdResponse,
+  onItemClick: (type: 'clinic' | 'favours', id: string) => void
+) => {
   return [
     { title: 'id', subtitle: employeeById.id },
-    { title: 'clinic_id', subtitle: employeeById.clinic_id },
+    {
+      title: 'clinic_id',
+      subtitle: (
+        <Link
+          color="info"
+          variant="button"
+          onClick={() => onItemClick('clinic', employeeById.clinic_id)}
+        >
+          {employeeById.clinic_id}
+        </Link>
+      ),
+    },
     { title: 'name', subtitle: employeeById.name },
     { title: 'gender', subtitle: employeeById.gender },
     {
@@ -40,8 +55,19 @@ export const getData = (employeeById: GetEmployeeByIdResponse) => {
     {
       title: 'favours',
       subtitle: isArray(employeeById.favours)
-        ? employeeById.favours.map((favour) => favour.title).join(', ')
-        : employeeById.favours,
+        ? employeeById.favours.map((f, i, arr) => (
+            <span key={f.id}>
+              <Link
+                color="info"
+                variant="button"
+                onClick={() => onItemClick('favours', f.id)}
+              >
+                {f.title}
+              </Link>
+              {i < arr.length - 1 ? ', ' : ''}
+            </span>
+          ))
+        : '--',
     },
     {
       title: 'schedule_templates',
@@ -50,14 +76,6 @@ export const getData = (employeeById: GetEmployeeByIdResponse) => {
             .map((scheduleTemplate) => scheduleTemplate.id)
             .join(', ')
         : employeeById.schedule_templates,
-    },
-    {
-      title: 'schedule_exceptions',
-      subtitle: isArray(employeeById.schedule_exceptions)
-        ? employeeById.schedule_exceptions
-            .map((scheduleException) => scheduleException.id)
-            .join(', ')
-        : employeeById.schedule_exceptions,
     },
   ]
 }

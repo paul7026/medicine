@@ -2,24 +2,46 @@ import { GetFavourByIdResponse } from '@entities/favours'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { isArray } from '@shared/helpers/isArray'
+import { Link } from '@shared/ui/Link'
 
 import { FavourModalValues } from './types'
 
 export const getData = ({
   setModalValue,
   favourById,
+  onItemClick,
 }: {
   setModalValue: (formValue: FavourModalValues) => void
   favourById: GetFavourByIdResponse
+  onItemClick: (type: 'clinic' | 'category' | 'employees', id: string) => void
 }) => {
   return [
     { title: 'id', subtitle: favourById.id },
     {
       title: 'clinic_id',
-      subtitle: favourById.clinic_id,
+      subtitle: (
+        <Link
+          color="info"
+          variant="button"
+          onClick={() => onItemClick('clinic', favourById.clinic_id)}
+        >
+          {favourById.clinic_id}
+        </Link>
+      ),
     },
     { title: 'title', subtitle: favourById.title },
-    { title: 'favour_category_id', subtitle: favourById.favour_category_id },
+    {
+      title: 'favour_category_id',
+      subtitle: (
+        <Link
+          color="info"
+          variant="button"
+          onClick={() => onItemClick('category', favourById.favour_category_id)}
+        >
+          {favourById.favour_category_id}
+        </Link>
+      ),
+    },
     {
       title: 'favour_category_name',
       subtitle: favourById.favour_category_name
@@ -54,8 +76,19 @@ export const getData = ({
     {
       title: 'employees',
       subtitle: isArray(favourById.employees)
-        ? favourById.employees.map((filial) => filial.name).join(', ')
-        : favourById.employees,
+        ? favourById.employees.map((f, i, arr) => (
+            <span key={f.id}>
+              <Link
+                color="info"
+                variant="button"
+                onClick={() => onItemClick('employees', f.id)}
+              >
+                {f.name}
+              </Link>
+              {i < arr.length - 1 ? ', ' : ''}
+            </span>
+          ))
+        : '--',
       tooltipTitle: 'Change employees',
       onClick: () => setModalValue('changeEmployees'),
     },

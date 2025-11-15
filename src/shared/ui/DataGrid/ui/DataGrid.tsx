@@ -64,7 +64,16 @@ export const DataGrid = ({
               }
             >
               {item.link ? (
-                <Link href={item.link}>{item.subtitle ?? '--'}</Link>
+                <Link
+                  href={item.link}
+                  sx={{
+                    wordBreak: 'break-all',
+                    maxWidth: subtitleMaxWidth,
+                    display: 'inline-block',
+                  }}
+                >
+                  {item.subtitle ?? '--'}
+                </Link>
               ) : (
                 <Typography
                   noWrap={item.noWrap}
