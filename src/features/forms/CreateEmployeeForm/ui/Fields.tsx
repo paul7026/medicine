@@ -10,9 +10,9 @@ import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 
 import { GENDER_SELECT_ITEMS } from '../model/constants'
-import { CreateEmployeeFormValues } from '../model/types'
+import { CreateEmployeeFormValues, FieldsProps } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ employeeId, isMaintainer }: FieldsProps) => {
   const form = useFormContext<CreateEmployeeFormValues>()
 
   const { clinics, status } = useAppSelector(clinicsSelector)
@@ -23,6 +23,8 @@ export const Fields = () => {
     value: clinic.id,
   }))
 
+  const isClinicsEmpty = clinicsSelectList.length === 0
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
@@ -31,14 +33,17 @@ export const Fields = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        form={form}
-        label="Clinic *"
-        loading={status === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && !employeeId && (
+        <SelectControl
+          fullWidth
+          disabled={isClinicsEmpty}
+          form={form}
+          label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+          loading={status === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
       <TextFieldControl form={form} label="Name *" name="name" />
 

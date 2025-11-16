@@ -11,6 +11,7 @@ import {
   getFavourCategoryByIdApi,
 } from '@entities/favourCategory'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -36,6 +37,10 @@ export const CreateFavourCategoryForm = ({
     favourCategoryByIdSelector
   )
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateFavourCategoryFormValues>({
     defaultValues: {
       title: '',
@@ -43,7 +48,7 @@ export const CreateFavourCategoryForm = ({
       clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer, categoryId)),
   })
 
   const { handleSubmit, reset } = form
@@ -67,12 +72,16 @@ export const CreateFavourCategoryForm = ({
     }
   }, [favourCategoryById, categoryId, reset])
 
-  const onSubmit = (data: CreateFavourCategoryFormValues) => {
+  const onSubmit = ({ clinic_id, ...rest }: CreateFavourCategoryFormValues) => {
     setIsLoading(true)
 
     if (categoryId) {
       dispatch(
-        editFavourCategoryApi({ category_id: categoryId as string, ...data })
+        editFavourCategoryApi({
+          category_id: categoryId as string,
+          ...(isMaintainer && !categoryId && { clinic_id }),
+          ...rest,
+        })
       )
         .unwrap()
         .then(() => {
@@ -88,7 +97,9 @@ export const CreateFavourCategoryForm = ({
       return
     }
 
-    dispatch(createFavourCategoryApi(data))
+    dispatch(
+      createFavourCategoryApi({ ...(isMaintainer && { clinic_id }), ...rest })
+    )
       .unwrap()
       .then(() => {
         addSuccessMessage('Favour category successfully created')
@@ -126,7 +137,8 @@ export const CreateFavourCategoryForm = ({
         }
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Fields />
+        <Fields categoryId={categoryId} isMaintainer={isMaintainer} />
+
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>

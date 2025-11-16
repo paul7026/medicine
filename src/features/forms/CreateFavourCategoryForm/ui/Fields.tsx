@@ -9,9 +9,9 @@ import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 
-import { CreateFavourCategoryFormValues } from '../model/types'
+import { CreateFavourCategoryFormValues, FieldsProps } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ categoryId, isMaintainer }: FieldsProps) => {
   const form = useFormContext<CreateFavourCategoryFormValues>()
 
   const { setValue } = form
@@ -34,15 +34,17 @@ export const Fields = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        disabled={isClinicsEmpty}
-        form={form}
-        label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
-        loading={clinicsStatus === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && !categoryId && (
+        <SelectControl
+          fullWidth
+          disabled={isClinicsEmpty}
+          form={form}
+          label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+          loading={clinicsStatus === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
       <TextFieldControl form={form} label="Title *" name="title" />
 

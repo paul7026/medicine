@@ -28,5 +28,5 @@ export interface GetDocumentByIdResponse {
 export interface CreateDocumentPayload {
   name: string
   file: File
-  clinic_id: string
+  clinic_id?: string
 }

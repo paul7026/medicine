@@ -10,9 +10,9 @@ import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 import { UploaderControl } from '@shared/ui/Uploader/ui/UploaderControl'
 
-import { UploadDocumentFormValues } from '../model/types'
+import { FieldsProps, UploadDocumentFormValues } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ isMaintainer }: FieldsProps) => {
   const form = useFormContext<UploadDocumentFormValues>()
 
   const { setValue } = form
@@ -44,15 +44,17 @@ export const Fields = () => {
 
       <TextFieldControl form={form} label="Name *" name="name" />
 
-      <SelectControl
-        fullWidth
-        disabled={isClinicsEmpty}
-        form={form}
-        label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
-        loading={clinicsStatus === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && (
+        <SelectControl
+          fullWidth
+          disabled={isClinicsEmpty}
+          form={form}
+          label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+          loading={clinicsStatus === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
     </Box>
   )
 }

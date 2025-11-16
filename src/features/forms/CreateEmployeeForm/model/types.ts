@@ -14,5 +14,10 @@ export interface CreateEmployeeFormValues {
   specialization: string
   work_experience?: number
   medical_degree?: string
-  clinic_id: string
+  clinic_id?: string
+}
+
+export interface FieldsProps {
+  isMaintainer: boolean
+  employeeId?: GridRowId | null
 }

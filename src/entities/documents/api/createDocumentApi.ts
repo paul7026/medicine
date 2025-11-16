@@ -10,8 +10,10 @@ export const createDocumentApi = createThunkWithErrorHandler<
   const formData = new FormData()
 
   formData.append('file', file)
-  formData.append('clinic_id', clinic_id)
   formData.append('name', name)
+  if (clinic_id) {
+    formData.append('clinic_id', clinic_id)
+  }
 
   const response = await $api.post('/document', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
