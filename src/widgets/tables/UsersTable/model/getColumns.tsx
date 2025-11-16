@@ -1,13 +1,9 @@
-import CheckIcon from '@mui/icons-material/Check'
-import CloseIcon from '@mui/icons-material/Close'
 import DeleteIcon from '@mui/icons-material/DeleteOutlined'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 
 import { User } from '@entities/users'
-
-import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
   onDeleteClick: (user: User) => void,
@@ -75,27 +71,5 @@ export const getColumns = (
     minWidth: 330,
     headerAlign: 'center',
     align: 'center',
-  },
-
-  {
-    field: 'is_active',
-    headerName: 'Is active',
-    width: 110,
-    headerAlign: 'center',
-    align: 'center',
-    renderCell: ({ value }) => {
-      return (
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: '100%',
-          }}
-        >
-          {value ? <CheckIcon color="success" /> : <CloseIcon color="error" />}
-        </Box>
-      )
-    },
   },
 ]

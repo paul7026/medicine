@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { createDocumentApi, getDocumentsApi } from '@entities/documents'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
@@ -20,6 +21,10 @@ import { validationSchema } from '../model/validationSchema'
 export const UploadDocumentForm = ({ onClose }: UploadDocumentFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<UploadDocumentFormValues>({
     defaultValues: {
       name: '',
@@ -27,7 +32,7 @@ export const UploadDocumentForm = ({ onClose }: UploadDocumentFormProps) => {
       clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer)),
   })
 
   const { handleSubmit } = form
@@ -43,7 +48,9 @@ export const UploadDocumentForm = ({ onClose }: UploadDocumentFormProps) => {
 
     setIsLoading(true)
 
-    dispatch(createDocumentApi({ file, name, clinic_id }))
+    dispatch(
+      createDocumentApi({ file, name, ...(isMaintainer && { clinic_id }) })
+    )
       .unwrap()
       .then(() => {
         addSuccessMessage('Document successfully uploaded')
@@ -59,7 +66,7 @@ export const UploadDocumentForm = ({ onClose }: UploadDocumentFormProps) => {
   return (
     <FormProvider {...form}>
       <form id="upload-document-form" onSubmit={handleSubmit(onSubmit)}>
-        <Fields />
+        <Fields isMaintainer={isMaintainer} />
 
         <LoadingBackdrop isLoading={isLoading} />
       </form>

@@ -39,10 +39,25 @@ export interface UserById {
   complaints: string[]
   custom_complaint: string
   lifestyle: {
-    additionalProp1: object
+    workout_frequency?: string
+    physical_activities?: string[]
+    custom_activities?: string[]
+    eating_habits?: string[]
+    custom_habits?: string
+    meal_frequency?: string
+    water_intake?: string
+    stress_level?: string
   }
   contraindications: {
-    additionalProp1: object
+    allergies?: string[]
+    custom_allergies?: string[]
+    chronic_conditions?: string[]
+    custom_conditions?: string[]
+    health_conditions?: string[]
+    medication_restrictions?: string[]
+    custom_restrictions?: string[]
+    ethical_choices?: string[]
+    custom_features?: string[]
   }
   is_onboarded: boolean
 }
@@ -50,22 +65,18 @@ export interface UserById {
 export type GetUserByIdResponse = UserById
 
 export interface EditUserPayload {
-  user_id: string
-  name: string
-  country: string
-  date_of_birth: string
-  height: number
-  weight: number
-  gender: string
-  goal: string
-  custom_goal: string
-  complaints: string[]
-  custom_complaint: string
-  lifestyle?: {
-    additionalProp1: object
-  }
-  contraindications?: {
-    additionalProp1: object
-  }
-  is_onboarded: boolean
+  user_id?: string
+  name?: string
+  country?: string
+  date_of_birth: string | null
+  height?: number
+  weight?: number
+  gender?: string
+  goal?: string
+  custom_goal?: string
+  complaints?: string[]
+  custom_complaint?: string
+  lifestyle?: UserById['lifestyle']
+  contraindications?: UserById['contraindications']
+  is_onboarded?: boolean
 }

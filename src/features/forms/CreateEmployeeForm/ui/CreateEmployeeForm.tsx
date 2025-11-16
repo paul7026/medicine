@@ -11,6 +11,7 @@ import {
   getEmployeesApi,
 } from '@entities/employees'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -34,6 +35,10 @@ export const CreateEmployeeForm = ({
 
   const { status, employeeById } = useAppSelector(employeeByIdSelector)
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateEmployeeFormValues>({
     defaultValues: {
       name: '',
@@ -47,7 +52,7 @@ export const CreateEmployeeForm = ({
       clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer, employeeId)),
   })
 
   const { handleSubmit, reset } = form
@@ -77,11 +82,17 @@ export const CreateEmployeeForm = ({
     }
   }, [employeeById, employeeId, reset])
 
-  const onSubmit = (data: CreateEmployeeFormValues) => {
+  const onSubmit = ({ clinic_id, ...rest }: CreateEmployeeFormValues) => {
     setIsLoading(true)
 
     if (employeeId) {
-      dispatch(editEmployeeApi({ employee_id: employeeId as string, ...data }))
+      dispatch(
+        editEmployeeApi({
+          employee_id: employeeId as string,
+          ...(isMaintainer && !employeeId && { clinic_id }),
+          ...rest,
+        })
+      )
         .unwrap()
         .then(() => {
           addSuccessMessage('Employee successfully edited')
@@ -96,7 +107,7 @@ export const CreateEmployeeForm = ({
       return
     }
 
-    dispatch(createEmployeeApi(data))
+    dispatch(createEmployeeApi({ ...(isMaintainer && { clinic_id }), ...rest }))
       .unwrap()
       .then(() => {
         addSuccessMessage('Employee successfully created')
@@ -130,7 +141,7 @@ export const CreateEmployeeForm = ({
         id={employeeId ? 'edit-employee-form' : 'create-employee-form'}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Fields />
+        <Fields employeeId={employeeId} isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>

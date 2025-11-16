@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 import { employeesSelector, getEmployeesApi } from '@entities/employees'
+import { getFavourByIdApi } from '@entities/favours'
 import { favourToEmployeeApi } from '@entities/filials'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
@@ -53,6 +54,7 @@ export const ChangeEmployeesForm = ({
       .then(() => {
         closeModal()
         reset()
+        dispatch(getFavourByIdApi(favourId))
         addSuccessMessage('Employees changed')
       })
       .catch((err) => addErrorMessage(err))
@@ -60,9 +62,7 @@ export const ChangeEmployeesForm = ({
   }
 
   useEffect(() => {
-    // TODO глянуть тут
-    dispatch(getEmployeesApi(`favourId=${favourId}`))
-    // dispatch(getEmployeesApi())
+    dispatch(getEmployeesApi(`favour_id=${favourId}`))
   }, [dispatch, favourId])
 
   return (

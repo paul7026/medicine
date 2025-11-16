@@ -66,5 +66,5 @@ export interface CreateFavourPayload {
   online_switch_on?: boolean
   price?: number
   currency?: string
-  clinic_id: string
+  clinic_id?: string
 }

@@ -8,7 +8,7 @@ export const getEmployeesApi = createThunkWithErrorHandler<
   string | undefined
 >('employees/getEmployees', async (queryStr) => {
   const response = await $api.get(
-    `/admin/employee/list${queryStr ? '?' + queryStr : ''}`
+    `/employee/list${queryStr ? '?' + queryStr : ''}`
   )
 
   return response.data
