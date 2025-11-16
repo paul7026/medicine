@@ -17,6 +17,7 @@ import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { ChangeFilialsFormProps, ChangeFilialsFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
+import { getFavourByIdApi } from '@entities/favours'
 
 export const ChangeFilialsForm = ({
   closeModal,
@@ -53,6 +54,7 @@ export const ChangeFilialsForm = ({
       .then(() => {
         closeModal()
         reset()
+        dispatch(getFavourByIdApi(favourId))
         addSuccessMessage('Filials changed')
       })
       .catch((err) => addErrorMessage(err))
