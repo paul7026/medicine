@@ -5,6 +5,7 @@ import { favourByIdSelector, getFavourByIdApi } from '@entities/favours'
 import { ChangeEmployeesForm } from '@features/forms/ChangeEmployeesForm'
 import { ChangeFilialsForm } from '@features/forms/ChangeFilialsForm'
 
+import { AffiliateModalData } from '@widgets/AffiliateModalData'
 import { ClinicModalData } from '@widgets/ClinicModalData'
 import { EmployeeModalData } from '@widgets/EmployeeModalData'
 import { FavourCategoriesModalData } from '@widgets/FavourCategoriesModalData'
@@ -55,7 +56,7 @@ export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
   const closeModal = () => setModalValue(null)
 
   const onItemClick = (
-    type: 'clinic' | 'category' | 'employees',
+    type: 'clinic' | 'category' | 'employees' | 'filials',
     id: string
   ) => {
     setOpenedModal({ type, id })
@@ -114,6 +115,10 @@ export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
 
         {openedModal?.type === 'employees' && (
           <EmployeeModalData employeeId={openedModal.id} />
+        )}
+
+        {openedModal?.type === 'filials' && (
+          <AffiliateModalData filialId={openedModal.id} />
         )}
       </Modal>
     </>

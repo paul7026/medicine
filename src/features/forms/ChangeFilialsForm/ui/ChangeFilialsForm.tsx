@@ -18,7 +18,6 @@ import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 import { ChangeFilialsFormProps, ChangeFilialsFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
-// TODO посмотреть как работает, добавить фильтр. разобраться
 export const ChangeFilialsForm = ({
   closeModal,
   favourId,
@@ -61,9 +60,7 @@ export const ChangeFilialsForm = ({
   }
 
   useEffect(() => {
-    // TODO глянуть тут
-    dispatch(getFilialsApi(`favourId=${favourId}`))
-    // dispatch(getFilialsApi())
+    dispatch(getFilialsApi(`favour_id=${favourId}`))
   }, [dispatch, favourId])
 
   return (

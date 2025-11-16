@@ -7,7 +7,7 @@ export const getEmployeeByIdApi = createThunkWithErrorHandler<
   GetEmployeeByIdResponse,
   string
 >('employees/getEmployeeById', async (employee_id) => {
-  const response = await $api.get(`/admin/employee/${employee_id}`)
+  const response = await $api.get(`/employee/${employee_id}`)
 
   return response.data
 })
