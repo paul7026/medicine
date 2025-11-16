@@ -27,7 +27,7 @@ export interface EditFavourCategoryPayload {
 }
 
 export interface CreateFavourCategoryPayload {
-  clinic_id: string
+  clinic_id?: string
   title: string
   description?: string
 }

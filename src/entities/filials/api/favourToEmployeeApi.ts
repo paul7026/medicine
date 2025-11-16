@@ -7,7 +7,6 @@ export const favourToEmployeeApi = createThunkWithErrorHandler<
   void,
   FavourToEmployeePayload
 >('filials/favourToEmployee', async (payload) => {
-  // TODO проверить запрос
   const response = await $api.post('favour/favour-to-employee', {
     ...payload,
   })

@@ -8,5 +8,10 @@ export interface CreateFavourCategoryFormProps {
 export interface CreateFavourCategoryFormValues {
   title: string
   description?: string
-  clinic_id: string
+  clinic_id?: string
+}
+
+export interface FieldsProps {
+  isMaintainer: boolean
+  categoryId?: GridRowId | null
 }

@@ -30,7 +30,7 @@ export interface CreateEmployeePayload {
   specialization: string
   work_experience?: number
   medical_degree?: string
-  clinic_id: string
+  clinic_id?: string
 }
 
 export interface EditEmployeePayload {
@@ -38,7 +38,7 @@ export interface EditEmployeePayload {
   name: string
   position: string
   specialization: string
-  clinic_id: string
+  clinic_id?: string
 }
 
 export interface GetEmployeeByIdResponse {

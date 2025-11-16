@@ -5,5 +5,9 @@ export interface UploadDocumentFormProps {
 export interface UploadDocumentFormValues {
   name: string
   file: File | null
-  clinic_id: string
+  clinic_id?: string
+}
+
+export interface FieldsProps {
+  isMaintainer: boolean
 }

@@ -11,6 +11,7 @@ import {
   getFavoursApi,
 } from '@entities/favours'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -31,6 +32,10 @@ export const CreateFavourForm = ({
 
   const { status, favourById } = useAppSelector(favourByIdSelector)
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateFavourFormValues>({
     defaultValues: {
       title: '',
@@ -43,7 +48,7 @@ export const CreateFavourForm = ({
       clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer, favourId)),
   })
 
   const { handleSubmit, reset } = form
@@ -72,11 +77,17 @@ export const CreateFavourForm = ({
     }
   }, [favourById, favourId, reset])
 
-  const onSubmit = (data: CreateFavourFormValues) => {
+  const onSubmit = ({ clinic_id, ...rest }: CreateFavourFormValues) => {
     setIsLoading(true)
 
     if (favourId) {
-      dispatch(editFavourApi({ favour_id: favourId as string, ...data }))
+      dispatch(
+        editFavourApi({
+          favour_id: favourId as string,
+          ...(isMaintainer && !favourId && { clinic_id }),
+          ...rest,
+        })
+      )
         .unwrap()
         .then(() => {
           addSuccessMessage('Favour successfully edited')
@@ -91,7 +102,7 @@ export const CreateFavourForm = ({
       return
     }
 
-    dispatch(createFavourApi(data))
+    dispatch(createFavourApi({ ...(isMaintainer && { clinic_id }), ...rest }))
       .unwrap()
       .then(() => {
         addSuccessMessage('Favour successfully created')
@@ -125,7 +136,7 @@ export const CreateFavourForm = ({
         id={favourId ? 'edit-favour-form' : 'create-favour-form'}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Fields />
+        <Fields favourId={favourId} isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>
