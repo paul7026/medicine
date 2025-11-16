@@ -5,5 +5,5 @@ export interface ChatModalDataProps {
 
 export interface InterceptReturnButtonProps {
   chatId: string
-  currentIntent: number
+  currentIntent: string
 }

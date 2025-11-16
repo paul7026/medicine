@@ -43,7 +43,7 @@ export interface ChatById {
   id: string
   user_id: string
   channel: string
-  current_intent: number
+  current_intent: string
   previous_intent: number
   is_active: boolean
   created_at: string
