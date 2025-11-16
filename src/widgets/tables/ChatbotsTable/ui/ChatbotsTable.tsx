@@ -3,47 +3,71 @@ import { GridRowId } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
 
 import {
-  deleteDocumentApi,
-  documentsSelector,
-  getDocumentsApi,
-} from '@entities/documents'
+  chatbotByIdSelector,
+  chatbotsSelector,
+  deleteChatbotApi,
+  getChatbotByIdApi,
+  getChatbotsApi,
+} from '@entities/chatbots'
+import { clinicByIdSelector, getClinicByIdApi } from '@entities/clinics'
 
-import { DocumentModalData } from '@widgets/DocumentModalData'
+import { CreateChatbotForm } from '@features/forms/CreateChatbotForm'
+
+import { ChatbotModalData } from '@widgets/ChatbotModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Button } from '@shared/ui/Button'
-import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 import { Modal } from '@shared/ui/Modal'
 import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
 import { getColumns } from '../model/getColumns'
 
-export const DocumentsTable = () => {
-  const [isLoading, setIsLoading] = useState(false)
+export const ChatbotsTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
+  const [editIsOpen, setEditIsOpen] = useState(false)
   const [viewIsOpen, setViewIsOpen] = useState(false)
   const [id, setId] = useState<GridRowId | null>(null)
 
-  const { status, documents } = useAppSelector(documentsSelector)
+  const { status, chatbots } = useAppSelector(chatbotsSelector)
+
+  const { chatbotById } = useAppSelector(chatbotByIdSelector)
+
+  const { clinicById } = useAppSelector(clinicByIdSelector)
 
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
-    dispatch(getDocumentsApi())
+    dispatch(getChatbotsApi())
   }, [dispatch])
+
+  useEffect(() => {
+    if (!id) return
+    dispatch(getChatbotByIdApi(id as string))
+  }, [id, dispatch])
+
+  useEffect(() => {
+    if (!chatbotById?.clinic_id) return
+    dispatch(getClinicByIdApi(chatbotById.clinic_id))
+  }, [chatbotById?.clinic_id, dispatch])
 
   const handleClickDelete = (id: GridRowId) => {
     setId(id)
     setDeleteIsOpen(true)
   }
 
+  const handleEdit = (id: GridRowId) => {
+    setId(id)
+    setEditIsOpen(true)
+  }
+
   const handleClose = () => {
     setId(null)
     setDeleteIsOpen(false)
+    setEditIsOpen(false)
     setViewIsOpen(false)
   }
 
@@ -52,17 +76,14 @@ export const DocumentsTable = () => {
       return
     }
 
-    setIsLoading(true)
-
-    dispatch(deleteDocumentApi(id as string))
+    dispatch(deleteChatbotApi(id as string))
       .unwrap()
       .then(() => {
         handleClose()
-        addSuccessMessage('Document deleted')
-        dispatch(getDocumentsApi())
+        addSuccessMessage('Chatbot deleted')
+        dispatch(getChatbotsApi())
       })
       .catch((err) => addErrorMessage(err))
-      .finally(() => setIsLoading(false))
   }
 
   const handleView = (id: GridRowId) => {
@@ -74,9 +95,9 @@ export const DocumentsTable = () => {
     <>
       <Table
         isSingleSelection
-        columns={getColumns(handleClickDelete, handleView)}
+        columns={getColumns(handleClickDelete, handleEdit, handleView)}
         loading={status === 'pending'}
-        rows={documents}
+        rows={chatbots}
       />
       <Modal
         okButton={
@@ -85,24 +106,33 @@ export const DocumentsTable = () => {
           </Button>
         }
         open={deleteIsOpen}
-        title="Removing a document"
+        title="Removing a chatbot"
         onClose={handleClose}
       >
         <Typography>
-          Are you sure you want to delete the document with id:{' '}
+          Are you sure you want to delete the chatbot with id:{' '}
           <strong>{id}</strong>?
         </Typography>
-        <LoadingBackdrop isLoading={isLoading} />
+      </Modal>
+
+      <Modal
+        formId="edit-chatbot-form"
+        open={editIsOpen}
+        title="Editing an chatbot"
+        onClose={handleClose}
+      >
+        <CreateChatbotForm chatbotId={id} onClose={handleClose} />
       </Modal>
 
       <Modal
         withoutActionButtons
-        formId="view-document-form"
+        formId="view-chatbot-form"
+        // maxWidth="md"
         open={viewIsOpen}
-        title="Document"
+        title={`${clinicById?.title ?? 'Loading...'} / ${chatbotById?.platform ?? '...'}`}
         onClose={handleClose}
       >
-        {id && <DocumentModalData documentId={id as string} />}
+        {id && <ChatbotModalData chatbot={chatbotById} />}
       </Modal>
     </>
   )

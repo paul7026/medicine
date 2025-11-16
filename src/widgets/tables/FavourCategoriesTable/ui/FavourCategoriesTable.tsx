@@ -10,6 +10,8 @@ import {
 
 import { CreateFavourCategoryForm } from '@features/forms/CreateFavourCategoryForm'
 
+import { FavourCategoriesModalData } from '@widgets/FavourCategoriesModalData'
+
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -19,7 +21,6 @@ import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
 import { getColumns } from '../model/getColumns'
-import { FavourCategoriesModalData } from '@widgets/FavourCategoriesModalData'
 
 export const FavourCategoriesTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
@@ -110,7 +111,7 @@ export const FavourCategoriesTable = () => {
         withoutActionButtons
         formId="view-favour-category-form"
         open={viewIsOpen}
-        title="FavourCategories"
+        title="Favour Categories"
         onClose={handleClose}
       >
         {id && <FavourCategoriesModalData categoryId={id as string} />}
