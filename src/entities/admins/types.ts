@@ -3,6 +3,14 @@ import { ReducerLoadingState } from '@shared/types'
 export interface AdminsState {
   admins: Admin[]
   adminsStatus: ReducerLoadingState
+  total: number
+  page: number
+  per_page: number
+}
+
+export interface GetAdminsPayload {
+  page?: number
+  per_page?: number
 }
 
 export interface GetAdminsResponse {
@@ -11,7 +19,6 @@ export interface GetAdminsResponse {
     tenant: string
     clinic_id: string
     is_superuser: true
-    is_active: true
     id: string
     created_at: string
     updated_at: string
@@ -35,7 +42,7 @@ export interface EditAdminPayload {
   admin_id: string
   username: string
   password: string
-  is_superuser: boolean
   tenant?: string
   clinic_id?: string
+  is_superuser: boolean
 }

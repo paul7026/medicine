@@ -6,7 +6,6 @@ import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 
 import { Admin } from '@entities/admins'
 
-import { formatIsoString } from '@shared/helpers/formatIsoString'
 import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
@@ -46,6 +45,14 @@ export const getColumns = (
     align: 'center',
   },
   {
+    field: 'username',
+    headerName: 'Username',
+    minWidth: 330,
+    headerAlign: 'center',
+    align: 'center',
+    flex: 1,
+  },
+  {
     field: 'tenant',
     headerName: 'Tenant',
     width: 150,
@@ -58,14 +65,6 @@ export const getColumns = (
     width: 300,
     headerAlign: 'center',
     align: 'center',
-  },
-  {
-    field: 'username',
-    headerName: 'Username',
-    minWidth: 330,
-    headerAlign: 'center',
-    align: 'center',
-    flex: 1,
   },
   {
     field: 'is_superuser',
@@ -87,21 +86,5 @@ export const getColumns = (
         </Box>
       )
     },
-  },
-  {
-    field: 'created_at',
-    headerName: 'Created at',
-    width: 160,
-    headerAlign: 'center',
-    align: 'center',
-    valueGetter: (value: string) => formatIsoString(value),
-  },
-  {
-    field: 'updated_at',
-    headerName: 'Updated at',
-    width: 160,
-    headerAlign: 'center',
-    align: 'center',
-    valueGetter: (value: string) => formatIsoString(value),
   },
 ]

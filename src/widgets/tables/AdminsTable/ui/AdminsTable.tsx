@@ -1,3 +1,5 @@
+import { GridPaginationModel } from '@mui/x-data-grid'
+
 import { useEffect, useState } from 'react'
 
 import {
@@ -24,14 +26,25 @@ export const AdminsTable = () => {
   const [editIsOpen, setEditIsOpen] = useState(false)
   const [admin, setAdmin] = useState<Admin | null>(null)
 
-  const { admins, status } = useAppSelector(adminsSelector)
+  const { admins, status, total, page, per_page } =
+    useAppSelector(adminsSelector)
+
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page,
+    pageSize: per_page,
+  })
 
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
-    dispatch(getAdminsApi())
-  }, [dispatch])
+    dispatch(
+      getAdminsApi({
+        page: paginationModel.page,
+        per_page: paginationModel.pageSize,
+      })
+    )
+  }, [dispatch, paginationModel.page, paginationModel.pageSize])
 
   const handleClickDelete = (admin: Admin) => {
     setAdmin(admin)
@@ -59,7 +72,12 @@ export const AdminsTable = () => {
       .then(() => {
         handleClose()
         addSuccessMessage('Admin deleted')
-        dispatch(getAdminsApi())
+        dispatch(
+          getAdminsApi({
+            page: paginationModel.page,
+            per_page: paginationModel.pageSize,
+          })
+        )
       })
       .catch((err) => addErrorMessage(err))
   }
@@ -70,7 +88,11 @@ export const AdminsTable = () => {
         isSingleSelection
         columns={getColumns(handleClickDelete, handleEdit)}
         loading={status === 'pending'}
+        paginationMode="server"
+        paginationModel={paginationModel}
+        rowCount={total}
         rows={admins}
+        onPaginationModelChange={setPaginationModel}
       />
       <Modal
         okButton={

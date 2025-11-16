@@ -3,9 +3,10 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
-import { editAdminApi, getAdminsApi } from '@entities/admins'
+import { adminsSelector, editAdminApi, getAdminsApi } from '@entities/admins'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
+import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
@@ -16,6 +17,8 @@ import { validationSchema } from '../model/validationSchema'
 
 export const EditAdminForm = ({ admin, onClose }: EditAdminFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const { page, per_page } = useAppSelector(adminsSelector)
 
   const form = useForm<EditAdminFormValues>({
     defaultValues: {
@@ -38,7 +41,12 @@ export const EditAdminForm = ({ admin, onClose }: EditAdminFormProps) => {
       .then(() => {
         addSuccessMessage('Admin successfully edited')
         onClose()
-        dispatch(getAdminsApi())
+        dispatch(
+          getAdminsApi({
+            page,
+            per_page,
+          })
+        )
       })
       .catch((err) => {
         addErrorMessage(err)

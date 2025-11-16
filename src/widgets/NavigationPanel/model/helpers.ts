@@ -8,22 +8,23 @@ export const getNavPanelListItems = () => {
     { id: '5', name: 'Favours', value: 'favours', icon: 'medical_services' },
     { id: '6', name: 'Chats', value: 'chats', icon: 'chat' },
     { id: '7', name: 'Prompts', value: 'prompts', icon: 'smart_toy' },
+    { id: '8', name: 'Schedule', value: 'schedule', icon: 'schedule' },
     {
-      id: '8',
+      id: '9',
       name: 'Favour categories',
       value: 'favour_categories',
       icon: 'home_health',
     },
     {
-      id: '9',
+      id: '10',
       name: 'Documents',
       value: 'documents',
       icon: 'folder_open',
     },
     {
-      id: '10',
+      id: '11',
       name: 'Schedule Connections',
-      value: 'schedule-connections',
+      value: 'connections-schedule',
       icon: 'link',
     },
     {

@@ -1,16 +1,16 @@
+import CheckIcon from '@mui/icons-material/Check'
+import CloseIcon from '@mui/icons-material/Close'
 import EditIcon from '@mui/icons-material/Edit'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import { GridActionsCellItem, GridColDef } from '@mui/x-data-grid'
 
-type ChatRow = {
-  id: string
-  clinic_name: string
-  prettify_name: string
-}
+import { Chat } from '@entities/chats'
+
+import { Box } from '@shared/ui/Box'
 
 export const getColumns = (
-  onEditClick: (chat: ChatRow) => void,
-  onViewClick: (chat: ChatRow) => void
+  onEditClick: (chat: Chat) => void,
+  onViewClick: (chat: Chat) => void
 ): GridColDef[] => [
   {
     field: 'actions',
@@ -39,26 +39,54 @@ export const getColumns = (
     },
   },
   {
-    field: 'id',
-    headerName: 'Id',
-    minWidth: 330,
+    field: 'name',
+    headerName: 'Name',
+    minWidth: 200,
+    flex: 1,
     headerAlign: 'center',
     align: 'center',
   },
   {
-    field: 'clinic_name',
-    headerName: 'Clinic name',
+    field: 'channel',
+    headerName: 'Channel',
+    minWidth: 150,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'current_intent',
+    headerName: 'Current intent',
+    width: 150,
+    headerAlign: 'center',
+    align: 'center',
+  },
+  {
+    field: 'last_message_preview',
+    headerName: 'Last message preview',
     minWidth: 300,
     flex: 1,
     headerAlign: 'center',
     align: 'center',
   },
   {
-    field: 'prettify_name',
-    headerName: 'Prettify name',
-    minWidth: 300,
-    flex: 1,
+    field: 'is_active',
+    headerName: 'Is active',
+    width: 110,
     headerAlign: 'center',
     align: 'center',
+    renderCell: ({ value }) => {
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            height: '100%',
+          }}
+        >
+          {value ? <CheckIcon color="success" /> : <CloseIcon color="error" />}
+        </Box>
+      )
+    },
   },
 ]

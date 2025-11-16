@@ -13,7 +13,12 @@ export const Fields = () => {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <TextFieldControl form={form} label="Username *" name="username" />
 
-      <TextFieldControl form={form} label="Password *" name="password" />
+      <TextFieldControl
+        form={form}
+        label="Password *"
+        name="password"
+        type="password"
+      />
 
       <SwitchControl form={form} label="Is superuser" name="is_superuser" />
     </Box>

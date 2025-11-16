@@ -14,6 +14,7 @@ import { MainPage } from '@pages/MainPage'
 import { NotFoundPage } from '@pages/NotFoundPage'
 import { PromptsPage } from '@pages/PromptsPage'
 import { ScheduleConnectionsPage } from '@pages/ScheduleConnectionsPage'
+import { SchedulePage } from '@pages/SchedulePage'
 import { UsersPage } from '@pages/UsersPage'
 
 import { PrivateRoute } from '../ui/PrivateRoute'
@@ -27,10 +28,6 @@ export const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
-      // {
-      //   path: '/',
-      //   element: <HomePage />,
-      // },
       {
         path: 'admins',
         element: <AdminsPage />,
@@ -64,6 +61,10 @@ export const router = createBrowserRouter([
         element: <PromptsPage />,
       },
       {
+        path: 'schedule',
+        element: <SchedulePage />,
+      },
+      {
         path: 'favour_categories',
         element: <FavourCategoriesPage />,
       },
@@ -72,7 +73,7 @@ export const router = createBrowserRouter([
         element: <DocumentsPage />,
       },
       {
-        path: 'schedule-connections',
+        path: 'connections-schedule',
         element: <ScheduleConnectionsPage />,
       },
       {
