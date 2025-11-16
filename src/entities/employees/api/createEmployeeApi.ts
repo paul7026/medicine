@@ -7,7 +7,7 @@ export const createEmployeeApi = createThunkWithErrorHandler<
   void,
   CreateEmployeePayload
 >('employees/createEmployee', async (payload) => {
-  const response = await $api.post('/admin/employee/', {
+  const response = await $api.post('/employee/', {
     ...payload,
   })
 

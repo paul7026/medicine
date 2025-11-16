@@ -13,7 +13,10 @@ export const getData = ({
 }: {
   setModalValue: (formValue: FavourModalValues) => void
   favourById: GetFavourByIdResponse
-  onItemClick: (type: 'clinic' | 'category' | 'employees', id: string) => void
+  onItemClick: (
+    type: 'clinic' | 'category' | 'employees' | 'filials',
+    id: string
+  ) => void
 }) => {
   return [
     { title: 'id', subtitle: favourById.id },
@@ -67,9 +70,20 @@ export const getData = ({
     },
     {
       title: 'filials',
-      subtitle: isArray(favourById.filials)
-        ? favourById.filials.map((filial) => filial.name).join(', ')
-        : favourById.filials,
+      subtitle: isArray(favourById.employees)
+        ? favourById.filials.map((f, i, arr) => (
+            <span key={f.id}>
+              <Link
+                color="info"
+                variant="button"
+                onClick={() => onItemClick('filials', f.id)}
+              >
+                {f.name}
+              </Link>
+              {i < arr.length - 1 ? ', ' : ''}
+            </span>
+          ))
+        : '--',
       tooltipTitle: 'Change filials',
       onClick: () => setModalValue('changeFilials'),
     },

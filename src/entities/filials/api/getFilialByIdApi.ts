@@ -7,7 +7,7 @@ export const getFilialByIdApi = createThunkWithErrorHandler<
   GetFilialByIdPayload,
   string
 >('filials/getFilialById', async (filial_id) => {
-  const response = await $api.get(`/admin/filial/${filial_id}`)
+  const response = await $api.get(`/filial/${filial_id}`)
 
   return response.data
 })

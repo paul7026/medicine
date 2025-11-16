@@ -60,9 +60,7 @@ export const ChangeEmployeesForm = ({
   }
 
   useEffect(() => {
-    // TODO глянуть тут
-    dispatch(getEmployeesApi(`favourId=${favourId}`))
-    // dispatch(getEmployeesApi())
+    dispatch(getEmployeesApi(`favour_id=${favourId}`))
   }, [dispatch, favourId])
 
   return (
