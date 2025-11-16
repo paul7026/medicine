@@ -14,3 +14,11 @@ export const slotsSelector = createSelector(
     per_page,
   })
 )
+
+export const slotsWIthQueryStrSelector = createSelector(
+  baseSelector,
+  ({ slotsWIthQueryStr, slotsWIthQueryStrStatus }) => ({
+    slotsWIthQueryStr,
+    status: slotsWIthQueryStrStatus,
+  })
+)

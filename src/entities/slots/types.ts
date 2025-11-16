@@ -6,6 +6,9 @@ export interface SlotsState {
   total: number
   page: number
   per_page: number
+
+  slotsWIthQueryStr: Slot[]
+  slotsWIthQueryStrStatus: ReducerLoadingState
 }
 
 export interface GetSlotsPayload {
