@@ -55,7 +55,7 @@ export const getData = (
     {
       title: 'favours',
       subtitle: isArray(employeeById.favours)
-        ? employeeById.favours.map((f, i, arr) => (
+        ? employeeById.favours?.map((f, i, arr) => (
             <span key={f.id}>
               <Link
                 color="info"

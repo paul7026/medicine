@@ -18,7 +18,7 @@ export const InterceptReturnButton = ({
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-  const isReturn = currentIntent === 0
+  const isReturn = currentIntent === 'call_administrator'
 
   const handleClick = () => {
     if (isReturn) {
@@ -35,6 +35,7 @@ export const InterceptReturnButton = ({
       .unwrap()
       .then(() => {
         addSuccessMessage('Chat intercepted successfully')
+        // TODO : скорее всего надо добавить гет запрос
       })
       .catch((err) => addErrorMessage(err))
       .finally(() => setIsLoading(false))
@@ -47,6 +48,7 @@ export const InterceptReturnButton = ({
       .unwrap()
       .then(() => {
         addSuccessMessage('Chat returned successfully')
+        // TODO : скорее всего надо добавить гет запрос
       })
       .catch((err) => addErrorMessage(err))
       .finally(() => setIsLoading(false))
