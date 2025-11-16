@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getSlotsApi } from '../api'
+import { getSlotsApi, getSlotsWIthQueryStrApi } from '../api'
 import { SlotsState } from '../types'
 
 const initialState: SlotsState = {
@@ -9,6 +9,9 @@ const initialState: SlotsState = {
   total: 0,
   page: 0,
   per_page: 25,
+
+  slotsWIthQueryStr: [],
+  slotsWIthQueryStrStatus: 'idle',
 }
 
 const slotsSlice = createSlice({
@@ -29,6 +32,17 @@ const slotsSlice = createSlice({
       })
       .addCase(getSlotsApi.rejected, (state) => {
         state.slotsStatus = 'failed'
+      })
+
+      .addCase(getSlotsWIthQueryStrApi.pending, (state) => {
+        state.slotsWIthQueryStrStatus = 'pending'
+      })
+      .addCase(getSlotsWIthQueryStrApi.fulfilled, (state, action) => {
+        state.slotsWIthQueryStr = action.payload.items
+        state.slotsWIthQueryStrStatus = 'succeeded'
+      })
+      .addCase(getSlotsWIthQueryStrApi.rejected, (state) => {
+        state.slotsWIthQueryStrStatus = 'failed'
       })
   },
 })

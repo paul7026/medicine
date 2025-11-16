@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import { AdminsPage } from '@pages/AdminsPage'
 import { AffiliatePage } from '@pages/AffiliatePage'
+import { AppointmentsPage } from '@pages/AppointmentsPage'
 import { ChatbotsPage } from '@pages/ChatbotsPage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
@@ -79,6 +80,10 @@ export const router = createBrowserRouter([
       {
         path: 'chatbots',
         element: <ChatbotsPage />,
+      },
+      {
+        path: 'appointments',
+        element: <AppointmentsPage />,
       },
     ],
   },
