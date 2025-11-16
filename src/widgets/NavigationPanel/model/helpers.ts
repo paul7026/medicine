@@ -29,8 +29,8 @@ export const getNavPanelListItems = () => {
     },
     {
       id: '11',
-      name: 'Chatbot',
-      value: 'chatbot',
+      name: 'Chatbots',
+      value: 'chatbots',
       icon: 'chat',
     },
   ]

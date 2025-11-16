@@ -1,3 +1,5 @@
+import { GetChatbotByIdResponse } from '@entities/chatbots'
+
 export interface ChatbotModalDataProps {
-  chatbotId: string
+  chatbot: GetChatbotByIdResponse | null
 }

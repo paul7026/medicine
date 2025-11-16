@@ -10,9 +10,9 @@ import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 
 import { PLATFORM_SELECT_ITEMS } from '../model/constants'
-import { CreateChatbotFormValues } from '../model/types'
+import { CreateChatbotFormValues, FieldsProps } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ chatbotId, isMaintainer }: FieldsProps) => {
   const form = useFormContext<CreateChatbotFormValues>()
 
   const { setValue } = form
@@ -35,23 +35,27 @@ export const Fields = () => {
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        disabled={isClinicsEmpty}
-        form={form}
-        label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
-        loading={clinicsStatus === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && !chatbotId && (
+        <SelectControl
+          fullWidth
+          disabled={isClinicsEmpty}
+          form={form}
+          label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+          loading={clinicsStatus === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
-      <SelectControl
-        fullWidth
-        form={form}
-        label="Platform *"
-        name="platform"
-        selectItems={PLATFORM_SELECT_ITEMS}
-      />
+      {!chatbotId && (
+        <SelectControl
+          fullWidth
+          form={form}
+          label="Platform *"
+          name="platform"
+          selectItems={PLATFORM_SELECT_ITEMS}
+        />
+      )}
 
       <TextFieldControl form={form} label="Bot token *" name="bot_token" />
 

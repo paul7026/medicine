@@ -6,10 +6,15 @@ export interface CreateChatbotFormProps {
 }
 
 export interface CreateChatbotFormValues {
-  clinic_id: string
-  platform: string
+  clinic_id?: string
+  platform?: string
   bot_token: string
   api_key: string
   webhook_url: string
   config: string | null
+}
+
+export interface FieldsProps {
+  isMaintainer: boolean
+  chatbotId?: GridRowId | null
 }

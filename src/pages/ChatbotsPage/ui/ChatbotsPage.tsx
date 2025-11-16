@@ -7,7 +7,7 @@ import { Page } from '@shared/ui/Page'
 const ChatbotPage = () => {
   return (
     <Page
-      breadcrumbsList={[{ id: '0', name: 'Chatbot', icon: 'chat' }]}
+      breadcrumbsList={[{ id: '0', name: 'Chatbots', icon: 'chat' }]}
       id="chatbot-page"
     >
       <ChatbotActions />

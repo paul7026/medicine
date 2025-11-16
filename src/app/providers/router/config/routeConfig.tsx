@@ -77,7 +77,7 @@ export const router = createBrowserRouter([
         element: <ScheduleConnectionsPage />,
       },
       {
-        path: 'chatbot',
+        path: 'chatbots',
         element: <ChatbotsPage />,
       },
     ],

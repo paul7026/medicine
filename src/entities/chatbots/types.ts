@@ -6,6 +6,9 @@ export interface ChatbotsState {
 
   chatbotById: GetChatbotByIdResponse | null
   chatbotByIdStatus: ReducerLoadingState
+
+  chatbotStatusData: GetChatbotStatusResponse | null
+  getChatbotStatus: ReducerLoadingState
 }
 
 export interface GetChatbotsResponse {
@@ -49,10 +52,16 @@ export interface EditChatbotPayload {
 }
 
 export interface CreateChatbotPayload {
-  platform: string
+  platform?: string
   bot_token: string
   api_key: string
   webhook_url: string
   config: JsonValue
-  clinic_id: string
+  clinic_id?: string
+}
+
+export interface GetChatbotStatusResponse {
+  id: string
+  status: string
+  message: string
 }

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getChatbotByIdApi, getChatbotsApi } from '../api'
+import { getChatbotByIdApi, getChatbotStatusApi, getChatbotsApi } from '../api'
 import { ChatbotsState } from '../types'
 
 const initialState: ChatbotsState = {
@@ -9,6 +9,9 @@ const initialState: ChatbotsState = {
 
   chatbotById: null,
   chatbotByIdStatus: 'idle',
+
+  chatbotStatusData: null,
+  getChatbotStatus: 'idle',
 }
 
 const chatbotsSlice = createSlice({
@@ -37,6 +40,17 @@ const chatbotsSlice = createSlice({
       })
       .addCase(getChatbotByIdApi.rejected, (state) => {
         state.chatbotByIdStatus = 'failed'
+      })
+
+      .addCase(getChatbotStatusApi.pending, (state) => {
+        state.getChatbotStatus = 'pending'
+      })
+      .addCase(getChatbotStatusApi.fulfilled, (state, action) => {
+        state.chatbotStatusData = action.payload
+        state.getChatbotStatus = 'succeeded'
+      })
+      .addCase(getChatbotStatusApi.rejected, (state) => {
+        state.getChatbotStatus = 'failed'
       })
   },
 })

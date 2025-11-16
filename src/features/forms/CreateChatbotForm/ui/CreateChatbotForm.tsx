@@ -11,6 +11,7 @@ import {
   getChatbotsApi,
 } from '@entities/chatbots'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -31,6 +32,10 @@ export const CreateChatbotForm = ({
 
   const { status, chatbotById } = useAppSelector(chatbotByIdSelector)
 
+  const tenant = getTenantType()
+
+  const isMaintainer = tenant === 'maintainer'
+
   const form = useForm<CreateChatbotFormValues>({
     defaultValues: {
       clinic_id: '',
@@ -41,7 +46,7 @@ export const CreateChatbotForm = ({
       config: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer, chatbotId)),
   })
 
   const { handleSubmit, reset } = form
@@ -68,16 +73,25 @@ export const CreateChatbotForm = ({
     }
   }, [chatbotById, chatbotId, reset])
 
-  const onSubmit = (data: CreateChatbotFormValues) => {
+  const onSubmit = ({
+    clinic_id,
+    platform,
+    ...rest
+  }: CreateChatbotFormValues) => {
     setIsLoading(true)
 
     const payload = {
-      ...data,
-      config: JSON.parse(data.config || '{}'),
+      ...rest,
+      config: JSON.parse(rest.config || '{}'),
     }
 
     if (chatbotId) {
-      dispatch(editChatbotApi({ chatbot_id: chatbotId as string, ...payload }))
+      dispatch(
+        editChatbotApi({
+          chatbot_id: chatbotId as string,
+          ...payload,
+        })
+      )
         .unwrap()
         .then(() => {
           addSuccessMessage('Chatbot successfully edited')
@@ -92,7 +106,13 @@ export const CreateChatbotForm = ({
       return
     }
 
-    dispatch(createChatbotApi(payload))
+    dispatch(
+      createChatbotApi({
+        ...(isMaintainer && { clinic_id }),
+        platform,
+        ...payload,
+      })
+    )
       .unwrap()
       .then(() => {
         addSuccessMessage('Chatbot successfully created')
@@ -126,7 +146,7 @@ export const CreateChatbotForm = ({
         id={chatbotId ? 'edit-chatbot-form' : 'create-chatbot-form'}
         onSubmit={handleSubmit(onSubmit)}
       >
-        <Fields />
+        <Fields chatbotId={chatbotId} isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>

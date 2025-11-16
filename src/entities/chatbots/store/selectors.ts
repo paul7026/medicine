@@ -19,3 +19,12 @@ export const chatbotByIdSelector = createSelector(
     status: chatbotByIdStatus,
   })
 )
+
+export const chatbotStatusSelector = createSelector(
+  baseSelector,
+  ({ chatbotStatusData, getChatbotStatus }) => ({
+    chatbotStatusData,
+    status: getChatbotStatus,
+  })
+)
+

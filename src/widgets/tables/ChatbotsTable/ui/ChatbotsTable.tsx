@@ -3,12 +3,17 @@ import { GridRowId } from '@mui/x-data-grid'
 import { useEffect, useState } from 'react'
 
 import {
+  chatbotByIdSelector,
   chatbotsSelector,
   deleteChatbotApi,
+  getChatbotByIdApi,
   getChatbotsApi,
 } from '@entities/chatbots'
+import { clinicByIdSelector, getClinicByIdApi } from '@entities/clinics'
 
 import { CreateChatbotForm } from '@features/forms/CreateChatbotForm'
+
+import { ChatbotModalData } from '@widgets/ChatbotModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -19,7 +24,6 @@ import { Table } from '@shared/ui/Table'
 import { Typography } from '@shared/ui/Typography'
 
 import { getColumns } from '../model/getColumns'
-import { ChatbotModalData } from '@widgets/ChatbotModalData'
 
 export const ChatbotsTable = () => {
   const [deleteIsOpen, setDeleteIsOpen] = useState(false)
@@ -29,12 +33,26 @@ export const ChatbotsTable = () => {
 
   const { status, chatbots } = useAppSelector(chatbotsSelector)
 
+  const { chatbotById } = useAppSelector(chatbotByIdSelector)
+
+  const { clinicById } = useAppSelector(clinicByIdSelector)
+
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   useEffect(() => {
     dispatch(getChatbotsApi())
   }, [dispatch])
+
+  useEffect(() => {
+    if (!id) return
+    dispatch(getChatbotByIdApi(id as string))
+  }, [id, dispatch])
+
+  useEffect(() => {
+    if (!chatbotById?.clinic_id) return
+    dispatch(getClinicByIdApi(chatbotById.clinic_id))
+  }, [chatbotById?.clinic_id, dispatch])
 
   const handleClickDelete = (id: GridRowId) => {
     setId(id)
@@ -109,11 +127,12 @@ export const ChatbotsTable = () => {
       <Modal
         withoutActionButtons
         formId="view-chatbot-form"
+        // maxWidth="md"
         open={viewIsOpen}
-        title="Chatbot"
+        title={`${clinicById?.title ?? 'Loading...'} / ${chatbotById?.platform ?? '...'}`}
         onClose={handleClose}
       >
-        {id && <ChatbotModalData chatbotId={id as string} />}
+        {id && <ChatbotModalData chatbot={chatbotById} />}
       </Modal>
     </>
   )
