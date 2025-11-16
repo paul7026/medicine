@@ -1,5 +1,5 @@
 export interface CreateFilialFormValues {
-  clinic_id: string
+  clinic_id?: string
   name: string
   address: string
   timezone?: string
@@ -12,4 +12,8 @@ export interface CreateFilialFormValues {
 
 export interface CreateFilialFormProps {
   onClose: () => void
+}
+
+export interface FieldsProps {
+  isMaintainer: boolean
 }

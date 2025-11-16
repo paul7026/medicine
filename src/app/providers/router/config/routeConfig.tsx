@@ -45,7 +45,7 @@ export const router = createBrowserRouter([
         element: <ClinicsPage />,
       },
       {
-        path: 'affiliate',
+        path: 'filials',
         element: <AffiliatePage />,
       },
       {

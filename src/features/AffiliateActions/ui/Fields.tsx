@@ -9,14 +9,14 @@ import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 
-import { CreateFilialFormValues } from '../model/types'
+import { CreateFilialFormValues, FieldsProps } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ isMaintainer }: FieldsProps) => {
   const { clinics, status } = useAppSelector(clinicsSelector)
 
   const clinicsSelectList = clinics.map((clinic) => ({
     id: clinic.id,
-    name: clinic.legal_name,
+    name: clinic.title,
     value: clinic.id,
   }))
 
@@ -25,19 +25,23 @@ export const Fields = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getClinicsApi())
-  }, [dispatch])
+    if (isMaintainer) {
+      dispatch(getClinicsApi())
+    }
+  }, [dispatch, isMaintainer])
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        form={form}
-        label="Clinic *"
-        loading={status === 'pending'}
-        name="clinic_id"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && (
+        <SelectControl
+          fullWidth
+          form={form}
+          label="Clinic *"
+          loading={status === 'pending'}
+          name="clinic_id"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
       <TextFieldControl form={form} label="Name *" name="name" />
 

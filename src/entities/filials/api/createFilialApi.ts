@@ -7,7 +7,7 @@ export const createFilialApi = createThunkWithErrorHandler<
   void,
   CreateFilialPayload
 >('filials/createFilial', async (payload) => {
-  const response = await $api.post('/admin/filial/', {
+  const response = await $api.post('/filial/', {
     ...payload,
   })
 
