@@ -25,7 +25,7 @@ export const Fields = ({ isMaintainer }: FieldsProps) => {
     name: clinic.legal_name,
     value: clinic.id,
   }))
-  console.log(isMaintainer)
+
   const dispatch = useAppDispatch()
 
   useEffect(() => {
