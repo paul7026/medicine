@@ -73,3 +73,13 @@ export interface FavourToEmployeePayload {
   employees: string[]
   favour_id: string
 }
+
+export interface PostFilialToFavourPayload {
+  favours: string[]
+  filial_id: string
+}
+
+export interface PostFilialToEmployeePayload {
+  employees: string[]
+  filial_id: string
+}

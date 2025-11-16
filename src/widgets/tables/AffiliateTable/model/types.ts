@@ -1,5 +1,4 @@
 export interface EditFilialFormValues {
-  clinic_id: string
   name: string
   address: string
   timezone?: string

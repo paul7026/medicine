@@ -9,6 +9,7 @@ import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
 import { TextFieldControl } from '@shared/ui/TextField'
 
+import { TIMEZONE_SELECT_ITEMS } from '../model/constants'
 import { CreateFilialFormValues, FieldsProps } from '../model/types'
 
 export const Fields = ({ isMaintainer }: FieldsProps) => {
@@ -45,7 +46,13 @@ export const Fields = ({ isMaintainer }: FieldsProps) => {
 
       <TextFieldControl form={form} label="Name *" name="name" />
 
-      <TextFieldControl form={form} label="Timezone" name="timezone" />
+      <SelectControl
+        fullWidth
+        form={form}
+        label="Timezone"
+        name="timezone"
+        selectItems={TIMEZONE_SELECT_ITEMS}
+      />
 
       <TextFieldControl form={form} label="Address *" name="address" />
 

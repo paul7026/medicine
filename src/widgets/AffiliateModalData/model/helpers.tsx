@@ -1,12 +1,20 @@
 import { FilialById } from '@entities/filials'
 
 import { formatIsoString } from '@shared/helpers/formatIsoString'
+import { Link } from '@shared/ui/Link'
 
-export const getData = (filialById: FilialById) => {
+export const getData = (filialById: FilialById, onClinicClick: () => void) => {
   return [
     { title: 'id', subtitle: filialById.id },
     { title: 'external_id', subtitle: filialById.external_id },
-    { title: 'clinic_id', subtitle: filialById.clinic_id },
+    {
+      title: 'clinic_id',
+      subtitle: (
+        <Link color="info" variant="button" onClick={onClinicClick}>
+          {filialById.clinic_id}
+        </Link>
+      ),
+    },
     { title: 'name', subtitle: filialById.name },
     { title: 'timezone', subtitle: filialById.timezone },
     { title: 'address', subtitle: filialById.address },

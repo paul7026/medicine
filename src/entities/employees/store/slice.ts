@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getEmployeeByIdApi, getEmployeesApi } from '../api'
+import {
+  getAllEmployeesForFormApi,
+  getEmployeeByIdApi,
+  getEmployeesApi,
+  getSelectedEmployeesForFormApi,
+} from '../api'
 import { EmployeesState } from '../types'
 
 const initialState: EmployeesState = {
@@ -9,6 +14,12 @@ const initialState: EmployeesState = {
 
   employeeById: null,
   employeeByIdStatus: 'idle',
+
+  allEmployeesForForm: [],
+  allEmployeesForFormStatus: 'idle',
+
+  selectedEmployeesForForm: [],
+  selectedEmployeesForFormStatus: 'idle',
 }
 
 const employeesSlice = createSlice({
@@ -37,6 +48,22 @@ const employeesSlice = createSlice({
       })
       .addCase(getEmployeeByIdApi.rejected, (state) => {
         state.employeeByIdStatus = 'failed'
+      })
+
+      .addCase(getAllEmployeesForFormApi.pending, (state) => {
+        state.allEmployeesForFormStatus = 'pending'
+      })
+      .addCase(getAllEmployeesForFormApi.fulfilled, (state, action) => {
+        state.allEmployeesForForm = action.payload.items
+        state.allEmployeesForFormStatus = 'succeeded'
+      })
+
+      .addCase(getSelectedEmployeesForFormApi.pending, (state) => {
+        state.selectedEmployeesForFormStatus = 'pending'
+      })
+      .addCase(getSelectedEmployeesForFormApi.fulfilled, (state, action) => {
+        state.selectedEmployeesForForm = action.payload.items
+        state.selectedEmployeesForFormStatus = 'succeeded'
       })
   },
 })

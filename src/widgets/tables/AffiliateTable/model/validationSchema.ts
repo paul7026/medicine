@@ -1,10 +1,15 @@
 import * as Yup from 'yup'
 
-import { EditUserFormValues } from './types'
+import { EditFilialFormValues } from './types'
 
-export const validationSchema = (): Yup.ObjectSchema<EditUserFormValues> =>
+export const validationSchema = (): Yup.ObjectSchema<EditFilialFormValues> =>
   Yup.object().shape({
-    is_superuser: Yup.boolean().required(),
-    password: Yup.string().required(),
-    username: Yup.string().required(),
+    name: Yup.string().required(),
+    timezone: Yup.string(),
+    address: Yup.string().required(),
+    address_data: Yup.string(),
+    phones: Yup.string(),
+    description: Yup.string(),
+    social_media: Yup.string(),
+    email: Yup.string().email(),
   })

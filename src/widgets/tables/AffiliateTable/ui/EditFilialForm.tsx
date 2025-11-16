@@ -11,7 +11,6 @@ import {
   getFilialsApi,
 } from '@entities/filials'
 
-import { validationSchema } from '@features/AffiliateActions/model/validationSchema'
 import { Fields } from '@features/AffiliateActions/ui/Fields'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
@@ -21,6 +20,7 @@ import { Box } from '@shared/ui/Box'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 
 import { EditFilialFormProps, EditFilialFormValues } from '../model/types'
+import { validationSchema } from '../model/validationSchema'
 
 export const EditFilialForm = ({ filialId, onClose }: EditFilialFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
@@ -37,7 +37,6 @@ export const EditFilialForm = ({ filialId, onClose }: EditFilialFormProps) => {
       description: '',
       social_media: '',
       email: '',
-      clinic_id: '',
     },
     reValidateMode: 'onChange',
     resolver: yupResolver(validationSchema()),
@@ -63,7 +62,6 @@ export const EditFilialForm = ({ filialId, onClose }: EditFilialFormProps) => {
         description: filialById.description || '',
         social_media: filialById.social_media || '',
         email: filialById.email || '',
-        clinic_id: filialById.clinic_id,
       })
     }
   }, [filialById, reset])
@@ -107,7 +105,7 @@ export const EditFilialForm = ({ filialId, onClose }: EditFilialFormProps) => {
   return (
     <FormProvider {...form}>
       <form id="edit-form" onSubmit={handleSubmit(onSubmit)}>
-        <Fields />
+        <Fields isMaintainer={false} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>
