@@ -3,7 +3,6 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight'
 import { Stack, Step, StepLabel, Stepper as StepperMui } from '@mui/material'
 
 import { FieldValues, FormProvider } from 'react-hook-form'
-import { useTranslation } from 'react-i18next'
 
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
@@ -21,10 +20,6 @@ export const Stepper = <T extends FieldValues>({
   setActiveStep,
   onSubmit,
 }: ModalStepperProps<T>) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'CREATE_VIRTUAL_MACHINES.STEPPER',
-  })
-
   const backClickHandler = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1)
   }
@@ -64,7 +59,7 @@ export const Stepper = <T extends FieldValues>({
       )}
 
       <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
-        {activeStep === 0 && <Button onClick={onClose}>{t('CANCEL')}</Button>}
+        {activeStep === 0 && <Button onClick={onClose}>CANCEL</Button>}
 
         {activeStep === steps.length - 1 && (
           <Button
@@ -73,7 +68,7 @@ export const Stepper = <T extends FieldValues>({
             variant="contained"
             onClick={resetClickHandler}
           >
-            {t('RESET')}
+            RESET
           </Button>
         )}
 
@@ -83,13 +78,13 @@ export const Stepper = <T extends FieldValues>({
             variant="outlined"
             onClick={backClickHandler}
           >
-            {t('BACK')}
+            BACK
           </Button>
         )}
 
         {activeStep === steps.length - 1 ? (
           <Button color="primary" variant="contained" onClick={onSubmit}>
-            {submitBtnTitle ? submitBtnTitle : t('CREATE')}
+            {submitBtnTitle ? submitBtnTitle : 'CREATE'}
           </Button>
         ) : (
           <Button
@@ -98,7 +93,7 @@ export const Stepper = <T extends FieldValues>({
             variant="outlined"
             onClick={nextClickHandler}
           >
-            {t('NEXT')}
+            {'NEXT'}
           </Button>
         )}
       </Stack>

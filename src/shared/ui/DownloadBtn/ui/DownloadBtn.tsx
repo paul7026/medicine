@@ -1,6 +1,5 @@
 import DownloadIcon from '@mui/icons-material/Download'
 
-import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Button } from '@shared/ui/Button'
 
 interface DownloadBtnProps {
@@ -8,7 +7,7 @@ interface DownloadBtnProps {
 }
 
 export const DownloadBtn = ({ downloadFn }: DownloadBtnProps) => {
-  const { addErrorMessage } = useSystemMessage()
+  // const { addErrorMessage } = useSystemMessage()
 
   const downloadHandler = async () => {
     try {
@@ -25,7 +24,8 @@ export const DownloadBtn = ({ downloadFn }: DownloadBtnProps) => {
       link.click()
       document.body.removeChild(link)
     } catch (err) {
-      addErrorMessage(err as [])
+      console.log(err)
+      // addErrorMessage(err as [])
     }
   }
 

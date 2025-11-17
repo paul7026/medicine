@@ -1,1 +1,1 @@
-export { AdminsActions } from './ui/AdminsActions'
+export { ClinicsActions } from './ui/ClinicsActions'

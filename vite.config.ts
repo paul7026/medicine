@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 import ReactCompiler from 'babel-plugin-react-compiler'
 import path from 'path'
 import { defineConfig, loadEnv } from 'vite'
-import CircularDependency from 'vite-plugin-circular-dependency'
+
+// import CircularDependency from 'vite-plugin-circular-dependency'
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
@@ -31,11 +32,11 @@ export default ({ mode }) => {
       },
     },
     plugins: [
-      CircularDependency({
-        exclude: /node_modules/,
-        circleImportThrowErr: true,
-        ignoreDynamicImport: false,
-      }),
+      // CircularDependency({
+      //   exclude: /node_modules/,
+      //   circleImportThrowErr: true,
+      //   ignoreDynamicImport: false,
+      // }),
       react({
         babel: {
           plugins: [ReactCompiler],

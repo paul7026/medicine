@@ -3,7 +3,6 @@ import { InputAdornment, TextFieldProps } from '@mui/material'
 import { debounce } from '@mui/material/utils'
 
 import { ChangeEvent, useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import { TextField } from '@shared/ui/TextField'
 
@@ -18,9 +17,6 @@ export const SearchInput = ({
   sx,
   ...rest
 }: SearchInputProps) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'SEARCH_INPUT',
-  })
   const changeHandler = useMemo(
     () =>
       debounce((e: ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +25,7 @@ export const SearchInput = ({
     [onChange]
   )
 
-  const resultPlaceholder = placeholder ?? t('SEARCH_PLACEHOLDER')
+  const resultPlaceholder = placeholder ?? 'Placeholder'
 
   return (
     <TextField
