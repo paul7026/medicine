@@ -6,7 +6,7 @@ import {
   getSelectedEmployeesForFormApi,
   selectedEmployeesForFormSelector,
 } from '@entities/employees'
-import { getFilialByIdApi, postFilialToEmployeeApi } from '@entities/filials'
+import { postFilialToEmployeeApi } from '@entities/filials'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -71,7 +71,6 @@ export const EditFilialToEmployeeForm = ({
       .then(() => {
         addSuccessMessage('Employees updated for filial')
         onClose()
-        dispatch(getFilialByIdApi(filialId))
         dispatch(getEmployeesApi(`filial_id=${filialId}`))
       })
       .catch((err) => {

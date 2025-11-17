@@ -19,3 +19,19 @@ export const favourByIdSelector = createSelector(
     status: favourByIdStatus,
   })
 )
+
+export const allFavoursForFormSelector = createSelector(
+  baseSelector,
+  ({ allFavoursForForm, allFavoursForFormStatus }) => ({
+    allFavoursForForm,
+    status: allFavoursForFormStatus,
+  })
+)
+
+export const selectedFavoursForFormSelector = createSelector(
+  baseSelector,
+  ({ selectedFavoursForForm, selectedFavoursForFormStatus }) => ({
+    selectedFavoursForForm,
+    status: selectedFavoursForFormStatus,
+  })
+)

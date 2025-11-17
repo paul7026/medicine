@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import { filialByIdSelector, getFilialByIdApi } from '@entities/filials'
 
 import { EditFilialToEmployeeForm } from '@features/forms/EditFilialToEmployeeForm'
+import { EditFilialToFavoursForm } from '@features/forms/EditFilialToFavoursForm'
 
 import { ClinicModalData } from '@widgets/ClinicModalData'
 import { EmployeeModalData } from '@widgets/EmployeeModalData'
 import { FilialEmployeesTable } from '@widgets/tables/FilialEmployeesTable'
+import { FilialFavoursTable } from '@widgets/tables/FilialFavoursTable'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -28,7 +30,6 @@ export const AffiliateModalData = ({ filialId }: AffiliateModalDataProps) => {
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<string | null>(
     null
   )
-
   const { status, filialById } = useAppSelector(filialByIdSelector)
 
   const dispatch = useAppDispatch()
@@ -61,11 +62,20 @@ export const AffiliateModalData = ({ filialId }: AffiliateModalDataProps) => {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       <DataGrid dense data={getData(filialById, handleClinicClick)} />
 
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="h6">Employees</Typography>
+        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'space-between' }}>
+          <Typography variant="h6">Employees</Typography>
+          <Button
+            variant="contained"
+            onClick={() => setEmployeesModalOpen(true)}
+          >
+            Edit employees
+          </Button>
+        </Box>
+
         <FilialEmployeesTable
           filialId={filialId}
           onNameClick={(employeeId) => {
@@ -75,13 +85,15 @@ export const AffiliateModalData = ({ filialId }: AffiliateModalDataProps) => {
         />
       </Box>
 
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-        <Button variant="contained" onClick={() => setEmployeesModalOpen(true)}>
-          Edit employees
-        </Button>
-        <Button variant="contained" onClick={() => setFavoursModalOpen(true)}>
-          Edit favours
-        </Button>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Box sx={{ display: 'flex', gap: 3, justifyContent: 'space-between' }}>
+          <Typography variant="h6">Favours</Typography>
+          <Button variant="contained" onClick={() => setFavoursModalOpen(true)}>
+            Edit favours
+          </Button>
+        </Box>
+
+        <FilialFavoursTable filialId={filialId} />
       </Box>
 
       <Modal
@@ -125,14 +137,27 @@ export const AffiliateModalData = ({ filialId }: AffiliateModalDataProps) => {
       </Modal>
 
       <Modal
-        withoutActionButtons
+        formId="edit-filial-to-favours-form"
         maxWidth="md"
         open={favoursModalOpen}
         title="Edit favours"
         onClose={() => setFavoursModalOpen(false)}
       >
-        {/* TODO: implement edit favours form */}
+        <EditFilialToFavoursForm
+          filialId={filialId}
+          onClose={() => setFavoursModalOpen(false)}
+        />
       </Modal>
+
+      {/* <Modal
+        withoutActionButtons
+        maxWidth="md"
+        open={favoursModalOpen}
+        title="Favour"
+        onClose={() => setFavoursModalOpen(false)}
+      >
+        {selectedFavourId && <FavourModalData favourId={selectedFavourId} />}
+      </Modal> */}
     </Box>
   )
 }
