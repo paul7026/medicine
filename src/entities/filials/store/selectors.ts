@@ -19,3 +19,11 @@ export const filialByIdSelector = createSelector(
     status: filialByIdStatus,
   })
 )
+
+export const selectedFilialsForFormSelector = createSelector(
+  baseSelector,
+  ({ selectedFilialsForForm, selectedFilialsForFormStatus }) => ({
+    selectedFilialsForForm,
+    status: selectedFilialsForFormStatus,
+  })
+)

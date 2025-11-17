@@ -1,6 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getFilialByIdApi, getFilialsApi } from '../api'
+import {
+  getFilialByIdApi,
+  getFilialsApi,
+  getSelectedFilialsForFormApi,
+} from '../api'
 import { FilialsState } from '../types'
 
 const initialState: FilialsState = {
@@ -9,6 +13,9 @@ const initialState: FilialsState = {
 
   filialById: null,
   filialByIdStatus: 'idle',
+
+  selectedFilialsForForm: [],
+  selectedFilialsForFormStatus: 'idle',
 }
 
 const filialsSlice = createSlice({
@@ -37,6 +44,17 @@ const filialsSlice = createSlice({
       })
       .addCase(getFilialByIdApi.rejected, (state) => {
         state.filialByIdStatus = 'failed'
+      })
+
+      .addCase(getSelectedFilialsForFormApi.pending, (state) => {
+        state.selectedFilialsForFormStatus = 'pending'
+      })
+      .addCase(getSelectedFilialsForFormApi.fulfilled, (state, action) => {
+        state.selectedFilialsForForm = action.payload.items
+        state.selectedFilialsForFormStatus = 'succeeded'
+      })
+      .addCase(getSelectedFilialsForFormApi.rejected, (state) => {
+        state.selectedFilialsForFormStatus = 'failed'
       })
   },
 })
