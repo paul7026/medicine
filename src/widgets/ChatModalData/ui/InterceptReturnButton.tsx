@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { getChatByIdApi } from '@entities/chats'
 import { interceptChatApi } from '@entities/chats/api/interceptChatApi'
 import { returnChatApi } from '@entities/chats/api/returnChatApi'
 
@@ -35,7 +36,7 @@ export const InterceptReturnButton = ({
       .unwrap()
       .then(() => {
         addSuccessMessage('Chat intercepted successfully')
-        // TODO : скорее всего надо добавить гет запрос
+        dispatch(getChatByIdApi(chatId))
       })
       .catch((err) => addErrorMessage(err))
       .finally(() => setIsLoading(false))
@@ -48,7 +49,7 @@ export const InterceptReturnButton = ({
       .unwrap()
       .then(() => {
         addSuccessMessage('Chat returned successfully')
-        // TODO : скорее всего надо добавить гет запрос
+        dispatch(getChatByIdApi(chatId))
       })
       .catch((err) => addErrorMessage(err))
       .finally(() => setIsLoading(false))
