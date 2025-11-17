@@ -1,3 +1,5 @@
+import { InputAdornment } from '@mui/material'
+
 import { useEffect } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
@@ -9,11 +11,13 @@ import {
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
+import { AutocompleteControl } from '@shared/ui/Autocomplete'
 import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
 import { SwitchControl } from '@shared/ui/Switch'
 import { TextFieldControl } from '@shared/ui/TextField'
 
+import { CURRENCY_OPTIONS } from '../model/constants'
 import { CreateFavourFormValues, FieldsProps } from '../model/types'
 
 export const Fields = ({ favourId, isMaintainer }: FieldsProps) => {
@@ -91,13 +95,43 @@ export const Fields = ({ favourId, isMaintainer }: FieldsProps) => {
 
       <TextFieldControl form={form} label="Comment" name="comment" />
 
-      <TextFieldControl form={form} label="Duration (min)" name="duration" />
+      <TextFieldControl
+        form={form}
+        label="Duration"
+        name="duration"
+        slotProps={{
+          input: {
+            endAdornment: <InputAdornment position="end">min</InputAdornment>,
+          },
+        }}
+      />
 
       <SwitchControl form={form} label="Online" name="online_switch_on" />
 
-      <TextFieldControl form={form} label="Price" name="price" />
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 0.6fr',
+          gap: 2,
+        }}
+      >
+        <TextFieldControl
+          fullWidth
+          form={form}
+          label="Price"
+          name="price"
+          type="number"
+        />
 
-      <TextFieldControl form={form} label="Currency" name="currency" />
+        <AutocompleteControl
+          freeSolo
+          fullWidth
+          form={form}
+          label="Currency"
+          name="currency"
+          options={CURRENCY_OPTIONS}
+        />
+      </Box>
     </Box>
   )
 }
