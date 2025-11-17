@@ -14,25 +14,36 @@ interface LoginResponse {
   token_type: 'bearer'
 }
 
+const API = import.meta.env.VITE_API_BASE_URL
+const isDev = import.meta.env.MODE === 'development'
+const isProduction = import.meta.env.MODE === 'production'
+const loginURL = isDev ? '/admin/auth/login' : `${API}/admin/auth/login`
+
 export const loginApi = createThunkWithErrorHandler<
   LoginResponse,
   LoginPayload
 >('auth/login', async (payload) => {
-  const response = await axios.post<LoginResponse>('/admin/auth/login', {
-    ...payload,
-  })
+  const response = await axios.post<LoginResponse>(
+    loginURL,
+    {
+      ...payload,
+    },
+    {
+      withCredentials: true,
+    }
+  )
 
   const { access_token, refresh_token } = response.data
 
   cookies.set('access_token', access_token, {
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProduction,
     sameSite: 'strict',
   })
 
   cookies.set('refresh_token', refresh_token, {
     path: '/',
-    secure: process.env.NODE_ENV === 'production',
+    secure: isProduction,
     sameSite: 'strict',
   })
 
