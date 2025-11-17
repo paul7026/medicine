@@ -2,7 +2,9 @@ import axios from 'axios'
 
 import { cookies } from './cookies'
 
-const baseURL = '/admin'
+const API = import.meta.env.VITE_API_BASE_URL
+const isDev = import.meta.env.MODE === 'development'
+const baseURL = isDev ? '/admin' : `${API}/admin`
 
 const $api = axios.create({
   withCredentials: true,
