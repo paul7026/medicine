@@ -110,6 +110,7 @@ export const FavourCategoriesTable = () => {
       <Modal
         withoutActionButtons
         formId="view-favour-category-form"
+        maxWidth="md"
         open={viewIsOpen}
         title="Favour Categories"
         onClose={handleClose}

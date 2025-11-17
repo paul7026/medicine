@@ -110,6 +110,7 @@ export const EmployeesTable = () => {
       <Modal
         withoutActionButtons
         formId="view-employee-form"
+        maxWidth="md"
         open={viewIsOpen}
         title="Employee"
         onClose={handleClose}

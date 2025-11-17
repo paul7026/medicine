@@ -30,7 +30,7 @@ $api.interceptors.response.use(
 
     // Check if error has response and is 401 Unauthorized
     if (
-      error.response?.status === 401 &&
+      error.response?.status === 403 &&
       !originalRequest._retry &&
       originalRequest.url !== '/auth/refresh'
     ) {
