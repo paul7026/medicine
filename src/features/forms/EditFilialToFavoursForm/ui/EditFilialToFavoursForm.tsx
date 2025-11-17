@@ -44,7 +44,7 @@ export const EditFilialToFavoursForm = ({
   useEffect(() => {
     if (!filialId) return
 
-    dispatch(getSelectedFavoursForFormApi(`filial=${filialId}`))
+    dispatch(getSelectedFavoursForFormApi(`filial_id=${filialId}`))
   }, [dispatch, filialId])
 
   // Pre-fill favours from selectedFavoursForForm
@@ -71,7 +71,7 @@ export const EditFilialToFavoursForm = ({
       .then(() => {
         addSuccessMessage('Favours updated for filial')
         onClose()
-        dispatch(getSelectedFavoursForFormApi(`filial=${filialId}`))
+        dispatch(getSelectedFavoursForFormApi(`filial_id=${filialId}`))
       })
       .catch((err) => {
         addErrorMessage(err)

@@ -18,7 +18,7 @@ export const getColumns = (
         variant="button"
         onClick={() => onNameClick(params.row.id)}
       >
-        {params.value as string}
+        {params.value}
       </Link>
     ),
   },

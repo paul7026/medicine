@@ -1,19 +1,26 @@
 import { GridColDef } from '@mui/x-data-grid'
 
-export const getColumns = (): GridColDef[] => [
-  {
-    field: 'id',
-    headerName: 'Id',
-    width: 250,
-    headerAlign: 'center',
-    align: 'center',
-  },
+import { Link } from '@shared/ui/Link'
+
+export const getColumns = (
+  onNameClick: (favoursId: string) => void
+): GridColDef[] => [
   {
     field: 'title',
     headerName: 'Title',
-    minWidth: 150,
+    minWidth: 400,
     headerAlign: 'center',
     align: 'center',
+    flex: 1,
+    renderCell: (params) => (
+      <Link
+        color="info"
+        variant="button"
+        onClick={() => onNameClick(params.row.id)}
+      >
+        {params.value}
+      </Link>
+    ),
   },
   {
     field: 'clinic_name',
