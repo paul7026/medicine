@@ -19,3 +19,19 @@ export const employeeByIdSelector = createSelector(
     status: employeeByIdStatus,
   })
 )
+
+export const allEmployeesForFormSelector = createSelector(
+  baseSelector,
+  ({ allEmployeesForForm, allEmployeesForFormStatus }) => ({
+    allEmployeesForForm,
+    status: allEmployeesForFormStatus,
+  })
+)
+
+export const selectedEmployeesForFormSelector = createSelector(
+  baseSelector,
+  ({ selectedEmployeesForForm, selectedEmployeesForFormStatus }) => ({
+    selectedEmployeesForForm,
+    status: selectedEmployeesForFormStatus,
+  })
+)

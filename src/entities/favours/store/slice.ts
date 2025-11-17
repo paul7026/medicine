@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getFavourByIdApi, getFavoursApi } from '../api'
+import {
+  getAllFavoursForFormApi,
+  getFavourByIdApi,
+  getFavoursApi,
+  getSelectedFavoursForFormApi,
+} from '../api'
 import { FavoursState } from '../types'
 
 const initialState: FavoursState = {
@@ -9,6 +14,12 @@ const initialState: FavoursState = {
 
   favourById: null,
   favourByIdStatus: 'idle',
+
+  allFavoursForForm: [],
+  allFavoursForFormStatus: 'idle',
+
+  selectedFavoursForForm: [],
+  selectedFavoursForFormStatus: 'idle',
 }
 
 const favoursSlice = createSlice({
@@ -37,6 +48,28 @@ const favoursSlice = createSlice({
       })
       .addCase(getFavourByIdApi.rejected, (state) => {
         state.favourByIdStatus = 'failed'
+      })
+
+      .addCase(getAllFavoursForFormApi.pending, (state) => {
+        state.allFavoursForFormStatus = 'pending'
+      })
+      .addCase(getAllFavoursForFormApi.fulfilled, (state, action) => {
+        state.allFavoursForForm = action.payload.items
+        state.allFavoursForFormStatus = 'succeeded'
+      })
+      .addCase(getAllFavoursForFormApi.rejected, (state) => {
+        state.allFavoursForFormStatus = 'failed'
+      })
+
+      .addCase(getSelectedFavoursForFormApi.pending, (state) => {
+        state.selectedFavoursForFormStatus = 'pending'
+      })
+      .addCase(getSelectedFavoursForFormApi.fulfilled, (state, action) => {
+        state.selectedFavoursForForm = action.payload.items
+        state.selectedFavoursForFormStatus = 'succeeded'
+      })
+      .addCase(getSelectedFavoursForFormApi.rejected, (state) => {
+        state.selectedFavoursForFormStatus = 'failed'
       })
   },
 })

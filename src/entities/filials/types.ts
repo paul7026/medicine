@@ -53,7 +53,6 @@ export interface EditFilialPayload {
 }
 
 export interface CreateFilialPayload {
-  clinic_id: string
   name: string
   address: string
   timezone?: string
@@ -62,6 +61,7 @@ export interface CreateFilialPayload {
   description?: string
   social_media?: string
   email?: string
+  clinic_id?: string
 }
 
 export interface FavourToFilialPayload {
@@ -72,4 +72,14 @@ export interface FavourToFilialPayload {
 export interface FavourToEmployeePayload {
   employees: string[]
   favour_id: string
+}
+
+export interface PostFilialToFavourPayload {
+  favours: string[]
+  filial_id: string
+}
+
+export interface PostFilialToEmployeePayload {
+  employees: string[]
+  filial_id: string
 }

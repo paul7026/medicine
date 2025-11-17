@@ -6,6 +6,12 @@ export interface FavoursState {
 
   favourById: GetFavourByIdResponse | null
   favourByIdStatus: ReducerLoadingState
+
+  allFavoursForForm: GetFavoursResponse['items']
+  allFavoursForFormStatus: ReducerLoadingState
+
+  selectedFavoursForForm: GetFavoursResponse['items']
+  selectedFavoursForFormStatus: ReducerLoadingState
 }
 
 export interface GetFavoursResponse {

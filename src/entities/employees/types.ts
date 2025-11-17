@@ -6,6 +6,12 @@ export interface EmployeesState {
 
   employeeById: GetEmployeeByIdResponse | null
   employeeByIdStatus: ReducerLoadingState
+
+  allEmployeesForForm: GetEmployeesResponse['items']
+  allEmployeesForFormStatus: ReducerLoadingState
+
+  selectedEmployeesForForm: GetEmployeesResponse['items']
+  selectedEmployeesForFormStatus: ReducerLoadingState
 }
 
 export interface GetEmployeesResponse {

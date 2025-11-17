@@ -2,7 +2,9 @@ import * as Yup from 'yup'
 
 import { CreateFilialFormValues } from './types'
 
-export const validationSchema = (): Yup.ObjectSchema<CreateFilialFormValues> =>
+export const validationSchema = (
+  isMaintainer: boolean
+): Yup.ObjectSchema<CreateFilialFormValues> =>
   Yup.object().shape({
     name: Yup.string().required(),
     timezone: Yup.string(),
@@ -12,5 +14,5 @@ export const validationSchema = (): Yup.ObjectSchema<CreateFilialFormValues> =>
     description: Yup.string(),
     social_media: Yup.string(),
     email: Yup.string().email(),
-    clinic_id: Yup.string().required(),
+    clinic_id: isMaintainer ? Yup.string().required() : Yup.string(),
   })

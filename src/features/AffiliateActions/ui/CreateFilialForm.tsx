@@ -5,6 +5,7 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import { createFilialApi, getFilialsApi } from '@entities/filials'
 
+import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
@@ -16,6 +17,9 @@ import { validationSchema } from '../model/validationSchema'
 
 export const CreateFilialForm = ({ onClose }: CreateFilialFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
+
+  const tenant = getTenantType()
+  const isMaintainer = tenant === 'maintainer'
 
   const form = useForm<CreateFilialFormValues>({
     defaultValues: {
@@ -30,7 +34,7 @@ export const CreateFilialForm = ({ onClose }: CreateFilialFormProps) => {
       clinic_id: '',
     },
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema()),
+    resolver: yupResolver(validationSchema(isMaintainer)),
   })
 
   const { handleSubmit } = form
@@ -38,10 +42,10 @@ export const CreateFilialForm = ({ onClose }: CreateFilialFormProps) => {
   const dispatch = useAppDispatch()
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
-  const onSubmit = (data: CreateFilialFormValues) => {
+  const onSubmit = ({ clinic_id, ...rest }: CreateFilialFormValues) => {
     setIsLoading(true)
 
-    dispatch(createFilialApi(data))
+    dispatch(createFilialApi({ ...(isMaintainer && { clinic_id }), ...rest }))
       .unwrap()
       .then(() => {
         addSuccessMessage('Filial successfully created')
@@ -57,7 +61,7 @@ export const CreateFilialForm = ({ onClose }: CreateFilialFormProps) => {
   return (
     <FormProvider {...form}>
       <form id="create-filial-form" onSubmit={handleSubmit(onSubmit)}>
-        <Fields />
+        <Fields isMaintainer={isMaintainer} />
         <LoadingBackdrop isLoading={isLoading} />
       </form>
     </FormProvider>
