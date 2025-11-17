@@ -9,7 +9,7 @@ import { defineConfig, loadEnv } from 'vite'
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd())
   process.env = { ...process.env, ...env }
-  const proxyUrl = process.env.BASE_URL || 'https://b8bc855c293e.ngrok-free.app'
+  const proxyUrl = process.env.VITE_BASE_URL
 
   console.log('👉 Loaded BASE_URL:', proxyUrl)
 
