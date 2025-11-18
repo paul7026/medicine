@@ -1,6 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-import { getFilialByIdApi, getFilialsApi } from '../api'
+import {
+  getAllFilialsForFormApi,
+  getFilialByIdApi,
+  getFilialsApi,
+  getSelectedFilialsForFormApi,
+} from '../api'
 import { FilialsState } from '../types'
 
 const initialState: FilialsState = {
@@ -9,6 +14,12 @@ const initialState: FilialsState = {
 
   filialById: null,
   filialByIdStatus: 'idle',
+
+  selectedFilialsForForm: [],
+  selectedFilialsForFormStatus: 'idle',
+
+  allFilialsForForm: [],
+  allFilialsForFormStatus: 'idle',
 }
 
 const filialsSlice = createSlice({
@@ -37,6 +48,28 @@ const filialsSlice = createSlice({
       })
       .addCase(getFilialByIdApi.rejected, (state) => {
         state.filialByIdStatus = 'failed'
+      })
+
+      .addCase(getSelectedFilialsForFormApi.pending, (state) => {
+        state.selectedFilialsForFormStatus = 'pending'
+      })
+      .addCase(getSelectedFilialsForFormApi.fulfilled, (state, action) => {
+        state.selectedFilialsForForm = action.payload.items
+        state.selectedFilialsForFormStatus = 'succeeded'
+      })
+      .addCase(getSelectedFilialsForFormApi.rejected, (state) => {
+        state.selectedFilialsForFormStatus = 'failed'
+      })
+
+      .addCase(getAllFilialsForFormApi.pending, (state) => {
+        state.allFilialsForFormStatus = 'pending'
+      })
+      .addCase(getAllFilialsForFormApi.fulfilled, (state, action) => {
+        state.allFilialsForForm = action.payload.items
+        state.allFilialsForFormStatus = 'succeeded'
+      })
+      .addCase(getAllFilialsForFormApi.rejected, (state) => {
+        state.allFilialsForFormStatus = 'failed'
       })
   },
 })
