@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { FormProvider, useForm } from 'react-hook-form'
 
 import {
+  getFavoursApi,
   getSelectedFavoursForFormApi,
   selectedFavoursForFormSelector,
 } from '@entities/favours'
@@ -71,7 +72,7 @@ export const EditFilialToFavoursForm = ({
       .then(() => {
         addSuccessMessage('Favours updated for filial')
         onClose()
-        dispatch(getSelectedFavoursForFormApi(`filial_id=${filialId}`))
+        dispatch(getFavoursApi(`filial_id=${filialId}`))
       })
       .catch((err) => {
         addErrorMessage(err)

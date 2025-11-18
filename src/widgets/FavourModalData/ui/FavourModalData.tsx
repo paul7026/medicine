@@ -2,12 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { favourByIdSelector, getFavourByIdApi } from '@entities/favours'
 
-import { ChangeEmployeesForm } from '@features/forms/ChangeEmployeesForm'
-import { ChangeFilialsForm } from '@features/forms/ChangeFilialsForm'
-
-import { AffiliateModalData } from '@widgets/AffiliateModalData'
 import { ClinicModalData } from '@widgets/ClinicModalData'
-import { EmployeeModalData } from '@widgets/EmployeeModalData'
 import { FavourCategoriesModalData } from '@widgets/FavourCategoriesModalData'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
@@ -17,12 +12,13 @@ import { CircularProgress } from '@shared/ui/CircularProgress'
 import { DataGrid } from '@shared/ui/DataGrid'
 import { Modal } from '@shared/ui/Modal'
 
-import { getDataModal } from '../model/getDataModal'
+import { FavourToEmployeesData } from './FavourToEmployeesData'
+import { FavourToFilialsData } from './FavourToFilialsData'
+
 import { getData } from '../model/helpers'
-import { FavourModalDataProps, FavourModalValues } from '../model/types'
+import { FavourModalDataProps } from '../model/types'
 
 export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
-  const [modalValue, setModalValue] = useState<FavourModalValues | null>(null)
   const [openedModal, setOpenedModal] = useState<null | {
     type: 'clinic' | 'category' | 'filials' | 'employees'
     id: string
@@ -51,20 +47,11 @@ export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
     )
   }
 
-  const { filials, employees } = favourById
-
-  const closeModal = () => setModalValue(null)
-
-  const onItemClick = (
-    type: 'clinic' | 'category' | 'employees' | 'filials',
-    id: string
-  ) => {
+  const onItemClick = (type: 'clinic' | 'category', id: string) => {
     setOpenedModal({ type, id })
   }
 
-  const dataGrid = getData({ setModalValue, favourById, onItemClick })
-
-  const modalData = getDataModal()
+  const dataGrid = getData({ favourById, onItemClick })
 
   const closeLinksModal = () => setOpenedModal(null)
 
@@ -73,29 +60,9 @@ export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
         <DataGrid dense data={dataGrid} subtitleMaxWidth="350px" />
 
-        {modalValue && (
-          <Modal
-            formId={modalData[modalValue].formId}
-            open={Boolean(modalValue)}
-            title={modalData[modalValue].title}
-            onClose={closeModal}
-          >
-            {modalValue === 'changeFilials' && (
-              <ChangeFilialsForm
-                closeModal={closeModal}
-                favourId={favourId}
-                filialsDefault={(filials ?? []).map((f) => f.id)}
-              />
-            )}
-            {modalValue === 'changeEmployees' && (
-              <ChangeEmployeesForm
-                closeModal={closeModal}
-                employeesDefault={(employees ?? []).map((e) => e.id)}
-                favourId={favourId}
-              />
-            )}
-          </Modal>
-        )}
+        <FavourToFilialsData favourId={favourId} />
+
+        <FavourToEmployeesData favourId={favourId} />
       </Box>
 
       <Modal
@@ -111,14 +78,6 @@ export const FavourModalData = ({ favourId }: FavourModalDataProps) => {
 
         {openedModal?.type === 'category' && (
           <FavourCategoriesModalData categoryId={openedModal.id} />
-        )}
-
-        {openedModal?.type === 'employees' && (
-          <EmployeeModalData employeeId={openedModal.id} />
-        )}
-
-        {openedModal?.type === 'filials' && (
-          <AffiliateModalData filialId={openedModal.id} />
         )}
       </Modal>
     </>
