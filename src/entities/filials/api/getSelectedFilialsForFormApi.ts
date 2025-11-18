@@ -8,7 +8,7 @@ export const getSelectedFilialsForFormApi = createThunkWithErrorHandler<
   string | undefined
 >('filials/getSelectedFilialsForForm', async (queryStr) => {
   const response = await $api.get(
-    `/filials/list${queryStr ? '?' + queryStr : ''}`
+    `/filial/list${queryStr ? '?' + queryStr : ''}`
   )
 
   return response.data

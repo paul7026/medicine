@@ -27,3 +27,11 @@ export const selectedFilialsForFormSelector = createSelector(
     status: selectedFilialsForFormStatus,
   })
 )
+
+export const allFilialsForFormSelector = createSelector(
+  baseSelector,
+  ({ allFilialsForForm, allFilialsForFormStatus }) => ({
+    allFilialsForForm,
+    status: allFilialsForFormStatus,
+  })
+)

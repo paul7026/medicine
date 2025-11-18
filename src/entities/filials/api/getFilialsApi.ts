@@ -13,3 +13,14 @@ export const getFilialsApi = createThunkWithErrorHandler<
 
   return response.data
 })
+
+export const getAllFilialsForFormApi = createThunkWithErrorHandler<
+  GetFilialsResponse,
+  string | undefined
+>('filials/getAllFilialsForForm', async (queryStr) => {
+  const response = await $api.get(
+    `/filial/list${queryStr ? '?' + queryStr : ''}`
+  )
+
+  return response.data
+})

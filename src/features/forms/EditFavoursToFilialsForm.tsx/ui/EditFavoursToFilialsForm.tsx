@@ -3,6 +3,8 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import {
   favourToFilialApi,
+  getAllFilialsForFormApi,
+  getFilialsApi,
   getSelectedFilialsForFormApi,
   selectedFilialsForFormSelector,
 } from '@entities/filials'
@@ -44,7 +46,7 @@ export const EditFavoursToFilialsForm = ({
   useEffect(() => {
     if (!favourId) return
 
-    dispatch(getSelectedFilialsForFormApi(`filial_id=${favourId}`))
+    dispatch(getSelectedFilialsForFormApi(`favour_id=${favourId}`))
   }, [dispatch, favourId])
 
   // Pre-fill filials from selectedFilialsForForm
@@ -71,7 +73,7 @@ export const EditFavoursToFilialsForm = ({
       .then(() => {
         addSuccessMessage('Filials updated for favour')
         onClose()
-        dispatch(getSelectedFilialsForFormApi(`favour_id=${favourId}`))
+        dispatch(getFilialsApi(`favour_id=${favourId}`))
       })
       .catch((err) => {
         addErrorMessage(err)

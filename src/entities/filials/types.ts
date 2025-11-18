@@ -9,6 +9,9 @@ export interface FilialsState {
 
   selectedFilialsForForm: GetFilialsResponse['items']
   selectedFilialsForFormStatus: ReducerLoadingState
+
+  allFilialsForForm: GetFilialsResponse['items']
+  allFilialsForFormStatus: ReducerLoadingState
 }
 
 export interface GetFilialsResponse {

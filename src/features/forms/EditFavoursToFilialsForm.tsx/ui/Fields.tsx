@@ -1,7 +1,10 @@
 import { useEffect } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-import { filialsSelector, getFilialsApi } from '@entities/filials'
+import {
+  allFilialsForFormSelector,
+  getAllFilialsForFormApi,
+} from '@entities/filials'
 
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
@@ -11,9 +14,11 @@ import { Box } from '@shared/ui/Box'
 import { EditFavourToFilialsFormValues } from '../model/types'
 
 export const Fields = () => {
-  const { filials, status } = useAppSelector(filialsSelector)
+  const { allFilialsForForm, status } = useAppSelector(
+    allFilialsForFormSelector
+  )
 
-  const options = filials.map((filial) => ({
+  const options = allFilialsForForm.map((filial) => ({
     id: filial.id,
     label: filial.name,
   }))
@@ -25,7 +30,7 @@ export const Fields = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getFilialsApi())
+    dispatch(getAllFilialsForFormApi())
   }, [dispatch])
 
   return (
