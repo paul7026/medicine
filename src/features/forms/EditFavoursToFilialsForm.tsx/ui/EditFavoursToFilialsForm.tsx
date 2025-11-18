@@ -3,7 +3,6 @@ import { FormProvider, useForm } from 'react-hook-form'
 
 import {
   favourToFilialApi,
-  getAllFilialsForFormApi,
   getFilialsApi,
   getSelectedFilialsForFormApi,
   selectedFilialsForFormSelector,
