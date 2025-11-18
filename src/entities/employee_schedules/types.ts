@@ -55,8 +55,8 @@ export interface GetEmployeeScheduleByIdResponse {
   medical_degree: string
   created_at: string
   updated_at: string
-  work_time: Record<string, unknown>
-  work_time_table: WorkTimeTable
+  work_time: Record<ScheduleDay, ScheduleSlot[]>
+  work_time_table: Record<ScheduleDay, ScheduleSlot[]>
 }
 
 export interface CreateEmployeeSchedulePayload {

@@ -1,8 +1,10 @@
 import * as yup from 'yup'
 
-export const validationSchema = () =>
+export const validationSchema = (isMaintainer: boolean) =>
   yup.object({
-    clinic: yup.string().required('Clinic is required'),
+    clinic: isMaintainer
+      ? yup.string().required('Clinic is required')
+      : yup.string().default(''),
     employee: yup.string().required('Employee is required'),
     filial: yup.string().required('Filial is required'),
     work_time: yup.object({

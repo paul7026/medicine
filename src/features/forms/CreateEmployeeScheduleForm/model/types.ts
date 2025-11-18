@@ -10,3 +10,7 @@ export interface CreateEmployeeScheduleFormValues {
   filial: string
   work_time: Record<ScheduleDay, ScheduleSlot[]>
 }
+
+export interface FieldsProps {
+  isMaintainer: boolean
+}

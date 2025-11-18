@@ -8,6 +8,10 @@ import {
   getEmployeeScheduleApi,
 } from '@entities/employee_schedules'
 
+import { EditEmployeeScheduleForm } from '@features/forms/EditEmployeeScheduleForm'
+
+import { EmployeeScheduleModalData } from '@widgets/EmployeeScheduleModalData'
+
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
@@ -97,12 +101,19 @@ export const EmployeeScheduleTable = () => {
       </Modal>
 
       <Modal
+        withoutActionButtons
         formId="edit-employee-schedule-form"
+        maxWidth="lg"
         open={editIsOpen}
         title="Editing an employee schedule"
         onClose={handleClose}
       >
-        {/* Edit form will be added here */}
+        {id && (
+          <EditEmployeeScheduleForm
+            scheduleId={id as string}
+            onClose={handleClose}
+          />
+        )}
       </Modal>
 
       <Modal
@@ -113,7 +124,7 @@ export const EmployeeScheduleTable = () => {
         title="Employee Schedule"
         onClose={handleClose}
       >
-        {/* View modal data will be added here */}
+        {id && <EmployeeScheduleModalData employeeScheduleId={id as string} />}
       </Modal>
     </>
   )

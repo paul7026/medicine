@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useFormContext, useWatch } from 'react-hook-form'
 
+import { whoAmISelector } from '@entities/auth/store/selectors'
 import { clinicsSelector, getClinicsApi } from '@entities/clinics'
 import { employeesSelector, getEmployeesApi } from '@entities/employees'
 import { filialsSelector, getFilialsApi } from '@entities/filials'
@@ -10,9 +11,9 @@ import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { Box } from '@shared/ui/Box'
 import { SelectControl } from '@shared/ui/Select'
 
-import { CreateEmployeeScheduleFormValues } from '../model/types'
+import { CreateEmployeeScheduleFormValues, FieldsProps } from '../model/types'
 
-export const Fields = () => {
+export const Fields = ({ isMaintainer }: FieldsProps) => {
   const form = useFormContext<CreateEmployeeScheduleFormValues>()
 
   const { control, setValue } = form
@@ -24,6 +25,7 @@ export const Fields = () => {
   const { employees, status: employeesStatus } =
     useAppSelector(employeesSelector)
   const { filials, status: filialsStatus } = useAppSelector(filialsSelector)
+  const { whoAmI } = useAppSelector(whoAmISelector)
 
   const clinicsSelectList = clinics.map((clinic) => ({
     id: clinic.id,
@@ -50,8 +52,10 @@ export const Fields = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    dispatch(getClinicsApi())
-  }, [dispatch])
+    if (isMaintainer) {
+      dispatch(getClinicsApi())
+    }
+  }, [dispatch, isMaintainer])
 
   useEffect(() => {
     // Only clear employee and filial if the clinic actually changed
@@ -71,17 +75,28 @@ export const Fields = () => {
     }
   }, [setValue, selectedClinicId, dispatch])
 
+  // For non-maintainers, set clinic from whoAmI and fetch employees/filials
+  useEffect(() => {
+    if (!isMaintainer && whoAmI?.clinic_id) {
+      setValue('clinic', whoAmI.clinic_id, { shouldDirty: false })
+      dispatch(getEmployeesApi(`clinic_id=${whoAmI.clinic_id}`))
+      dispatch(getFilialsApi(`clinic_id=${whoAmI.clinic_id}`))
+    }
+  }, [isMaintainer, whoAmI, setValue, dispatch])
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <SelectControl
-        fullWidth
-        disabled={isClinicsEmpty}
-        form={form}
-        label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
-        loading={clinicsStatus === 'pending'}
-        name="clinic"
-        selectItems={clinicsSelectList}
-      />
+      {isMaintainer && (
+        <SelectControl
+          fullWidth
+          disabled={isClinicsEmpty}
+          form={form}
+          label={isClinicsEmpty ? 'Clinic is empty *' : 'Clinic *'}
+          loading={clinicsStatus === 'pending'}
+          name="clinic"
+          selectItems={clinicsSelectList}
+        />
+      )}
 
       <SelectControl
         fullWidth

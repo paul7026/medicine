@@ -1,13 +1,21 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { CircularProgress } from '@mui/material'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { whoAmISelector } from '@entities/auth/store/selectors'
 import {
-  createEmployeeScheduleApi,
+  ScheduleDay,
+  editEmployeeScheduleApi,
+  employeeScheduleByIdSelector,
   getEmployeeScheduleApi,
+  getEmployeeScheduleByIdApi,
 } from '@entities/employee_schedules'
+
+import { CreateEmployeeScheduleFormValues } from '@features/forms/CreateEmployeeScheduleForm/model/types'
+import { validationSchema } from '@features/forms/CreateEmployeeScheduleForm/model/validationSchema'
+import { Fields } from '@features/forms/CreateEmployeeScheduleForm/ui/Fields'
+import { ScheduleStep } from '@features/forms/CreateEmployeeScheduleForm/ui/ScheduleStep'
 
 import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
@@ -16,15 +24,6 @@ import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
 import { Stepper } from '@shared/ui/Stepper'
-
-import { Fields } from './Fields'
-import { ScheduleStep } from './ScheduleStep'
-
-import {
-  CreateEmployeeScheduleFormProps,
-  CreateEmployeeScheduleFormValues,
-} from '../model/types'
-import { validationSchema } from '../model/validationSchema'
 
 const createDefaultWorkTime =
   (): CreateEmployeeScheduleFormValues['work_time'] => ({
@@ -37,15 +36,23 @@ const createDefaultWorkTime =
     sunday: [],
   })
 
-export const CreateEmployeeScheduleForm = ({
+export interface EditEmployeeScheduleFormProps {
+  scheduleId: string
+  onClose: () => void
+}
+
+export const EditEmployeeScheduleForm = ({
+  scheduleId,
   onClose,
-}: CreateEmployeeScheduleFormProps) => {
+}: EditEmployeeScheduleFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [activeStep, setActiveStep] = useState(0)
 
   const tenant = getTenantType()
   const isMaintainer = tenant === 'maintainer'
-  const { whoAmI } = useAppSelector(whoAmISelector)
+  const { status, employeeScheduleById } = useAppSelector(
+    employeeScheduleByIdSelector
+  )
 
   const form = useForm<CreateEmployeeScheduleFormValues>({
     defaultValues: {
@@ -59,25 +66,60 @@ export const CreateEmployeeScheduleForm = ({
     resolver: yupResolver(validationSchema(isMaintainer)),
   })
 
-  const { handleSubmit } = form
+  const { handleSubmit, reset } = form
   const { addErrorMessage, addSuccessMessage } = useSystemMessage()
 
   const dispatch = useAppDispatch()
 
+  useEffect(() => {
+    if (scheduleId) {
+      dispatch(getEmployeeScheduleByIdApi(scheduleId))
+    }
+  }, [dispatch, scheduleId])
+
+  useEffect(() => {
+    if (employeeScheduleById) {
+      reset({
+        clinic: employeeScheduleById.clinic_id,
+        employee: employeeScheduleById.employee_id,
+        filial: employeeScheduleById.filial_id,
+        work_time:
+          employeeScheduleById.work_time_table || createDefaultWorkTime(),
+      })
+    }
+  }, [employeeScheduleById, reset])
+
   const onSubmit = (data: CreateEmployeeScheduleFormValues) => {
     setIsLoading(true)
 
-    const clinic_id = isMaintainer ? data.clinic : whoAmI?.clinic_id || ''
+    // Convert form format to API format
+    const work_time: Record<string, unknown> = {}
+    const days: ScheduleDay[] = [
+      'monday',
+      'tuesday',
+      'wednesday',
+      'thursday',
+      'friday',
+      'saturday',
+      'sunday',
+    ]
+
+    days.forEach((day) => {
+      work_time[day] = data.work_time[day].map((slot) => ({
+        from_minutes: slot.from,
+        to_minutes: slot.to,
+      }))
+    })
 
     dispatch(
-      createEmployeeScheduleApi({
-        ...data,
-        clinic: clinic_id,
+      editEmployeeScheduleApi({
+        schedule_id: scheduleId,
+        work_time,
       })
     )
       .unwrap()
       .then(() => {
-        addSuccessMessage('Employee schedule successfully created')
+        addSuccessMessage('Employee schedule successfully edited')
         onClose()
         dispatch(getEmployeeScheduleApi())
       })
@@ -88,6 +130,21 @@ export const CreateEmployeeScheduleForm = ({
   }
 
   const steps = ['Basic Information', 'Schedule']
+
+  if (status === 'pending' || !employeeScheduleById) {
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: 200,
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    )
+  }
 
   return (
     <>
