@@ -7,6 +7,12 @@ export const getNavPanelListItems = () => {
     { id: '3', name: 'Filials', value: 'filials', icon: 'corporate_fare' },
     { id: '4', name: 'Employees', value: 'employees', icon: 'account_circle' },
     {
+      id: '14',
+      name: 'Employee Schedule',
+      value: 'employee-schedule',
+      icon: 'schedule',
+    },
+    {
       id: '5',
       name: 'Appointments',
       value: 'appointments',

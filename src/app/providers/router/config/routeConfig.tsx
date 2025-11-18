@@ -7,6 +7,7 @@ import { ChatbotsPage } from '@pages/ChatbotsPage'
 import { ChatsPage } from '@pages/ChatsPage'
 import { ClinicsPage } from '@pages/ClinicsPage'
 import { DocumentsPage } from '@pages/DocumentsPage'
+import { EmployeeSchedulePage } from '@pages/EmployeeSchedulePage'
 import { EmployeesPage } from '@pages/EmployeesPage'
 import { FavourCategoriesPage } from '@pages/FavourCategoriesPage'
 import { FavoursPage } from '@pages/FavoursPage'
@@ -40,6 +41,10 @@ export const router = createBrowserRouter([
       {
         path: 'employees',
         element: <EmployeesPage />,
+      },
+      {
+        path: 'employee-schedule',
+        element: <EmployeeSchedulePage />,
       },
       {
         path: 'clinics',

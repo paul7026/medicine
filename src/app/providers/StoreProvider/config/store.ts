@@ -7,6 +7,7 @@ import { chatbotsReducer } from '@entities/chatbots'
 import { chatsReducer } from '@entities/chats'
 import { clinicsReducer } from '@entities/clinics'
 import { documentsReducer } from '@entities/documents'
+import { employeeSchedulesReducer } from '@entities/employee_schedules'
 import { employeesReducer } from '@entities/employees'
 import { favourCategoriesReducer } from '@entities/favourCategory'
 import { favoursReducer } from '@entities/favours'
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   filialsReducer,
   promptsReducer,
   employeesReducer,
+  employeeSchedulesReducer,
   chatsReducer,
   favoursReducer,
   favourCategoriesReducer,
