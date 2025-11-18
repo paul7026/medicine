@@ -1,5 +1,9 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
+import { InputAdornment } from '@mui/material'
 
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,12 +14,15 @@ import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { Button } from '@shared/ui/Button'
 import { Card } from '@shared/ui/Card'
+import { IconButton } from '@shared/ui/IconButton'
 import { TextFieldControl } from '@shared/ui/TextField'
 
 import { LoginFormValues } from '../model/types'
 import { validationSchema } from '../model/validationSchema'
 
 export const LoginForm = () => {
+  const [showPassword, setShowPassword] = useState(false)
+
   const navigate = useNavigate()
 
   const form = useForm<LoginFormValues>({
@@ -41,6 +48,8 @@ export const LoginForm = () => {
       .catch((err) => addErrorMessage(err))
   }
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show)
+
   return (
     <Card sx={{ width: 600 }}>
       <form
@@ -54,7 +63,7 @@ export const LoginForm = () => {
             autoComplete="username"
             form={form}
             id="username"
-            label="Username *"
+            label="Username"
             name="username"
             type="text"
           />
@@ -62,9 +71,20 @@ export const LoginForm = () => {
             autoComplete="current-password"
             form={form}
             id="password"
-            label="Password *"
+            label="Password"
             name="password"
-            type="password"
+            slotProps={{
+              input: {
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton edge="end" onClick={handleClickShowPassword}>
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              },
+            }}
+            type={showPassword ? 'text' : 'password'}
           />
 
           <Button type="submit" variant="contained">
