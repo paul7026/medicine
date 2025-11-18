@@ -22,6 +22,7 @@ import { validationSchema } from '../model/validationSchema'
 
 export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const navigate = useNavigate()
 
@@ -40,12 +41,21 @@ export const LoginForm = () => {
   const dispatch = useAppDispatch()
 
   const onSubmit = (data: LoginFormValues) => {
+    setIsLoading(true)
     dispatch(loginApi(data))
       .unwrap()
       .then(() => {
-        dispatch(getWhoAmIApi()).then(() => navigate('/'))
+        dispatch(getWhoAmIApi())
+          .then(() => navigate('/'))
+          .catch((err) => {
+            addErrorMessage(err)
+            setIsLoading(false)
+          })
       })
-      .catch((err) => addErrorMessage(err))
+      .catch((err) => {
+        addErrorMessage(err)
+        setIsLoading(false)
+      })
   }
 
   const handleClickShowPassword = () => setShowPassword((show) => !show)
@@ -87,7 +97,7 @@ export const LoginForm = () => {
             type={showPassword ? 'text' : 'password'}
           />
 
-          <Button type="submit" variant="contained">
+          <Button disabled={isLoading} type="submit" variant="contained">
             login
           </Button>
         </Box>
