@@ -3,7 +3,6 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-import { whoAmISelector } from '@entities/auth/store/selectors'
 import {
   createEmployeeScheduleApi,
   getEmployeeScheduleApi,
@@ -11,7 +10,6 @@ import {
 
 import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
-import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
@@ -45,7 +43,6 @@ export const CreateEmployeeScheduleForm = ({
 
   const tenant = getTenantType()
   const isMaintainer = tenant === 'maintainer'
-  const { whoAmI } = useAppSelector(whoAmISelector)
 
   const form = useForm<CreateEmployeeScheduleFormValues>({
     defaultValues: {
@@ -64,15 +61,13 @@ export const CreateEmployeeScheduleForm = ({
 
   const dispatch = useAppDispatch()
 
-  const onSubmit = (data: CreateEmployeeScheduleFormValues) => {
+  const onSubmit = ({ clinic, ...rest }: CreateEmployeeScheduleFormValues) => {
     setIsLoading(true)
-
-    const clinic_id = isMaintainer ? data.clinic : whoAmI?.clinic_id || ''
 
     dispatch(
       createEmployeeScheduleApi({
-        ...data,
-        clinic: clinic_id,
+        ...(isMaintainer ? { clinic } : {}),
+        ...rest,
       })
     )
       .unwrap()

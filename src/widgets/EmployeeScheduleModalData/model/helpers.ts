@@ -1,5 +1,7 @@
 import { GetEmployeeScheduleByIdResponse } from '@entities/employee_schedules'
 
+import { formatIsoString } from '@shared/helpers/formatIsoString'
+
 export const getData = (
   employeeScheduleById: GetEmployeeScheduleByIdResponse
 ) => {
@@ -23,7 +25,13 @@ export const getData = (
       title: 'medical_degree',
       subtitle: employeeScheduleById.medical_degree,
     },
-    { title: 'created_at', subtitle: employeeScheduleById.created_at },
-    { title: 'updated_at', subtitle: employeeScheduleById.updated_at },
+    {
+      title: 'created_at',
+      subtitle: formatIsoString(employeeScheduleById.created_at),
+    },
+    {
+      title: 'updated_at',
+      subtitle: formatIsoString(employeeScheduleById.updated_at),
+    },
   ]
 }

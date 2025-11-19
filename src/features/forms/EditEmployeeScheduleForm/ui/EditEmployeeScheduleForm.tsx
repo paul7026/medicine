@@ -2,68 +2,47 @@ import { yupResolver } from '@hookform/resolvers/yup'
 import { CircularProgress } from '@mui/material'
 
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 
 import {
-  ScheduleDay,
   editEmployeeScheduleApi,
   employeeScheduleByIdSelector,
   getEmployeeScheduleApi,
   getEmployeeScheduleByIdApi,
 } from '@entities/employee_schedules'
 
-import { CreateEmployeeScheduleFormValues } from '@features/forms/CreateEmployeeScheduleForm/model/types'
-import { validationSchema } from '@features/forms/CreateEmployeeScheduleForm/model/validationSchema'
-import { Fields } from '@features/forms/CreateEmployeeScheduleForm/ui/Fields'
 import { ScheduleStep } from '@features/forms/CreateEmployeeScheduleForm/ui/ScheduleStep'
 
-import { getTenantType } from '@shared/helpers/getTenantType'
 import { useAppDispatch } from '@shared/hooks/useAppDispatch'
 import { useAppSelector } from '@shared/hooks/useAppSelector'
 import { useSystemMessage } from '@shared/hooks/useSystemMessage'
 import { Box } from '@shared/ui/Box'
 import { LoadingBackdrop } from '@shared/ui/LoadingBackdrop'
-import { Stepper } from '@shared/ui/Stepper'
 
-const createDefaultWorkTime =
-  (): CreateEmployeeScheduleFormValues['work_time'] => ({
-    monday: [],
-    tuesday: [],
-    wednesday: [],
-    thursday: [],
-    friday: [],
-    saturday: [],
-    sunday: [],
-  })
-
-export interface EditEmployeeScheduleFormProps {
-  scheduleId: string
-  onClose: () => void
-}
+import { createDefaultWorkTime, normalizeWorkTime } from '../model/helpers'
+import {
+  EditEmployeeScheduleFormProps,
+  EditEmployeeScheduleFormValues,
+} from '../model/types'
+import { validationSchema } from '../model/validationSchema'
 
 export const EditEmployeeScheduleForm = ({
   scheduleId,
   onClose,
 }: EditEmployeeScheduleFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [activeStep, setActiveStep] = useState(0)
 
-  const tenant = getTenantType()
-  const isMaintainer = tenant === 'maintainer'
   const { status, employeeScheduleById } = useAppSelector(
     employeeScheduleByIdSelector
   )
 
-  const form = useForm<CreateEmployeeScheduleFormValues>({
+  const form = useForm<EditEmployeeScheduleFormValues>({
     defaultValues: {
-      clinic: '',
-      employee: '',
-      filial: '',
       work_time: createDefaultWorkTime(),
     },
     mode: 'onChange',
     reValidateMode: 'onChange',
-    resolver: yupResolver(validationSchema(isMaintainer)),
+    resolver: yupResolver<EditEmployeeScheduleFormValues>(validationSchema()),
   })
 
   const { handleSubmit, reset } = form
@@ -80,41 +59,20 @@ export const EditEmployeeScheduleForm = ({
   useEffect(() => {
     if (employeeScheduleById) {
       reset({
-        clinic: employeeScheduleById.clinic_id,
-        employee: employeeScheduleById.employee_id,
-        filial: employeeScheduleById.filial_id,
-        work_time:
-          employeeScheduleById.work_time_table || createDefaultWorkTime(),
+        work_time: normalizeWorkTime(
+          employeeScheduleById.work_time ?? employeeScheduleById.work_time_table
+        ),
       })
     }
   }, [employeeScheduleById, reset])
 
-  const onSubmit = (data: CreateEmployeeScheduleFormValues) => {
+  const onSubmit = (data: EditEmployeeScheduleFormValues) => {
     setIsLoading(true)
-
-    // Convert form format to API format
-    const work_time: Record<string, unknown> = {}
-    const days: ScheduleDay[] = [
-      'monday',
-      'tuesday',
-      'wednesday',
-      'thursday',
-      'friday',
-      'saturday',
-      'sunday',
-    ]
-
-    days.forEach((day) => {
-      work_time[day] = data.work_time[day].map((slot) => ({
-        from_minutes: slot.from,
-        to_minutes: slot.to,
-      }))
-    })
 
     dispatch(
       editEmployeeScheduleApi({
         schedule_id: scheduleId,
-        work_time,
+        work_time: normalizeWorkTime(data.work_time),
       })
     )
       .unwrap()
@@ -128,8 +86,6 @@ export const EditEmployeeScheduleForm = ({
       })
       .finally(() => setIsLoading(false))
   }
-
-  const steps = ['Basic Information', 'Schedule']
 
   if (status === 'pending' || !employeeScheduleById) {
     return (
@@ -147,23 +103,12 @@ export const EditEmployeeScheduleForm = ({
   }
 
   return (
-    <>
-      <Stepper
-        activeStep={activeStep}
-        form={form}
-        setActiveStep={setActiveStep}
-        steps={steps}
-        submitBtnTitle="SAVE"
-        onClose={onClose}
-        onSubmit={handleSubmit(onSubmit)}
-      >
-        <Box sx={{ mb: 4 }}>
-          {activeStep === 0 && <Fields isMaintainer={isMaintainer} />}
-          {activeStep === 1 && <ScheduleStep />}
-        </Box>
-      </Stepper>
+    <FormProvider {...form}>
+      <form id="edit-employee-schedule-form" onSubmit={handleSubmit(onSubmit)}>
+        <ScheduleStep />
 
-      <LoadingBackdrop isLoading={isLoading} />
-    </>
+        <LoadingBackdrop isLoading={isLoading} />
+      </form>
+    </FormProvider>
   )
 }

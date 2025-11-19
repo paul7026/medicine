@@ -101,7 +101,6 @@ export const EmployeeScheduleTable = () => {
       </Modal>
 
       <Modal
-        withoutActionButtons
         formId="edit-employee-schedule-form"
         maxWidth="lg"
         open={editIsOpen}

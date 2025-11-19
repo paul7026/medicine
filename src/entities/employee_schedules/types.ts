@@ -63,12 +63,12 @@ export interface CreateEmployeeSchedulePayload {
   employee: string
   filial: string
   work_time: Record<ScheduleDay, ScheduleSlot[]>
-  clinic: string
+  clinic?: string
 }
 
 export interface EditEmployeeSchedulePayload {
   schedule_id: string
-  work_time: Record<string, unknown>
+  work_time: Record<ScheduleDay, ScheduleSlot[]>
 }
 
 export type ScheduleDay =
